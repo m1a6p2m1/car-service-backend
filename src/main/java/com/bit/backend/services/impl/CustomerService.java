@@ -26,43 +26,59 @@ public class CustomerService implements CustomerServiceI {
     @Override
     public CustomerDto addCustomerEntity(CustomerDto customerDto) {
 //        System.out.println("----------In Backend-----------");
-        CustomerEntity customerEntity = customerMapper.toCustomerEntity(customerDto);
-        CustomerEntity savedItem = customerRepository.save(customerEntity);
-        CustomerDto savedDto = customerMapper.toCustomerDto(savedItem);
+        try {
+            CustomerEntity customerEntity = customerMapper.toCustomerEntity(customerDto);
+            CustomerEntity savedItem = customerRepository.save(customerEntity);
+            CustomerDto savedDto = customerMapper.toCustomerDto(savedItem);
 
-        return savedDto;
+            return savedDto;
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public List<CustomerDto> getData() {
 //        System.out.println("******In DataBase**********");
-        List<CustomerEntity> customerEntityList = customerRepository.findAll();
-        List<CustomerDto> customerDtoList = customerMapper.toCustomerDtoList(customerEntityList);
-        return customerDtoList;
+        try {
+            List<CustomerEntity> customerEntityList = customerRepository.findAll();
+            List<CustomerDto> customerDtoList = customerMapper.toCustomerDtoList(customerEntityList);
+            return customerDtoList;
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public CustomerDto updateForm(long cusId, CustomerDto customerDto) {
 //        System.out.println("******In DataBase**********");
-        Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(cusId);
-        if (!optionalCustomerEntity.isPresent()){
-             throw new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST);
+        try {
+            Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(cusId);
+            if (!optionalCustomerEntity.isPresent()){
+                throw new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST);
+            }
+            CustomerEntity newCustomerEntity = customerMapper.toCustomerEntity(customerDto);
+            newCustomerEntity.setCusId(cusId);
+            CustomerEntity customerEntity = customerRepository.save(newCustomerEntity);
+            CustomerDto customerDtoResponse = customerMapper.toCustomerDto(customerEntity);
+            return customerDtoResponse;
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        CustomerEntity newCustomerEntity = customerMapper.toCustomerEntity(customerDto);
-        newCustomerEntity.setCusId(cusId);
-        CustomerEntity customerEntity = customerRepository.save(newCustomerEntity);
-        CustomerDto customerDtoResponse = customerMapper.toCustomerDto(customerEntity);
-        return customerDtoResponse;
     }
 
     @Override
     public CustomerDto deleteData(long cusId) {
 //        System.out.println("******In DataBase**********");
-        Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(cusId);
-        if (!optionalCustomerEntity.isPresent()){
-            throw new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST);
+        try {
+            Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(cusId);
+            if (!optionalCustomerEntity.isPresent()){
+                throw new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST);
+            }
+            customerRepository.deleteById(cusId);
+            return customerMapper.toCustomerDto(optionalCustomerEntity.get());
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        customerRepository.deleteById(cusId);
-        return customerMapper.toCustomerDto(optionalCustomerEntity.get());
     }
 }
