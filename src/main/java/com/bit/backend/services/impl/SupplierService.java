@@ -26,7 +26,7 @@ public class SupplierService implements SupplierServiceI {
 
     @Override
     public SupplierDto addSupplierEntity(SupplierDto supplierDto) {
-        System.out.println("************In BackEnd************");
+//        System.out.println("************In BackEnd************");
         try {
             SupplierEntity supplierEntity = supplierMapper.toSupplierEntity(supplierDto);
             SupplierEntity savedItem = supplierRepository.save(supplierEntity);
