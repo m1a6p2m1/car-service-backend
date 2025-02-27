@@ -9,11 +9,12 @@ public class ItemDto {
     private String itemCategory;
     private String supplierName;
     private String description;
+    private String itemImage;
 
     public ItemDto() {
     }
 
-    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description) {
+    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description, String itemImage) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -21,6 +22,8 @@ public class ItemDto {
         this.itemCategory = itemCategory;
         this.supplierName = supplierName;
         this.description = description;
+        this.itemImage = itemImage;
+
     }
 
     public long getItemId() {
@@ -77,5 +80,13 @@ public class ItemDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getItemImage() {
+        return itemImage;
+    }
+
+    public void setItemImage(String itemImage) {
+        this.itemImage = itemImage;
     }
 }

@@ -5,7 +5,9 @@ import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.ItemServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -19,8 +21,25 @@ public class ItemController {
     }
 
     @PostMapping("/item")
-    public ResponseEntity<ItemDto> addForm(@RequestBody ItemDto itemDto){
+    public ResponseEntity<ItemDto> addForm(
+            @RequestParam("itemCode") String itemCode,//<------
+            @RequestParam("itemName") String itemName,
+            @RequestParam("itemCategory") String itemCategory,
+            @RequestParam("supplierName") String supplierName,
+            @RequestParam("brandName") String brandName,
+            @RequestParam("description") String description,
+            @RequestParam(value = "itemImage", required = false) MultipartFile itemImage
+    ){
         try {
+
+            ItemDto itemDto = new ItemDto();//<------
+            itemDto.setItemCode(itemCode);
+            itemDto.setItemName(itemName);
+            itemDto.setItemCategory(itemCategory);
+            itemDto.setSupplierName(supplierName);
+            itemDto.setBrandName(brandName);
+            itemDto.setDescription(description);
+
             ItemDto itemDtoResponse = itemServiceI.addItemEntity(itemDto);
             return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemName())).body(itemDtoResponse);
         }catch (Exception e){
