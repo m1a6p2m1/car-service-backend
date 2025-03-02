@@ -9,12 +9,12 @@ public class ItemDto {
     private String itemCategory;
     private String supplierName;
     private String description;
-    private String itemImage;
+    private byte[] itemImage;
 
     public ItemDto() {
     }
 
-    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description, String itemImage) {
+    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description, byte[] itemImage) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -82,11 +82,11 @@ public class ItemDto {
         this.description = description;
     }
 
-    public String getItemImage() {
+    public byte[] getItemImage() {
         return itemImage;
     }
 
-    public void setItemImage(String itemImage) {
+    public void setItemImage(byte[] itemImage) {
         this.itemImage = itemImage;
     }
 }

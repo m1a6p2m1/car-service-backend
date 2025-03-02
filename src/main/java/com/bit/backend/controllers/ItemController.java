@@ -28,7 +28,7 @@ public class ItemController {
             @RequestParam("supplierName") String supplierName,
             @RequestParam("brandName") String brandName,
             @RequestParam("description") String description,
-            @RequestParam(value = "itemImage", required = false) MultipartFile itemImage
+            @RequestParam("itemImage") MultipartFile itemImage
     ){
         try {
 
@@ -39,6 +39,7 @@ public class ItemController {
             itemDto.setSupplierName(supplierName);
             itemDto.setBrandName(brandName);
             itemDto.setDescription(description);
+            itemDto.setItemImage(itemImage.getBytes());
 
             ItemDto itemDtoResponse = itemServiceI.addItemEntity(itemDto);
             return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemName())).body(itemDtoResponse);

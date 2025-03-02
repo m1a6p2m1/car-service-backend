@@ -21,11 +21,15 @@ public class ItemEntity {
     private String supplierName;
     @Column(name = "description")
     private String description;
+    @Lob
+    @Column(name = "item_image")
+    private byte[] itemImage;
 
     public ItemEntity() {
     }
 
-    public ItemEntity(long itemId, String itemCode, String itemName, String itemCategory, String brandName, String supplierName, String description) {
+    public ItemEntity(long itemId, String itemCode, String itemName, String itemCategory, String brandName,
+                      String supplierName, String description,byte[] itemImage) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -33,6 +37,7 @@ public class ItemEntity {
         this.brandName = brandName;
         this.supplierName = supplierName;
         this.description = description;
+        this.itemImage = itemImage;
     }
 
     public long getItemId() {
@@ -89,5 +94,13 @@ public class ItemEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getItemImage() {
+        return itemImage;
+    }
+
+    public void setItemImage(byte[] itemImage) {
+        this.itemImage = itemImage;
     }
 }
