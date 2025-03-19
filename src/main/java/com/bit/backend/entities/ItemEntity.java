@@ -21,15 +21,18 @@ public class ItemEntity {
     private String supplierName;
     @Column(name = "description")
     private String description;
-    @Lob
-    @Column(name = "item_image")
-    private byte[] itemImage;
+    @Column(name = "image")
+    private byte[] image;
+    @Column(name = "image_name")
+    private String imageName;
+    @Column(name = "image_type")
+    private String imageType;
 
     public ItemEntity() {
     }
 
-    public ItemEntity(long itemId, String itemCode, String itemName, String itemCategory, String brandName,
-                      String supplierName, String description,byte[] itemImage) {
+    public ItemEntity(long itemId, String itemCode, String itemName, String itemCategory, String brandName, String supplierName, String description,
+                        byte[] image, String imageType, String imageName) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -37,7 +40,9 @@ public class ItemEntity {
         this.brandName = brandName;
         this.supplierName = supplierName;
         this.description = description;
-        this.itemImage = itemImage;
+        this.image = image;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public long getItemId() {
@@ -96,11 +101,27 @@ public class ItemEntity {
         this.description = description;
     }
 
-    public byte[] getItemImage() {
-        return itemImage;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setItemImage(byte[] itemImage) {
-        this.itemImage = itemImage;
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

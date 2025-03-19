@@ -4,8 +4,10 @@ import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.EmployeeServiceI;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -19,9 +21,14 @@ public class EmployeeController {
         this.employeeServiceI = employeeServiceI;
     }
 
-    @PostMapping("/employee")
-    public ResponseEntity<EmployeeDto> addForm(@RequestBody EmployeeDto employeeDto){
+    @PostMapping(value = {"/employee"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<EmployeeDto> addForm(@RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file
+    ){
         try {
+            employeeDto.setImage(file.getBytes());
+            employeeDto.setImageName(file.getOriginalFilename());
+            employeeDto.setImageType(file.getContentType());
+
             EmployeeDto employeeDtoResponse = employeeServiceI.addEmployeeEntity(employeeDto);
             return ResponseEntity.created(URI.create("/employee"+employeeDtoResponse.getFullName())).body(employeeDtoResponse);
         } catch (Exception e){
@@ -42,8 +49,13 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee/{empNumber}")
-    public ResponseEntity<EmployeeDto> updateEmployeeData(@PathVariable long empNumber, @RequestBody EmployeeDto employeeDto){
+    public ResponseEntity<EmployeeDto> updateEmployeeData(@PathVariable long empNumber, @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file
+    ){
         try {
+            employeeDto.setImage(file.getBytes());
+            employeeDto.setImageName(file.getOriginalFilename());
+            employeeDto.setImageType(file.getContentType());
+
             EmployeeDto employeeDtoResponse = employeeServiceI.updateEmployeeData(empNumber, employeeDto);
             return ResponseEntity.ok(employeeDtoResponse);
         } catch (Exception e) {

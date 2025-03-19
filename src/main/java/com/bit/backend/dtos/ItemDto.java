@@ -1,5 +1,7 @@
 package com.bit.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ItemDto {
 
     private long itemId;
@@ -9,12 +11,18 @@ public class ItemDto {
     private String itemCategory;
     private String supplierName;
     private String description;
-    private byte[] itemImage;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private byte[] image;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageType;
 
     public ItemDto() {
     }
 
-    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description, byte[] itemImage) {
+    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description, byte[] image,
+                   String imageName, String imageType) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -22,7 +30,9 @@ public class ItemDto {
         this.itemCategory = itemCategory;
         this.supplierName = supplierName;
         this.description = description;
-        this.itemImage = itemImage;
+        this.image = image;
+        this.imageName = imageName;
+        this.imageType = imageType;
 
     }
 
@@ -82,11 +92,27 @@ public class ItemDto {
         this.description = description;
     }
 
-    public byte[] getItemImage() {
-        return itemImage;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setItemImage(byte[] itemImage) {
-        this.itemImage = itemImage;
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

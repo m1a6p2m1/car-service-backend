@@ -4,8 +4,8 @@ import com.bit.backend.dtos.ItemDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.ItemServiceI;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,26 +20,13 @@ public class ItemController {
         this.itemServiceI = itemServiceI;
     }
 
-    @PostMapping("/item")
-    public ResponseEntity<ItemDto> addForm(
-            @RequestParam("itemCode") String itemCode,//<------
-            @RequestParam("itemName") String itemName,
-            @RequestParam("itemCategory") String itemCategory,
-            @RequestParam("supplierName") String supplierName,
-            @RequestParam("brandName") String brandName,
-            @RequestParam("description") String description,
-            @RequestParam("itemImage") MultipartFile itemImage
+    @PostMapping(value = {"/item"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ItemDto> addForm(@RequestPart("itemForm") ItemDto itemDto, @RequestPart("image") MultipartFile file
     ){
         try {
-
-            ItemDto itemDto = new ItemDto();//<------
-            itemDto.setItemCode(itemCode);
-            itemDto.setItemName(itemName);
-            itemDto.setItemCategory(itemCategory);
-            itemDto.setSupplierName(supplierName);
-            itemDto.setBrandName(brandName);
-            itemDto.setDescription(description);
-            itemDto.setItemImage(itemImage.getBytes());
+            itemDto.setImage(file.getBytes());
+            itemDto.setImageName(file.getOriginalFilename());
+            itemDto.setImageType(file.getContentType());
 
             ItemDto itemDtoResponse = itemServiceI.addItemEntity(itemDto);
             return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemName())).body(itemDtoResponse);
@@ -59,8 +46,12 @@ public class ItemController {
     }
 
     @PutMapping("/item/{itemId}")
-    public ResponseEntity<ItemDto> updateForm(@PathVariable long itemId, @RequestBody ItemDto itemDto){
+    public ResponseEntity<ItemDto> updateForm(@PathVariable long itemId, @RequestPart("itemForm") ItemDto itemDto, @RequestPart("image") MultipartFile file){
         try {
+            itemDto.setImage(file.getBytes());
+            itemDto.setImageName(file.getOriginalFilename());
+            itemDto.setImageType(file.getContentType());
+
             ItemDto itemDtoResponse = itemServiceI.updateForm(itemId, itemDto);
             return ResponseEntity.ok(itemDtoResponse);
         }catch (Exception e){

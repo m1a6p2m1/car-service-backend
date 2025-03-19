@@ -1,5 +1,7 @@
 package com.bit.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class EmployeeDto {
 
     private long empNumber;
@@ -15,11 +17,18 @@ public class EmployeeDto {
     private String employmentType;
     private String employeeStatus;
     private String jobTitle;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private byte[] image;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageType;
 
     public EmployeeDto() {
     }
 
-    public EmployeeDto(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle) {
+    public EmployeeDto(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle, byte[] image,
+                       String imageName, String imageType) {
         this.empNumber = empNumber;
         this.fullName = fullName;
         this.callingName = callingName;
@@ -33,6 +42,9 @@ public class EmployeeDto {
         this.employmentType = employmentType;
         this.employeeStatus = employeeStatus;
         this.jobTitle = jobTitle;
+        this.image = image;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public long getEmpNumber() {
@@ -138,4 +150,28 @@ public class EmployeeDto {
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
     }
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
 }
