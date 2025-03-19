@@ -34,10 +34,17 @@ public class EmployeeEntity {
     private String employeeStatus;
     @Column(name = "job_title")
     private String jobTitle;
+    @Column(name = "image")
+    private byte[] image;
+    @Column(name = "image_name")
+    private String imageName;
+    @Column(name = "image_type")
+    private String imageType;
 
     public EmployeeEntity() { }
 
-    public EmployeeEntity(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle) {
+    public EmployeeEntity(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle,
+                          byte[] image, String imageType, String imageName) {
         this.empNumber = empNumber;
         this.fullName = fullName;
         this.callingName = callingName;
@@ -51,6 +58,9 @@ public class EmployeeEntity {
         this.employmentType = employmentType;
         this.employeeStatus = employeeStatus;
         this.jobTitle = jobTitle;
+        this.image = image;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public long getEmpNumber() {
@@ -155,6 +165,29 @@ public class EmployeeEntity {
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 
 

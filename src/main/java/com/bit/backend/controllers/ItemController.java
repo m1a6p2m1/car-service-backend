@@ -51,6 +51,7 @@ public class ItemController {
             itemDto.setImage(file.getBytes());
             itemDto.setImageName(file.getOriginalFilename());
             itemDto.setImageType(file.getContentType());
+
             ItemDto itemDtoResponse = itemServiceI.updateForm(itemId, itemDto);
             return ResponseEntity.ok(itemDtoResponse);
         }catch (Exception e){
