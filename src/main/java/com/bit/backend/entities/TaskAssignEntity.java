@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class TaskAssignEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private long taskId;
     @Column(name = "task_name")
@@ -21,12 +22,21 @@ public class TaskAssignEntity {
     public TaskAssignEntity() {
     }
 
-    public TaskAssignEntity(long taskId, String taskName, String taskCreatedBy, String customerName, String status) {
+    public TaskAssignEntity(Long id, long taskId, String taskName, String taskCreatedBy, String customerName, String status) {
+        this.id = id;
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public long getTaskId() {

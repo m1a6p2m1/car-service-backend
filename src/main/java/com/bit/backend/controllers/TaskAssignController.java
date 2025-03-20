@@ -1,5 +1,6 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.DefinedTasksDto;
 import com.bit.backend.dtos.TaskAssignDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.TaskAssignServiceI;
@@ -16,6 +17,17 @@ public class TaskAssignController {
 
     public TaskAssignController(TaskAssignServiceI taskAssignServiceI) {
         this.taskAssignServiceI = taskAssignServiceI;
+    }
+
+    @GetMapping("/defined_tasks")
+    public ResponseEntity<List<DefinedTasksDto>> getDefinedTasksData(){
+        try {
+            List<DefinedTasksDto> definedTasksDtos = taskAssignServiceI.getDefinedTasksData();
+            return ResponseEntity.ok(definedTasksDtos);
+        } catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @PostMapping("/task-assign")

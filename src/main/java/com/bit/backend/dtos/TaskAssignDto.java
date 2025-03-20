@@ -1,6 +1,7 @@
 package com.bit.backend.dtos;
 
 public class TaskAssignDto {
+    private Long id;
     private long taskId;
     private String taskName;
     private String taskCreatedBy;
@@ -10,12 +11,21 @@ public class TaskAssignDto {
     public TaskAssignDto() {
     }
 
-    public TaskAssignDto(long taskId, String taskName, String taskCreatedBy, String customerName, String status) {
+    public TaskAssignDto(Long id, long taskId, String taskName, String taskCreatedBy, String customerName, String status) {
+        this.id = id;
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public long getTaskId() {
