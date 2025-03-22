@@ -86,11 +86,11 @@ public class TaskAssignEntity {
         this.status = status;
     }
 
-    public List<SubTaskAssignedEntity> getSubTaskAssignedEntityList() {
+    public List<SubTaskAssignedEntity> getSubTasks() {
         return subTasks;
     }
 
-    public void setSubTaskAssignedEntityList(List<SubTaskAssignedEntity> subTaskAssignedEntityList) {
+    public void setSubTasks(List<SubTaskAssignedEntity> subTaskAssignedEntityList) {
         this.subTasks.clear();
         if (subTaskAssignedEntityList != null) {
             subTaskAssignedEntityList.forEach(this::addSubTask);
