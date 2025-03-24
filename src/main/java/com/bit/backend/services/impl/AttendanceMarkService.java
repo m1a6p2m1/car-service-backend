@@ -1,6 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AttendanceMarkDto;
+import com.bit.backend.dtos.AttendanceMarkEmployeeDto;
 import com.bit.backend.entities.AttendanceMarkEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AttendanceMarkMapper;
@@ -35,11 +36,11 @@ public class AttendanceMarkService implements AttendanceMarkServiceI {
     }
 
     @Override
-    public List<AttendanceMarkDto> getData() {
+    public List<AttendanceMarkEmployeeDto> getData() {
 //        System.out.println("=================In the Back end==================");
         try {
-            List<AttendanceMarkEntity> attendanceMarkEntityList = attendanceMarkRepository.findAll();
-            List<AttendanceMarkDto> attendanceMarkDtoList = attendanceMarkMapper.toAttendanceDtoList(attendanceMarkEntityList);
+            List<AttendanceMarkEmployeeDto> attendanceMarkDtoList = attendanceMarkRepository.getEmployeeAttendanceDetails();
+//            List<AttendanceMarkDto> attendanceMarkDtoList = attendanceMarkMapper.toAttendanceDtoList(attendanceMarkEntityList);
             return attendanceMarkDtoList;
         }catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);

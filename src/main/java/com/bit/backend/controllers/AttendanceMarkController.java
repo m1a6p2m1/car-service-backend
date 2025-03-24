@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AttendanceMarkDto;
+import com.bit.backend.dtos.AttendanceMarkEmployeeDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AttendanceMarkServiceI;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,9 @@ public class AttendanceMarkController {
         }
     }
     @GetMapping("/attendance-mark")
-    public ResponseEntity<List<AttendanceMarkDto>> getData(){
+    public ResponseEntity<List<AttendanceMarkEmployeeDto>> getData(){
         try {
-            List<AttendanceMarkDto> attendanceMarkDtoList = attendanceMarkServiceI.getData();
+            List<AttendanceMarkEmployeeDto> attendanceMarkDtoList = attendanceMarkServiceI.getData();
             return ResponseEntity.ok(attendanceMarkDtoList);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
