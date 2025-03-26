@@ -4,9 +4,6 @@ public class SubTaskAssignDto {
     private Long id;
     private String description;
 
-    public SubTaskAssignDto() {
-    }
-
     public SubTaskAssignDto(Long id, String description) {
         this.id = id;
         this.description = description;

@@ -78,7 +78,7 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
             TaskAssignEntity newTaskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
 
-            newTaskAssignEntity.setTaskId(taskId);
+            newTaskAssignEntity.setId(taskId);
 
             TaskAssignEntity taskAssignEntity = taskAssignRepository.save(newTaskAssignEntity);
             TaskAssignDto responseTaskAssignDto = taskAssignMapper.toTaskAssignDto(taskAssignEntity);

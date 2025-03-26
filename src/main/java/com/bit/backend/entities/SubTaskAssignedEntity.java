@@ -3,7 +3,7 @@ package com.bit.backend.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "sub_tasks")
+@Table(name = "sub_tasks_assign")
 public class SubTaskAssignedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,20 +4,15 @@ import java.util.List;
 
 public class TaskAssignDto {
     private Long id;
-    private long taskId;
     private String taskName;
     private String taskCreatedBy;
     private String customerName;
     private String status;
     private List<SubTaskAssignDto> subTasks;
 
-    public TaskAssignDto() {
-    }
-
-    public TaskAssignDto(Long id, long taskId, String taskName, String taskCreatedBy,
+    public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
                          String customerName, String status, List<SubTaskAssignDto> subTasks) {
         this.id = id;
-        this.taskId = taskId;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
@@ -31,14 +26,6 @@ public class TaskAssignDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(long taskId) {
-        this.taskId = taskId;
     }
 
     public String getTaskName() {

@@ -11,8 +11,6 @@ public class TaskAssignEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private long taskId;
     @Column(name = "task_name")
     private String taskName;
     @Column(name = "task_created_by")
@@ -27,31 +25,12 @@ public class TaskAssignEntity {
     public TaskAssignEntity() {
     }
 
-    public TaskAssignEntity(Long id, long taskId, String taskName, String taskCreatedBy,
-                            String customerName, String status, List<SubTaskAssignedEntity> subTasks) {
-        this.id = id;
-        this.taskId = taskId;
-        this.taskName = taskName;
-        this.taskCreatedBy = taskCreatedBy;
-        this.customerName = customerName;
-        this.status = status;
-        this.subTasks = subTasks;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(long taskId) {
-        this.taskId = taskId;
     }
 
     public String getTaskName() {
