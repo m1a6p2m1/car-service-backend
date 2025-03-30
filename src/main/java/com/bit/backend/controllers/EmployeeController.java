@@ -1,8 +1,11 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.dtos.SignUpDto;
+import com.bit.backend.dtos.UserDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.EmployeeServiceI;
+import com.bit.backend.services.UserServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +19,11 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeServiceI employeeServiceI;
+    private final UserServiceI userServiceI;
 
-    public EmployeeController(EmployeeServiceI employeeServiceI){
+    public EmployeeController(EmployeeServiceI employeeServiceI, UserServiceI userServiceI){
         this.employeeServiceI = employeeServiceI;
+        this.userServiceI = userServiceI;
     }
 
     @PostMapping(value = {"/employee"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -71,5 +76,19 @@ public class EmployeeController {
         } catch (Exception e) {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // employee logins
+
+    @PostMapping("/employee/register")
+    public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
+        UserDto user = userServiceI.register(signUpDto);
+        return ResponseEntity.created(URI.create("/employee/register/" + user.getId())).body(user);
+    }
+
+    @PutMapping ("/employee/register/{empNumber}")
+    public ResponseEntity<UserDto> editRegistrationDetails(@PathVariable long empNumber, @RequestBody SignUpDto signUpDto) {
+        UserDto user = userServiceI.register(signUpDto);
+        return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
 }

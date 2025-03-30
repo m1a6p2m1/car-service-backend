@@ -15,7 +15,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLogin(String login);
-
+    // auth_group_users - auth_group_id against user_id
+    // auth_group_authentication - auth_group_id against aut_id
     @Query(nativeQuery = true, value = "select auth_details.auth_id as auth_id, :userId as user_id from " +
                                        "(select * from auth_group_users auth_users where auth_users.user_Id = :userId) auth_users\n" +
                                        "join (select * from ems.auth_group_authentication auth_details) as auth_details\n" +

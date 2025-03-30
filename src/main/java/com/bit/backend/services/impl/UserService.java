@@ -52,6 +52,7 @@ public class UserService implements UserServiceI {
             throw new AppException("User Already Exists", HttpStatus.BAD_REQUEST);
         }
         User user = userMapper.signUpToUser(signUpDto);
+        // set role here
 
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
         User savedUser = userRepository.save(user);

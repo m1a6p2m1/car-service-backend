@@ -5,16 +5,17 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "app_user")
 public class User {
-
+// add role
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String login, String password) {
+    public User(Long id, String firstName, String lastName, String login, String password, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
         this.password = password;
+        this.role = role;
     }
 
     @Id
@@ -32,6 +33,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "role")
+    private String role;
 
     public Long getId() {
         return id;
@@ -71,5 +75,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
