@@ -1,29 +1,31 @@
 package com.bit.backend.dtos;
 
+import java.util.List;
+
 public class TaskAssignDto {
-    private long taskId;
+    private Long id;
     private String taskName;
     private String taskCreatedBy;
     private String customerName;
     private String status;
+    private List<SubTaskAssignDto> subTasks;
 
-    public TaskAssignDto() {
-    }
-
-    public TaskAssignDto(long taskId, String taskName, String taskCreatedBy, String customerName, String status) {
-        this.taskId = taskId;
+    public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
+                         String customerName, String status, List<SubTaskAssignDto> subTasks) {
+        this.id = id;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
         this.status = status;
+        this.subTasks = subTasks;
     }
 
-    public long getTaskId() {
-        return taskId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTaskId(long taskId) {
-        this.taskId = taskId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTaskName() {
@@ -56,5 +58,13 @@ public class TaskAssignDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<SubTaskAssignDto> getSubTasks() {
+        return subTasks;
+    }
+
+    public void setSubTasks(List<SubTaskAssignDto> subTasks) {
+        this.subTasks = subTasks;
     }
 }

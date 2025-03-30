@@ -2,13 +2,15 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table (name = "task_assign")
 public class TaskAssignEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long taskId;
+    private Long id;
     @Column(name = "task_name")
     private String taskName;
     @Column(name = "task_created_by")
@@ -17,24 +19,18 @@ public class TaskAssignEntity {
     private String customerName;
     @Column(name = "status")
     private String status;
+    @OneToMany(mappedBy = "taskAssignEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<SubTaskAssignedEntity> subTasks = new ArrayList<>();
 
     public TaskAssignEntity() {
     }
 
-    public TaskAssignEntity(long taskId, String taskName, String taskCreatedBy, String customerName, String status) {
-        this.taskId = taskId;
-        this.taskName = taskName;
-        this.taskCreatedBy = taskCreatedBy;
-        this.customerName = customerName;
-        this.status = status;
+    public Long getId() {
+        return id;
     }
 
-    public long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(long taskId) {
-        this.taskId = taskId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTaskName() {
@@ -69,5 +65,24 @@ public class TaskAssignEntity {
         this.status = status;
     }
 
+    public List<SubTaskAssignedEntity> getSubTasks() {
+        return subTasks;
+    }
 
+    public void setSubTasks(List<SubTaskAssignedEntity> subTaskAssignedEntityList) {
+        this.subTasks.clear();
+        if (subTaskAssignedEntityList != null) {
+            subTaskAssignedEntityList.forEach(this::addSubTask);
+        }
+    }
+
+    public void addSubTask(SubTaskAssignedEntity subTaskAssignedEntity) {
+        subTasks.add(subTaskAssignedEntity);
+        subTaskAssignedEntity.setTaskAssignEntity(this);
+    }
+
+    public void removeSubTask(SubTaskAssignedEntity subTaskAssignedEntity) {
+        subTasks.remove(subTaskAssignedEntity);
+        subTaskAssignedEntity.setTaskAssignEntity(null);
+    }
 }
