@@ -29,9 +29,9 @@ public class CustomerFeedbackController {
 
     }
     @GetMapping("/customer-feedback/{id}")
-    public ResponseEntity<List<CustomerFeedbackDto>> getData(@PathVariable String userName){
+    public ResponseEntity<List<CustomerFeedbackDto>> getData(@PathVariable long id){
         try {
-            List<CustomerFeedbackDto> customerFeedbackDtoList = customerFeedbackServiceI.getData(userName);
+            List<CustomerFeedbackDto> customerFeedbackDtoList = customerFeedbackServiceI.getData(id);
             return ResponseEntity.ok(customerFeedbackDtoList);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);

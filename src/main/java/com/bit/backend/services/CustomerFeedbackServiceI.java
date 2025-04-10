@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CustomerFeedbackServiceI {
     CustomerFeedbackDto addCustomerFeedbackEntity(CustomerFeedbackDto customerFeedbackDto);
-    List<CustomerFeedbackDto> getData(String userName);
+    List<CustomerFeedbackDto> getData(long id);
     CustomerFeedbackDto updateForm(long id, CustomerFeedbackDto customerFeedbackDto);
     CustomerFeedbackDto deleteData(long id);
 }
