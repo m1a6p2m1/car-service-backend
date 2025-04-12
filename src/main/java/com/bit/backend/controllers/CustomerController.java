@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CustomerController {
@@ -55,6 +56,16 @@ public class CustomerController {
         try {
             CustomerDto customerDto = customerServiceI.deleteData(cusId);
             return ResponseEntity.ok(customerDto);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/customer/task-list-customers")
+    public ResponseEntity<List<Map<String, Object>>> getTaskListCustomers(){
+        try {
+            List<Map<String, Object>> taskListCustomerLIst = customerServiceI.getTaskListCustomers();
+            return ResponseEntity.ok(taskListCustomerLIst);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

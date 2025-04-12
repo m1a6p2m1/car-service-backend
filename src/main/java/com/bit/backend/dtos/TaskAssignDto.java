@@ -9,15 +9,17 @@ public class TaskAssignDto {
     private String customerName;
     private String status;
     private List<SubTaskAssignDto> subTasks;
+    private Long customerId;
 
     public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
-                         String customerName, String status, List<SubTaskAssignDto> subTasks) {
+                         String customerName, String status, List<SubTaskAssignDto> subTasks, Long customerId) {
         this.id = id;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
         this.status = status;
         this.subTasks = subTasks;
+        this.customerId = customerId;
     }
 
     public Long getId() {
@@ -66,5 +68,13 @@ public class TaskAssignDto {
 
     public void setSubTasks(List<SubTaskAssignDto> subTasks) {
         this.subTasks = subTasks;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 }

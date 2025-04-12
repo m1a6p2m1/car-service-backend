@@ -21,6 +21,8 @@ public class TaskAssignEntity {
     private String status;
     @OneToMany(mappedBy = "taskAssignEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SubTaskAssignedEntity> subTasks = new ArrayList<>();
+    @Column(name = "customer_id")
+    private Long customerId;
 
     public TaskAssignEntity() {
     }
@@ -74,6 +76,14 @@ public class TaskAssignEntity {
         if (subTaskAssignedEntityList != null) {
             subTaskAssignedEntityList.forEach(this::addSubTask);
         }
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public void addSubTask(SubTaskAssignedEntity subTaskAssignedEntity) {
