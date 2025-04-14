@@ -7,16 +7,18 @@ public class TaskAssignDto {
     private String taskName;
     private String taskCreatedBy;
     private String customerName;
+    private String description;
     private String status;
     private List<SubTaskAssignDto> subTasks;
     private Long customerId;
 
     public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
-                         String customerName, String status, List<SubTaskAssignDto> subTasks, Long customerId) {
+                         String customerName, String description, String status, List<SubTaskAssignDto> subTasks, Long customerId) {
         this.id = id;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
+        this.description = description;
         this.status = status;
         this.subTasks = subTasks;
         this.customerId = customerId;
@@ -52,6 +54,13 @@ public class TaskAssignDto {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getStatus() {

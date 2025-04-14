@@ -17,6 +17,8 @@ public class TaskAssignEntity {
     private String taskCreatedBy;
     @Column(name = "customer_name")
     private String customerName;
+    @Column (name = "description")
+    private String description;
     @Column(name = "status")
     private String status;
     @OneToMany(mappedBy = "taskAssignEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -57,6 +59,14 @@ public class TaskAssignEntity {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getStatus() {
