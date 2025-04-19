@@ -11,4 +11,6 @@ public interface TaskAssignServiceI {
     TaskAssignDto updateData(long taskId, TaskAssignDto taskAssignDto);
     TaskAssignDto deleteData(long taskId);
     List<DefinedTasksDto> getDefinedTasksData();
+
+    List<TaskAssignDto> getByCustomerId(Long customerId); // customer commonly used tasks loaded into the dashboard
 }

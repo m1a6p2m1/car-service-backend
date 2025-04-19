@@ -2,7 +2,9 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.DefinedTasksDto;
 import com.bit.backend.dtos.TaskAssignDto;
+import com.bit.backend.entities.TaskAssignEntity;
 import com.bit.backend.exceptions.AppException;
+import com.bit.backend.repositories.TaskAssignRepository;
 import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,10 @@ import java.util.List;
 @RestController
 public class TaskAssignController {
     private  final TaskAssignServiceI taskAssignServiceI;
-
-    public TaskAssignController(TaskAssignServiceI taskAssignServiceI) {
+    private final TaskAssignRepository taskAssignRepository;
+    public TaskAssignController(TaskAssignServiceI taskAssignServiceI, TaskAssignRepository taskAssignRepository) {
         this.taskAssignServiceI = taskAssignServiceI;
+        this.taskAssignRepository = taskAssignRepository;
     }
 
     @GetMapping("/defined_tasks")
@@ -72,4 +75,18 @@ public class TaskAssignController {
         }
 
     }
+
+    // customer commonly used tasks loaded into the dashboard
+    @GetMapping("/task-assign/{customerId}")
+    public ResponseEntity<List<TaskAssignDto>> getByCustomerId(@PathVariable Long customerId) {
+        try {
+            List<TaskAssignDto> taskAssignDtoList = taskAssignServiceI.getByCustomerId(customerId);
+            return ResponseEntity.ok(taskAssignDtoList);
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
 }

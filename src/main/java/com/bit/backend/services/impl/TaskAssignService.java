@@ -42,6 +42,17 @@ public class TaskAssignService implements TaskAssignServiceI {
         }
     }
 
+    // customer commonly used tasks loaded into the dashboard
+    @Override
+    public List<TaskAssignDto> getByCustomerId(Long customerId) {
+        try {
+            List<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByCustomerId(customerId);
+            return taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
