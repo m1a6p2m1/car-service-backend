@@ -2,6 +2,8 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "defined_sub_tasks")
 public class DefinedSubTaskEntity {
@@ -16,7 +18,19 @@ public class DefinedSubTaskEntity {
     @JoinColumn(name = "task_id", nullable = false)
     private DefinedTasksEntity definedTasksEntity;
 
+    @Column(name = "price")
+    private BigDecimal price;
+
     public DefinedSubTaskEntity() {
+    }
+
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public DefinedSubTaskEntity(String subTaskName) {
