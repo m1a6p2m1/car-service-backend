@@ -2,6 +2,7 @@ package com.bit.backend.mappers;
 
 import com.bit.backend.dtos.DefinedSubTaskDto;
 import com.bit.backend.dtos.DefinedTasksDto;
+import com.bit.backend.dtos.TaskIntroduceDto;
 import com.bit.backend.entities.DefinedSubTaskEntity;
 import com.bit.backend.entities.DefinedTasksEntity;
 import org.mapstruct.*;
@@ -23,6 +24,10 @@ public interface DefinedTasksMapper {
 
     List<DefinedTasksDto> toDefinedTasksDtos(List<DefinedTasksEntity> definedTasksEntities);
     List<DefinedTasksEntity> toDefinedTasksEntityList(List<DefinedTasksDto> definedTasksDtos);
+
+
+    TaskIntroduceDto toTaskIntroduceDto(DefinedTasksEntity definedTasksEntity);
+    List<TaskIntroduceDto> toTaskIntroduceDtoList(List<DefinedTasksEntity> definedTasksEntities);
 
     @AfterMapping
     default void linkSubTasks(@MappingTarget DefinedTasksEntity definedTasksEntity) {
