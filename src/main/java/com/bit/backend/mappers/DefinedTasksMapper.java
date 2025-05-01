@@ -17,6 +17,10 @@ public interface DefinedTasksMapper {
     @Mapping(source = "definedSubTaskDtos", target = "definedSubTaskEntities")
     DefinedTasksEntity toDefinedTasksEntity(DefinedTasksDto definedTasksDto);
 
+    @Mapping(source = "definedSubTaskEntities", target = "subTasks")
+    TaskIntroduceDto toTaskIntroduceDto(DefinedTasksEntity definedTasksEntity);
+
+
     DefinedSubTaskDto toDefinedSubTasksDto(DefinedSubTaskEntity definedSubTaskEntity);
 
     List<DefinedSubTaskEntity> toDefinedSubTaskEntityList(List<DefinedSubTaskDto> definedSubTaskDtos);
@@ -26,8 +30,10 @@ public interface DefinedTasksMapper {
     List<DefinedTasksEntity> toDefinedTasksEntityList(List<DefinedTasksDto> definedTasksDtos);
 
 
-    TaskIntroduceDto toTaskIntroduceDto(DefinedTasksEntity definedTasksEntity);
+//    TaskIntroduceDto toTaskIntroduceDto(DefinedTasksEntity definedTasksEntity);
     List<TaskIntroduceDto> toTaskIntroduceDtoList(List<DefinedTasksEntity> definedTasksEntities);
+
+    DefinedTasksEntity toDefinedTasksEntity(TaskIntroduceDto definedTasksDto);
 
     @AfterMapping
     default void linkSubTasks(@MappingTarget DefinedTasksEntity definedTasksEntity) {
@@ -35,4 +41,5 @@ public interface DefinedTasksMapper {
             definedTasksEntity.getDefinedSubTaskEntities().forEach(subTask -> subTask.setDefinedTasksEntity(definedTasksEntity));
         }
     }
+
 }

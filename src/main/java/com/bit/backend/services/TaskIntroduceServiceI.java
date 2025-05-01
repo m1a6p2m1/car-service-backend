@@ -10,5 +10,7 @@ public interface TaskIntroduceServiceI {
 
     List<TaskIntroduceDto> getData();
 
-//    TaskIntroduceDto updateData(long id, TaskIntroduceDto taskIntroduceDto);
+    TaskIntroduceDto updateData(long id, TaskIntroduceDto taskIntroduceDto);
+
+    TaskIntroduceDto deleteData(long id);
 }
