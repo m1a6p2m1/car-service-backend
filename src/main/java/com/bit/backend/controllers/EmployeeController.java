@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EmployeeController {
@@ -90,5 +91,15 @@ public class EmployeeController {
     public ResponseEntity<UserDto> editRegistrationDetails(@PathVariable long empNumber, @RequestBody SignUpDto signUpDto) {
         UserDto user = userServiceI.register(signUpDto);
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
+    }
+
+    @GetMapping("/employee/get-employee-list")
+    public ResponseEntity<List<Map<String, Object>>> getEmployees(){
+        try {
+            List<Map<String, Object>> employeeList = employeeServiceI.getEmployees();
+            return ResponseEntity.ok(employeeList);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
