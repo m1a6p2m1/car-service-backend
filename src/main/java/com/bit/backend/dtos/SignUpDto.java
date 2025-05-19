@@ -1,4 +1,4 @@
 package com.bit.backend.dtos;
 
-public record SignUpDto(String firstName, String lastName, String login, char[] password, String role) { // add role
+public record SignUpDto(Long id, String firstName, String lastName, String login, char[] password, String role, Long employeeId, Long customerId) { // add role
 }

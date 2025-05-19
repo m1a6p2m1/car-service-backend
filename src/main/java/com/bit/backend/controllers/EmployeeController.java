@@ -1,5 +1,6 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.config.UserAuthProvider;
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.SignUpDto;
 import com.bit.backend.dtos.UserDto;
@@ -20,10 +21,12 @@ public class EmployeeController {
 
     private final EmployeeServiceI employeeServiceI;
     private final UserServiceI userServiceI;
+    private final UserAuthProvider userAuthProvider;
 
-    public EmployeeController(EmployeeServiceI employeeServiceI, UserServiceI userServiceI){
+    public EmployeeController(EmployeeServiceI employeeServiceI, UserServiceI userServiceI, UserAuthProvider userAuthProvider){
         this.employeeServiceI = employeeServiceI;
         this.userServiceI = userServiceI;
+        this.userAuthProvider = userAuthProvider;
     }
 
     @PostMapping(value = {"/employee"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -35,7 +38,7 @@ public class EmployeeController {
             employeeDto.setImageType(file.getContentType());
 
             EmployeeDto employeeDtoResponse = employeeServiceI.addEmployeeEntity(employeeDto);
-            return ResponseEntity.created(URI.create("/employee"+employeeDtoResponse.getFullName())).body(employeeDtoResponse);
+            return ResponseEntity.created(URI.create("/employee"+ employeeDtoResponse.getCallingName())).body(employeeDtoResponse);
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,4 +94,6 @@ public class EmployeeController {
         UserDto user = userServiceI.register(signUpDto);
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
+
+
 }

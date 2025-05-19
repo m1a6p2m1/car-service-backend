@@ -22,6 +22,8 @@ public class EmployeeEntity {
     private String gender;
     @Column(name = "address")
     private String address;
+    @Column(name = "email")
+    private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "emergency_phone_number")
@@ -43,7 +45,7 @@ public class EmployeeEntity {
 
     public EmployeeEntity() { }
 
-    public EmployeeEntity(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle,
+    public EmployeeEntity(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String email, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle,
                           byte[] image, String imageType, String imageName) {
         this.empNumber = empNumber;
         this.fullName = fullName;
@@ -52,6 +54,7 @@ public class EmployeeEntity {
         this.dob = dob;
         this.gender = gender;
         this.address = address;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.emergencyPhoneNumber = emergencyPhoneNumber;
         this.bloodGroup = bloodGroup;
@@ -117,6 +120,14 @@ public class EmployeeEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {

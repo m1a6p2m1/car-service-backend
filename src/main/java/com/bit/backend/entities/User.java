@@ -37,6 +37,14 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @OneToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "empNumber", unique = true)
+    private EmployeeEntity employee;
+
+    @OneToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "cusId", unique = true)
+    private CustomerEntity customer;
+
     public Long getId() {
         return id;
     }
@@ -83,5 +91,19 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
+    }
+
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
     }
 }

@@ -10,4 +10,7 @@ public interface UserServiceI {
     List<Integer> getAuthIds(long userId);
     SystemPrivilegeListDto getSystemPrivileges();
     List<Integer> setSystemPrivileges(SystemPrivilegeListDto systemPrivilegeListDto);
+
+    //user profile update
+    UserDto updateUserProfile(Long id, UserDto userDto);
 }

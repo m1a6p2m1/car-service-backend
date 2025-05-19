@@ -11,6 +11,7 @@ public class EmployeeDto {
     private String dob;
     private String gender;
     private String address;
+    private String email;
     private String phoneNumber;
     private String emergencyPhoneNumber;
     private String bloodGroup;
@@ -27,7 +28,7 @@ public class EmployeeDto {
     public EmployeeDto() {
     }
 
-    public EmployeeDto(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle, byte[] image,
+    public EmployeeDto(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String email , String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle, byte[] image,
                        String imageName, String imageType) {
         this.empNumber = empNumber;
         this.fullName = fullName;
@@ -36,6 +37,7 @@ public class EmployeeDto {
         this.dob = dob;
         this.gender = gender;
         this.address = address;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.emergencyPhoneNumber = emergencyPhoneNumber;
         this.bloodGroup = bloodGroup;
@@ -101,6 +103,14 @@ public class EmployeeDto {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
