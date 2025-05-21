@@ -4,6 +4,7 @@ import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.FormDemoDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeServiceI {
     EmployeeDto addEmployeeEntity(EmployeeDto employeeDto);
@@ -13,4 +14,6 @@ public interface EmployeeServiceI {
     EmployeeDto updateEmployeeData(long empNumber, EmployeeDto employeeDto);
 
     EmployeeDto deleteData(long empNumber);
+
+    List<Map<String, Object>> getEmployees();
 }

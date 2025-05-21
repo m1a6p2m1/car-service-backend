@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -82,5 +83,10 @@ public class EmployeeService implements EmployeeServiceI {
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> getEmployees() {
+        return employeeRepository.getEmployeeList();
     }
 }
