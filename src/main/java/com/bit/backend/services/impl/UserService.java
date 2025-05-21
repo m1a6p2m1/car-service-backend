@@ -149,6 +149,27 @@ public class UserService implements UserServiceI {
         return null;
     }
 
+    //get saved user data to the user profile form
+    @Override
+    public UserDto getUserProfile(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+
+        if (user.getEmployee() != null) {
+            dto.setEmail(user.getEmployee().getEmail());
+            dto.setPhoneNumber(user.getEmployee().getPhoneNumber());
+            dto.setImage(user.getEmployee().getImage());
+            dto.setImageType(user.getEmployee().getImageType());
+            dto.setImageName(user.getEmployee().getImageName());
+        }
+
+        return dto;
+    }
     @Override
     public UserDto updateUserProfile(Long id, UserDto userDto) {
         User user = userRepository.findById(id)

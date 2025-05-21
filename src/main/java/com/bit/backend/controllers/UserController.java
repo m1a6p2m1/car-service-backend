@@ -61,21 +61,10 @@ public class UserController {
             String login = loggedInUser.getLogin();
             System.out.println("Logged in" +
                     " user: " + principal.getName());
-            User user = userRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("User not found"));
+//            User user = userRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("User not found"));
 
-            UserDto dto = new UserDto();
-            dto.setId(user.getId());
-            dto.setFirstName(user.getFirstName());
-            dto.setLastName(user.getLastName());
-            System.out.println("logged user Id:" +user.getId());
-            if (user.getEmployee() != null) {
-                dto.setEmail(user.getEmployee().getEmail());
-                dto.setPhoneNumber(user.getEmployee().getPhoneNumber());
-                dto.setImage(user.getEmployee().getImage());
-                dto.setImageType(user.getEmployee().getImageType());
-                dto.setImageName(user.getEmployee().getImageName());
-            }
-            return ResponseEntity.ok(dto);
+            UserDto userDto = userServiceI.getUserProfile(login);
+            return ResponseEntity.ok(userDto);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
