@@ -21,15 +21,16 @@ public class OnlineItemController {
     }
 
     @PostMapping(value = {"/online-item"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<OnlineItemDto> addForm(@RequestPart("itemForm") OnlineItemDto onlineItemDto, @RequestPart("image") MultipartFile file
+    public ResponseEntity<OnlineItemDto> addForm(@RequestPart("onlineItemForm") OnlineItemDto onlineItemDto, @RequestPart("image") MultipartFile file
     ){
+        System.out.println(" online item controller");
         try {
             onlineItemDto.setImage(file.getBytes());
             onlineItemDto.setImageName(file.getOriginalFilename());
             onlineItemDto.setImageType(file.getContentType());
 
             OnlineItemDto onlineItemDtoResponse = onlineItemServiceI.addOnlineItemEntity(onlineItemDto);
-            return ResponseEntity.created(URI.create("/online-item"+ onlineItemDtoResponse.getName())).body(onlineItemDtoResponse);
+            return ResponseEntity.created(URI.create("/online-item"+ onlineItemDtoResponse.getItemCode())).body(onlineItemDtoResponse);
         }catch (Exception e){
             throw new AppException("Request fail with error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -46,7 +47,7 @@ public class OnlineItemController {
     }
 
     @PutMapping("/online-item/{id}")
-    public ResponseEntity<OnlineItemDto> updateForm(@PathVariable long id, @RequestPart("itemForm") OnlineItemDto onlineItemDto, @RequestPart("image") MultipartFile file){
+    public ResponseEntity<OnlineItemDto> updateForm(@PathVariable long id, @RequestPart("onlineItemForm") OnlineItemDto onlineItemDto, @RequestPart("image") MultipartFile file){
         try {
             onlineItemDto.setImage(file.getBytes());
             onlineItemDto.setImageName(file.getOriginalFilename());
