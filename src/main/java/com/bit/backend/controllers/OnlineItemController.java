@@ -46,6 +46,17 @@ public class OnlineItemController {
         }
     }
 
+    @GetMapping("/online-item/{id}")
+    public ResponseEntity<OnlineItemDto> getItemById(@PathVariable Long id) {
+        try {
+            OnlineItemDto item = onlineItemServiceI.getItemById(id);
+            return ResponseEntity.ok(item);
+        } catch (Exception e) {
+            throw new AppException("Failed to fetch item with ID: " + id, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @PutMapping("/online-item/{id}")
     public ResponseEntity<OnlineItemDto> updateForm(@PathVariable long id, @RequestPart("onlineItemForm") OnlineItemDto onlineItemDto, @RequestPart("image") MultipartFile file){
         try {

@@ -49,6 +49,18 @@ public class OnlineItemService implements OnlineItemServiceI {
     }
 
     @Override
+    public OnlineItemDto getItemById(Long id) {
+        Optional<OnlineItemEntity> optionalItem = onlineItemRepository.findById(id);
+
+        if (optionalItem.isPresent()) {
+            return onlineItemMapper.toOnlineItemDto(optionalItem.get());
+        } else {
+            throw new AppException("Item not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @Override
     public OnlineItemDto updateForm(long id, OnlineItemDto onlineItemDto) {
 //        System.out.println("-------------------In BackEnd--------------------");
         try {

@@ -11,6 +11,8 @@ public interface EmployeeServiceI {
 
     List<EmployeeDto> getData();
 
+    EmployeeDto getEmployeeById(Long empNumber);
+
     EmployeeDto updateEmployeeData(long empNumber, EmployeeDto employeeDto);
 
     EmployeeDto deleteData(long empNumber);

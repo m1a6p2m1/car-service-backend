@@ -50,12 +50,22 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDto>> getData(){
         try {
             List<EmployeeDto> employeeDtoList = employeeServiceI.getData();
-//            int i = 1/0;
             return ResponseEntity.ok(employeeDtoList);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/employee/{empNumber}")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable long empNumber) {
+        try {
+            EmployeeDto employeeDto = employeeServiceI.getEmployeeById(empNumber);
+            return ResponseEntity.ok(employeeDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to get employee with ID " + empNumber + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PutMapping("/employee/{empNumber}")
     public ResponseEntity<EmployeeDto> updateEmployeeData(@PathVariable long empNumber, @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file

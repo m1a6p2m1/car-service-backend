@@ -52,6 +52,18 @@ public class EmployeeService implements EmployeeServiceI {
     }
 
     @Override
+    public EmployeeDto getEmployeeById(Long empNumber) {
+        Optional<EmployeeEntity> optional = employeeRepository.findById(empNumber);
+        if (!optional.isPresent()) {
+            throw new AppException("Employee not found with ID: " + empNumber, HttpStatus.NOT_FOUND);
+        }
+
+        EmployeeEntity employeeEntity = optional.get();
+        return employeeMapper.toEmployeeDto(employeeEntity);
+    }
+
+
+    @Override
     public EmployeeDto updateEmployeeData(long empNumber, EmployeeDto employeeDto) {
         try {
             Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(empNumber);
