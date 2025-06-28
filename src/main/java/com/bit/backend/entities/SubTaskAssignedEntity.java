@@ -12,6 +12,9 @@ public class SubTaskAssignedEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "assigned_user")
+    private Long assignedUserId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskAssignEntity taskAssignEntity;
@@ -28,6 +31,14 @@ public class SubTaskAssignedEntity {
     public void setId(Long id) { this.id = id; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Long getAssignedUserId() {
+        return assignedUserId;
+    }
+
+    public void setAssignedUserId(Long assignedUserId) {
+        this.assignedUserId = assignedUserId;
+    }
 
     public TaskAssignEntity getTaskAssignEntity() {
         return taskAssignEntity;
