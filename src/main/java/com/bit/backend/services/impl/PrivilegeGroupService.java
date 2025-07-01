@@ -82,4 +82,23 @@ public class PrivilegeGroupService implements PrivilegeGroupServiceI {
         PrivilegeGroup savedPrivilegeGroup = privilegeGroupRepository.save(privilegeGroup);
         return privilegeGroupMapper.toPrivilegeGroupDto(savedPrivilegeGroup);
     }
+
+    @Override
+    public PrivilegeGroupDto setAsCustomerDefault(long id, PrivilegeGroupDto privilegeGroupDto) {
+        Optional<PrivilegeGroup> oPrivilegeGroup = privilegeGroupRepository.findById(id);
+
+        if (!oPrivilegeGroup.isPresent()) {
+            throw new AppException("Privilege Group Not Exists", HttpStatus.BAD_REQUEST);
+        }
+
+        PrivilegeGroup privilegeGroup = oPrivilegeGroup.get();
+        privilegeGroup.setDefault(true);
+        PrivilegeGroup savedPrivilegeGroup = privilegeGroupRepository.save(privilegeGroup);
+
+        if (savedPrivilegeGroup.isDefault() == true) {
+            privilegeGroupRepository.updatePrivilegeGroupDefaultStatus(id);
+        }
+
+        return privilegeGroupMapper.toPrivilegeGroupDto(savedPrivilegeGroup);
+    }
 }

@@ -3,11 +3,13 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.CustomerEntity;
 import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.PrivilegeGroup;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.UserMapper;
 import com.bit.backend.repositories.CustomerRepository;
 import com.bit.backend.repositories.EmployeeRepository;
+import com.bit.backend.repositories.PrivilegeGroupRepository;
 import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.UserServiceI;
 import jakarta.persistence.Tuple;
@@ -30,15 +32,17 @@ public class UserService implements UserServiceI {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final PrivilegeGroupRepository privilegeGroupRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, PrivilegeGroupRepository privilegeGroupRepository) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+        this.privilegeGroupRepository = privilegeGroupRepository;
     }
 
     @Override
@@ -74,7 +78,6 @@ public class UserService implements UserServiceI {
             throw new AppException("User Already Exists", HttpStatus.BAD_REQUEST);
         }
         User user = userMapper.signUpToUser(signUpDto);
-        // set role here
 
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
 
@@ -96,6 +99,20 @@ public class UserService implements UserServiceI {
         // get image from employee form to show in the profile
         User savedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDto(savedUser);
+
+        // set default privilege group
+
+        if (savedUser.getRole().equals("CUSTOMER")) {
+            // SET DEFAULT PRIVILEGE GROUP
+            int id = savedUser.getId().intValue();
+            Optional<List<PrivilegeGroup>> privilegeGroupList = privilegeGroupRepository.findByDefaultValue(true);
+
+            if (privilegeGroupList.isPresent()) {
+                int authGroupId = privilegeGroupList.get().get(0).getId().intValue();
+                privilegeGroupRepository.setAuthGroupToCustomer(authGroupId, id);
+            }
+
+        }
 
         if (savedUser.getEmployee() != null) {
             userDto.setImage(savedUser.getEmployee().getImage());
