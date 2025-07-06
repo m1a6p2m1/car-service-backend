@@ -35,6 +35,19 @@ public class TaskIntroduceController {
         }
 
     }
+
+    @GetMapping("/task-introduce/{id}")
+    public ResponseEntity<TaskIntroduceDto> getTaskById(@PathVariable Long id){
+        try {
+            TaskIntroduceDto taskIntroduceDto = taskIntroduceServiceI.getTaskById(id);
+            return ResponseEntity.ok(taskIntroduceDto);
+        } catch (Exception e){
+            throw new AppException("Failed to get task with id " + id + ". Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
     @PutMapping("/task-introduce/{id}")
     public ResponseEntity<TaskIntroduceDto> updateData(@PathVariable long id, @RequestBody TaskIntroduceDto taskIntroduceDto){
         try {

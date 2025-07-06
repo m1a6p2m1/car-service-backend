@@ -80,6 +80,18 @@ public class TaskAssignService implements TaskAssignServiceI {
     }
 
     @Override
+    public TaskAssignDto getTaskById(Long taskId) {
+        Optional<TaskAssignEntity> optionalTask = taskAssignRepository.findById(taskId);
+
+        if (optionalTask.isPresent()) {
+            return taskAssignMapper.toTaskAssignDto(optionalTask.get());
+        } else {
+            throw new AppException("Task not found with id: " + taskId, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @Override
     public TaskAssignDto updateData(long taskId, TaskAssignDto taskAssignDto) {
         try {
             Optional<TaskAssignEntity> optionalTaskAssignEntity = taskAssignRepository.findById(taskId);

@@ -54,6 +54,17 @@ public class TaskAssignController {
 
     }
 
+    @GetMapping("/task-assign/{taskId}")
+    public ResponseEntity<TaskAssignDto> getTaskById(@PathVariable Long taskId) {
+        try {
+            TaskAssignDto taskAssignDto = taskAssignServiceI.getTaskById(taskId);
+            return ResponseEntity.ok(taskAssignDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to get task with id " + taskId + ". Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @PutMapping("/task-assign/{taskId}")
     public ResponseEntity<TaskAssignDto> updateData(@PathVariable long taskId, @RequestBody TaskAssignDto taskAssignDto){
         try {

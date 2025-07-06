@@ -70,7 +70,17 @@ public class TaskIntroduceService implements TaskIntroduceServiceI {
         }
 
     }
-//
+
+    @Override
+    public TaskIntroduceDto getTaskById(Long id) {
+        Optional<DefinedTasksEntity> optionalTask = definedTasksRepository.findById(id);
+
+        if (optionalTask.isPresent()) {
+            return definedTasksMapper.toTaskIntroduceDto(optionalTask.get());
+        } else {
+            throw new AppException("Task not found with id: " + id, HttpStatus.NOT_FOUND);
+        }
+    }
 
 
     @Override
