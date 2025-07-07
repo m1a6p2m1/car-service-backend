@@ -12,6 +12,9 @@ public class DefinedSubTaskEntity {
     @Column(name = "sub_task_name")
     private String subTaskName;
 
+    @Column(name = "sub_task_price")
+    private Double subTaskPrice;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private DefinedTasksEntity definedTasksEntity;
@@ -45,5 +48,13 @@ public class DefinedSubTaskEntity {
 
     public void setDefinedTasksEntity(DefinedTasksEntity definedTasksEntity) {
         this.definedTasksEntity = definedTasksEntity;
+    }
+
+    public Double getSubTaskPrice() {
+        return subTaskPrice;
+    }
+
+    public void setSubTaskPrice(Double subTaskPrice) {
+        this.subTaskPrice = subTaskPrice;
     }
 }

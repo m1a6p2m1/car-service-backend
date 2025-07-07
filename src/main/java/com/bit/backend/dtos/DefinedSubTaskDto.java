@@ -4,14 +4,16 @@ public class DefinedSubTaskDto {
     private Long id;
     private String subTaskName;
     private Long taskId;
+    private Double subTaskPrice;
 
     public DefinedSubTaskDto() {
     }
 
-    public DefinedSubTaskDto(Long id, String subTaskName, Long taskId) {
+    public DefinedSubTaskDto(Long id, String subTaskName, Long taskId, Double subTaskPrice) {
         this.id = id;
         this.subTaskName = subTaskName;
         this.taskId = taskId;
+        this.subTaskPrice = subTaskPrice;
     }
 
     public Long getId() {
@@ -36,5 +38,13 @@ public class DefinedSubTaskDto {
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public Double getSubTaskPrice() {
+        return subTaskPrice;
+    }
+
+    public void setSubTaskPrice(Double subTaskPrice) {
+        this.subTaskPrice = subTaskPrice;
     }
 }
