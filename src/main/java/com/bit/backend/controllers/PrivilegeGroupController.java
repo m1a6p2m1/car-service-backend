@@ -42,4 +42,9 @@ public class PrivilegeGroupController {
     public ResponseEntity<PrivilegeGroupDto> deletePrivilegeGroup(@PathVariable long id, @RequestBody PrivilegeGroupDto privilegeGroupDto) {
         return ResponseEntity.ok(privilegeGroupServiceI.deletePrivilegeGroup(id, privilegeGroupDto));
     }
+
+    @PutMapping("/privilege-groups/set-as-default/{id}")
+    public ResponseEntity<PrivilegeGroupDto> setAsCustomerDefault(@PathVariable long id, @RequestBody PrivilegeGroupDto privilegeGroupDto) {
+        return ResponseEntity.ok(privilegeGroupServiceI.setAsCustomerDefault(id, privilegeGroupDto));
+    }
 }

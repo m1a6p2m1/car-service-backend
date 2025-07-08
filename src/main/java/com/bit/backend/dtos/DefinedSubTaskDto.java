@@ -3,17 +3,16 @@ package com.bit.backend.dtos;
 public class DefinedSubTaskDto {
     private Long id;
     private String subTaskName;
-    private String subTaskPrice;
     private Long taskId;
+    private Double subTaskPrice;
 
     public DefinedSubTaskDto() {
     }
-
-    public DefinedSubTaskDto(Long id, String subTaskName, String subTaskPrice, Long taskId) {
+    public DefinedSubTaskDto(Long id, String subTaskName, Long taskId, Double subTaskPrice) {
         this.id = id;
         this.subTaskName = subTaskName;
-        this.subTaskPrice = subTaskPrice;
         this.taskId = taskId;
+        this.subTaskPrice = subTaskPrice;
     }
 
     public Long getId() {
@@ -31,20 +30,19 @@ public class DefinedSubTaskDto {
     public void setSubTaskName(String subTaskName) {
         this.subTaskName = subTaskName;
     }
-
-    public String getSubTaskPrice() {
-        return subTaskPrice;
-    }
-
-    public void setSubTaskPrice(String subTaskPrice) {
-        this.subTaskPrice = subTaskPrice;
-    }
-
     public Long getTaskId() {
         return taskId;
     }
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public Double getSubTaskPrice() {
+        return subTaskPrice;
+    }
+
+    public void setSubTaskPrice(Double subTaskPrice) {
+        this.subTaskPrice = subTaskPrice;
     }
 }

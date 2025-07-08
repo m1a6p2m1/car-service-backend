@@ -15,11 +15,8 @@ public class DefinedTasksEntity {
     @Column(name = "task_name")
     private String taskName;
 
-    @OneToMany(mappedBy = "definedTasksEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<DefinedSubTaskEntity> definedSubTaskEntities = new ArrayList<>();
-
     @Column(name = "total_task_price")
-    private String totalTaskPrice;
+    private Double totalTaskPrice;
 
     @Column(name = "description")
     private String description;
@@ -27,16 +24,19 @@ public class DefinedTasksEntity {
     @Column(name = "short_description")
     private String shortDescription;
 
+    @OneToMany(mappedBy = "definedTasksEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<DefinedSubTaskEntity> definedSubTaskEntities = new ArrayList<>();
+
     public DefinedTasksEntity() {
     }
 
-    public DefinedTasksEntity(Long id, String taskName, List<DefinedSubTaskEntity> definedSubTaskEntities, String totalTaskPrice, String description, String shortDescription) {
+    public DefinedTasksEntity(Long id, String taskName, Double totalTaskPrice, String description, String shortDescription, List<DefinedSubTaskEntity> definedSubTaskEntities) {
         this.id = id;
         this.taskName = taskName;
-        this.definedSubTaskEntities = definedSubTaskEntities;
         this.totalTaskPrice = totalTaskPrice;
         this.description = description;
         this.shortDescription = shortDescription;
+        this.definedSubTaskEntities = definedSubTaskEntities;
     }
 
     public Long getId() {
@@ -59,11 +59,12 @@ public class DefinedTasksEntity {
         return definedSubTaskEntities;
     }
 
-    public String getTotalTaskPrice() {
+
+    public Double getTotalTaskPrice() {
         return totalTaskPrice;
     }
 
-    public void setTotalTaskPrice(String totalTaskPrice) {
+    public void setTotalTaskPrice(Double totalTaskPrice) {
         this.totalTaskPrice = totalTaskPrice;
     }
 

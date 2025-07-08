@@ -39,6 +39,9 @@ public class TaskIntroduceService implements TaskIntroduceServiceI {
         // Create a new DefinedTasksEntity
         DefinedTasksEntity taskEntity = new DefinedTasksEntity();
         taskEntity.setTaskName(taskIntroduceDto.getTaskName());
+        taskEntity.setTotalTaskPrice(taskIntroduceDto.getTotalTaskPrice());
+        taskEntity.setDescription(taskIntroduceDto.getDescription());
+        taskEntity.setShortDescription(taskIntroduceDto.getShortDescription());
 
         // Save task first to get generated ID
         DefinedTasksEntity savedTask = definedTasksRepository.save(taskEntity);
@@ -95,6 +98,9 @@ public class TaskIntroduceService implements TaskIntroduceServiceI {
 
             DefinedTasksEntity existingTask = optionalTask.get();
             existingTask.setTaskName(taskIntroduceDto.getTaskName()); // Update main task fields here
+            existingTask.setTotalTaskPrice(taskIntroduceDto.getTotalTaskPrice());
+            existingTask.setShortDescription(taskIntroduceDto.getShortDescription());
+            existingTask.setDescription(taskIntroduceDto.getDescription());
 
             // Handle SubTasks
             List<DefinedSubTaskEntity> existingSubTasks = existingTask.getDefinedSubTaskEntities();
@@ -112,6 +118,7 @@ public class TaskIntroduceService implements TaskIntroduceServiceI {
 
                     if (match != null) {
                         match.setSubTaskName(dto.getSubTaskName());
+                        match.setSubTaskPrice(dto.getSubTaskPrice());
                         updatedSubTasks.add(match);
                     }
                 } else {
@@ -119,6 +126,7 @@ public class TaskIntroduceService implements TaskIntroduceServiceI {
                     DefinedSubTaskEntity newSubTask = new DefinedSubTaskEntity();
                     newSubTask.setSubTaskName(dto.getSubTaskName());
                     newSubTask.setDefinedTasksEntity(existingTask);
+                    newSubTask.setSubTaskPrice(dto.getSubTaskPrice());
                     updatedSubTasks.add(newSubTask);
                 }
             }

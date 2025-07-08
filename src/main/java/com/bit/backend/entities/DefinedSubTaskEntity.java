@@ -13,7 +13,7 @@ public class DefinedSubTaskEntity {
     private String subTaskName;
 
     @Column(name = "sub_task_price")
-    private String subTaskPrice;
+    private Double subTaskPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
@@ -22,7 +22,7 @@ public class DefinedSubTaskEntity {
     public DefinedSubTaskEntity() {
     }
 
-    public DefinedSubTaskEntity(Long id, String subTaskName, String subTaskPrice, DefinedTasksEntity definedTasksEntity) {
+    public DefinedSubTaskEntity(Long id, String subTaskName, Double subTaskPrice, DefinedTasksEntity definedTasksEntity) {
         this.id = id;
         this.subTaskName = subTaskName;
         this.subTaskPrice = subTaskPrice;
@@ -45,19 +45,19 @@ public class DefinedSubTaskEntity {
         this.subTaskName = subTaskName;
     }
 
-    public String getSubTaskPrice() {
-        return subTaskPrice;
-    }
-
-    public void setSubTaskPrice(String subTaskPrice) {
-        this.subTaskPrice = subTaskPrice;
-    }
-
     public DefinedTasksEntity getDefinedTasksEntity() {
         return definedTasksEntity;
     }
 
     public void setDefinedTasksEntity(DefinedTasksEntity definedTasksEntity) {
         this.definedTasksEntity = definedTasksEntity;
+    }
+
+    public Double getSubTaskPrice() {
+        return subTaskPrice;
+    }
+
+    public void setSubTaskPrice(Double subTaskPrice) {
+        this.subTaskPrice = subTaskPrice;
     }
 }

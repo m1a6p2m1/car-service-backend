@@ -6,7 +6,7 @@ public class TaskIntroduceDto {
     private long id;
     private String taskName;
     private List<DefinedSubTaskDto> subTasks;
-    private String totalTaskPrice;
+    private Double totalTaskPrice;
     private String description;
     private String shortDescription;
 
@@ -33,12 +33,11 @@ public class TaskIntroduceDto {
     public void setSubTasks(List<DefinedSubTaskDto> subTasks) {
         this.subTasks = subTasks;
     }
-
-    public String getTotalTaskPrice() {
+    public Double getTotalTaskPrice() {
         return totalTaskPrice;
     }
 
-    public void setTotalTaskPrice(String totalTaskPrice) {
+    public void setTotalTaskPrice(Double totalTaskPrice) {
         this.totalTaskPrice = totalTaskPrice;
     }
 

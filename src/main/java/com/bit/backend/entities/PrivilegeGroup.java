@@ -8,11 +8,12 @@ public class PrivilegeGroup {
 
     public PrivilegeGroup() {}
 
-    public PrivilegeGroup(Long id, String groupName, String groupDescription, int status) {
+    public PrivilegeGroup(Long id, String groupName, String groupDescription, int status, boolean isDefault) {
         this.id = id;
         this.groupName = groupName;
         this.groupDescription = groupDescription;
         this.status = status;
+        this.isDefault = isDefault;
     }
 
     @Id
@@ -27,6 +28,10 @@ public class PrivilegeGroup {
 
     @Column(name = "status")
     private int status;
+
+
+    @Column(name = "is_default", nullable = false)
+    private boolean isDefault;
 
     public Long getId() {
         return id;
@@ -58,5 +63,13 @@ public class PrivilegeGroup {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }
