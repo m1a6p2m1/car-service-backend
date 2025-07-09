@@ -12,6 +12,8 @@ import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long> {
 
+    long countByAppointmentDateAndTimeSlot(LocalDate appointmentDate, LocalTime timeSlot);
+
     @Query("""
            SELECT a.timeSlot, COUNT(a.id)
            FROM AppointmentEntity a

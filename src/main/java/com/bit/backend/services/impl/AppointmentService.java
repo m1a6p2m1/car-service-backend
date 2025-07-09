@@ -80,8 +80,8 @@ public class AppointmentService implements AppointmentServiceI {
 
     @Override
     public AppointmentDto book(AppointmentDto appointmentDto) {
-        LocalDate date = appointmentDto.appointmentDate();
-        LocalTime slot = appointmentDto.timeSlot();
+        LocalDate date = appointmentDto.getAppointmentDate();
+        LocalTime slot = appointmentDto.getTimeSlot();
 
         // find a free bay 1‑3
         int bay = IntStream.rangeClosed(1, MAX_BAYS)
@@ -89,10 +89,22 @@ public class AppointmentService implements AppointmentServiceI {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("All bays full for that slot"));
 
+        //Save new appointment
         AppointmentEntity saved = appointmentRepository.save(
                 new AppointmentEntity(date, slot, bay));
+        System.out.println(" Appointment saved: " + saved.getAppointmentDate() + " " + saved.getTimeSlot() + " Bay: " + saved.getBay());
         System.out.println("************************appointment book service********************");
-        return appointmentMapper.toAppointmentDto(saved);
+        // Recount how many appointments are now booked for this slot
+        long bookedCount = appointmentRepository.countByAppointmentDateAndTimeSlot(date, slot);
+
+        // Return DTO with updated data
+        return new AppointmentDto(
+                saved.getId(),
+                saved.getAppointmentDate(),
+                saved.getTimeSlot(),
+                saved.getBay(),
+                bookedCount
+        );
     }
 
 

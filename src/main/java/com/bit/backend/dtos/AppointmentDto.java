@@ -8,15 +8,17 @@ public class AppointmentDto {
     private LocalDate appointmentDate;
     private LocalTime timeSlot;
     private Integer bay;
+    private Long bookedCount;
 
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, LocalDate appointmentDate, LocalTime timeSlot, Integer bay) {
+    public AppointmentDto(Long id, LocalDate appointmentDate, LocalTime timeSlot, Integer bay, Long bookedCount) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.timeSlot = timeSlot;
         this.bay = bay;
+        this.bookedCount = bookedCount;
     }
 
     public Long getId() {
@@ -51,12 +53,19 @@ public class AppointmentDto {
         this.bay = bay;
     }
 
-
-    public LocalDate appointmentDate() {
-        return null;
+    public Long getBookedCount() {
+        return bookedCount;
     }
 
-    public LocalTime timeSlot() {
-        return null;
+    public void setBookedCount(Long bookedCount) {
+        this.bookedCount = bookedCount;
     }
+
+//    public LocalDate appointmentDate() {
+//        return appointmentDate;
+//    }
+//
+//    public LocalTime timeSlot() {
+//        return timeSlot;
+//    }
 }

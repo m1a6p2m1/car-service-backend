@@ -23,9 +23,10 @@ public class AppointmentEntity {
     @Column(name = "bay")
     private Integer bay;
 
+
     public AppointmentEntity() {}
 
-    public AppointmentEntity(LocalDate appointmentDate, LocalTime timeSlot, Integer bay) {
+    public AppointmentEntity( LocalDate appointmentDate, LocalTime timeSlot, Integer bay) {
         this.appointmentDate = appointmentDate;
         this.timeSlot = timeSlot;
         this.bay = bay;

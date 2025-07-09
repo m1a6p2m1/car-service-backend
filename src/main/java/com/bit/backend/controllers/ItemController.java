@@ -29,7 +29,7 @@ public class ItemController {
             itemDto.setImageType(file.getContentType());
 
             ItemDto itemDtoResponse = itemServiceI.addItemEntity(itemDto);
-            return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemName())).body(itemDtoResponse);
+            return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemCode())).body(itemDtoResponse);
         }catch (Exception e){
             throw new AppException("Request fail with error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
