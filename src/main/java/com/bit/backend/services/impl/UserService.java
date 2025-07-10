@@ -183,6 +183,7 @@ public class UserService implements UserServiceI {
             dto.setImage(user.getEmployee().getImage());
             dto.setImageType(user.getEmployee().getImageType());
             dto.setImageName(user.getEmployee().getImageName());
+
         }
 
         return dto;

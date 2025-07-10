@@ -1,9 +1,11 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.CustomerDto;
-import com.bit.backend.dtos.FormDemoDto;
+import com.bit.backend.dtos.SignUpDto;
+import com.bit.backend.dtos.UserDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.CustomerServiceI;
+import com.bit.backend.services.UserServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,12 @@ import java.util.Map;
 @RestController
 public class CustomerController {
     private final CustomerServiceI customerServiceI;
+    private final UserServiceI userServiceI;
 
-    public CustomerController(CustomerServiceI customerServiceI) {
+
+    public CustomerController(CustomerServiceI customerServiceI, UserServiceI userServiceI) {
         this.customerServiceI = customerServiceI;
+        this.userServiceI = userServiceI;
     }
 
     @PostMapping("/customer")
@@ -69,6 +74,18 @@ public class CustomerController {
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/customer/register")
+    public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
+        UserDto user = userServiceI.register(signUpDto);
+        return ResponseEntity.created(URI.create("/customer/register/" + user.getId())).body(user);
+    }
+
+    @PutMapping ("/customer/register/{cusId}")
+    public ResponseEntity<UserDto> editRegistrationDetails(@PathVariable long cusId, @RequestBody SignUpDto signUpDto) {
+        UserDto user = userServiceI.register(signUpDto);
+        return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
 
 }

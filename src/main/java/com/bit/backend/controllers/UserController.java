@@ -49,6 +49,24 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
 
+    @PostMapping("/customer-register")
+    public ResponseEntity<UserDto> cusRegister(@RequestBody SignUpDto signUpDto) {
+        System.out.println("*******customer-register*****");
+        SignUpDto customerSignUp = new SignUpDto(
+                signUpDto.id(),
+                signUpDto.firstName(),
+                signUpDto.lastName(),
+                signUpDto.login(),
+                signUpDto.password(),
+                "CUSTOMER",                     // set role here
+                null,                // no employeeId for employee
+                signUpDto.customerId()
+        );
+        UserDto user = userServiceI.register(customerSignUp);
+        user.setToken(userAuthProvider.createToken(user));
+        return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
+    }
+
     //get saved user(employee) data to user profile form
     @GetMapping("/user-profile")
     public ResponseEntity<UserDto> getUserProfile(Principal principal) {
