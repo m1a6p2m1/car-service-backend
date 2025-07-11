@@ -1,5 +1,6 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.config.RSADecryptor;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.CustomerEntity;
 import com.bit.backend.entities.EmployeeEntity;
@@ -46,22 +47,26 @@ public class UserService implements UserServiceI {
     }
 
     @Override
-    public UserDto login(CredentialsDto credentialsDto) {
+    public UserDto login(CredentialsDto credentialsDto) throws Exception {
         logger.debug("Entering in login Method...");
         User user = userRepository.findByLogin(credentialsDto.login()).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+        String decryptedPassword = RSADecryptor.decrypt(new String(credentialsDto.password()));
+        try {
+            if (passwordEncoder.matches(CharBuffer.wrap(decryptedPassword.toCharArray()), user.getPassword())) {
+                UserDto userDto = userMapper.toUserDto(user);
 
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-            UserDto userDto = userMapper.toUserDto(user);
-
-            // Add employee image details here:
-            if (user.getEmployee() != null) {
-                userDto.setImage(user.getEmployee().getImage());
-                userDto.setImageName(user.getEmployee().getImageName());
-                userDto.setImageType(user.getEmployee().getImageType());
-                userDto.setImageType(user.getEmployee().getEmail());
-                userDto.setImageType(user.getEmployee().getPhoneNumber());
+                // Add employee image details here:
+                if (user.getEmployee() != null) {
+                    userDto.setImage(user.getEmployee().getImage());
+                    userDto.setImageName(user.getEmployee().getImageName());
+                    userDto.setImageType(user.getEmployee().getImageType());
+                    userDto.setImageType(user.getEmployee().getEmail());
+                    userDto.setImageType(user.getEmployee().getPhoneNumber());
+                }
+                return userDto;
             }
-            return userDto;
+        } catch (Exception exception) {
+            throw new AppException("Error Occurred", HttpStatus.BAD_REQUEST);
         }
 
 
