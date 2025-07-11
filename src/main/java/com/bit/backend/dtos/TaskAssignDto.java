@@ -7,13 +7,16 @@ public class TaskAssignDto {
     private String taskName;
     private String taskCreatedBy;
     private String customerName;
+    private String email;
     private String description;
     private String status;
+    private String uniqueTaskNo;
     private List<SubTaskAssignDto> subTasks;
     private Long customerId;
 
     public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
-                         String customerName, String description, String status, List<SubTaskAssignDto> subTasks, Long customerId) {
+                         String customerName, String description, String email, String status, List<SubTaskAssignDto> subTasks,
+                         Long customerId, String uniqueTaskNo) {
         this.id = id;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
@@ -22,6 +25,8 @@ public class TaskAssignDto {
         this.status = status;
         this.subTasks = subTasks;
         this.customerId = customerId;
+        this.email = email;
+        this.uniqueTaskNo = uniqueTaskNo;
     }
 
     public Long getId() {
@@ -85,5 +90,21 @@ public class TaskAssignDto {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUniqueTaskNo() {
+        return uniqueTaskNo;
+    }
+
+    public void setUniqueTaskNo(String uniqueTaskNo) {
+        this.uniqueTaskNo = uniqueTaskNo;
     }
 }

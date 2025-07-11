@@ -15,6 +15,9 @@ public class SubTaskAssignedEntity {
     @Column(name = "assigned_user")
     private Long assignedUserId;
 
+    @Column(name = "unique_sub_task_no")
+    private String uniqueSubTaskNo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskAssignEntity taskAssignEntity;
@@ -46,5 +49,13 @@ public class SubTaskAssignedEntity {
 
     public void setTaskAssignEntity(TaskAssignEntity taskAssignEntity) {
         this.taskAssignEntity = taskAssignEntity;
+    }
+
+    public String getUniqueSubTaskNo() {
+        return uniqueSubTaskNo;
+    }
+
+    public void setUniqueSubTaskNo(String uniqueSubTaskNo) {
+        this.uniqueSubTaskNo = uniqueSubTaskNo;
     }
 }
