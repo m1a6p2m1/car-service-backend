@@ -15,4 +15,6 @@ public interface UserServiceI {
     UserDto getUserProfile(String login);
     //user profile update
     UserDto updateUserProfile(Long id, UserDto userDto);
+    PasswordResetDto forgotPassword(PasswordResetDto passwordResetDto);
+    void resetPassword(String token, String newPassword);
 }
