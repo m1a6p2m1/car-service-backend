@@ -18,4 +18,6 @@ public interface TaskAssignServiceI {
     List<TaskAssignDto> getByCustomerId(Long customerId); // customer commonly used tasks loaded into the dashboard
     List<SubTaskAssignDto> getAssignedSubTasksData(Long userId);
     SubTaskStatusChangeDto subTaskStatusChange(SubTaskStatusChangeDto subTaskStatusChangeDto);
+    List<TaskAssignDto> getMainTaskDetails(String customerId, String taskNo);
+    List<TaskAssignDto> getMainTaskDetailsByUid(String uid);
 }

@@ -13,10 +13,11 @@ public class TaskAssignDto {
     private String uniqueTaskNo;
     private List<SubTaskAssignDto> subTasks;
     private Long customerId;
+    private Long supervisor;
 
     public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
                          String customerName, String description, String email, String status, List<SubTaskAssignDto> subTasks,
-                         Long customerId, String uniqueTaskNo) {
+                         Long customerId, String uniqueTaskNo, Long supervisor) {
         this.id = id;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
@@ -27,6 +28,7 @@ public class TaskAssignDto {
         this.customerId = customerId;
         this.email = email;
         this.uniqueTaskNo = uniqueTaskNo;
+        this.supervisor = supervisor;
     }
 
     public Long getId() {
@@ -106,5 +108,13 @@ public class TaskAssignDto {
 
     public void setUniqueTaskNo(String uniqueTaskNo) {
         this.uniqueTaskNo = uniqueTaskNo;
+    }
+
+    public Long getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Long supervisor) {
+        this.supervisor = supervisor;
     }
 }

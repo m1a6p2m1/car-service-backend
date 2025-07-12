@@ -21,6 +21,18 @@ public class SubTaskAssignedEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "supervisor")
+    private Long supervisor;
+
+    @Column(name="assigne_user_name")
+    private String assigneUserName;
+
+    @Column(name = "main_unique_task_no")
+    private String mainUniqueTaskNo;
+
+    @Column(name = "customer")
+    private String customer;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskAssignEntity taskAssignEntity;
@@ -68,5 +80,37 @@ public class SubTaskAssignedEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Long supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public String getAssigneUserName() {
+        return assigneUserName;
+    }
+
+    public void setAssigneUserName(String assigneUserName) {
+        this.assigneUserName = assigneUserName;
+    }
+
+    public String getMainUniqueTaskNo() {
+        return mainUniqueTaskNo;
+    }
+
+    public void setMainUniqueTaskNo(String mainUniqueTaskNo) {
+        this.mainUniqueTaskNo = mainUniqueTaskNo;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 }

@@ -10,6 +10,7 @@ import com.bit.backend.repositories.SubTasksAssignRepository;
 import com.bit.backend.repositories.TaskAssignRepository;
 import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.CustomerServiceI;
+import com.bit.backend.services.NotificationServiceI;
 import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,12 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final SubTasksAssignRepository subTasksAssignRepository;
     private final UserRepository userRepository;
     private final CustomerServiceI customerServiceI;
+    private final NotificationServiceI notificationServiceI;
 
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
                              DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
                              SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository,
-                             CustomerServiceI customerServiceI) {
+                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
@@ -41,6 +43,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         this.subTasksAssignRepository = subTasksAssignRepository;
         this.userRepository = userRepository;
         this.customerServiceI = customerServiceI;
+        this.notificationServiceI = notificationServiceI;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
             Long empId = user.getEmployee().getEmpNumber();
 
-            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
+            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
             return taskAssignMapper.toSubTaskAssignDto(subTaskAssignedEntities);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -100,6 +103,42 @@ public class TaskAssignService implements TaskAssignServiceI {
     }
 
     @Override
+    public List<TaskAssignDto> getMainTaskDetails(String customerId, String taskNo) {
+        if (customerId.equals("-1") && taskNo.equals("-1")) {
+            throw new AppException("Invalid Request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // get customerId from userId
+
+        User user = userRepository.findById(Long.parseLong(customerId)).orElseThrow(() -> new AppException("User Not Found", HttpStatus.INTERNAL_SERVER_ERROR));
+
+        if (user.getId() != null) {
+            Long cusId = user.getCustomer().getCusId();
+            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByCustomerId(cusId);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        }
+
+        if (taskNo != null || !taskNo.equals("") || !taskNo.equals(null)) {
+            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByUniqueTaskNo(taskNo);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<TaskAssignDto> getMainTaskDetailsByUid(String uid) {
+        try {
+            List<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(uid);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
 //            System.out.println("*******************In get Data**************");
@@ -118,6 +157,8 @@ public class TaskAssignService implements TaskAssignServiceI {
             int count = 1;
 
             String taskNo = generateTaskNumber(savedTask);
+            Long superVisorId = taskAssignDto.getSupervisor();
+            String customer = taskAssignDto.getCustomerName();
 
             if (taskNo != null) {
                 taskAssignEntity.setUniqueTaskNo(taskNo);
@@ -131,13 +172,19 @@ public class TaskAssignService implements TaskAssignServiceI {
                 for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
                     String subTaskNo = generateSubTaskNumber(taskNo, subTaskAssignedEntity, count);
                     subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
+                    subTaskAssignedEntity.setSupervisor(superVisorId);
+                    subTaskAssignedEntity.setMainUniqueTaskNo(taskNo);
+                    subTaskAssignedEntity.setCustomer(customer);
+                    subTaskAssignedEntity.setStatus("pending");
                     count = count + 1;
                 }
 
                 List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
             }
-
+            taskAssignDto.setEmail(taskAssignEntity.getEmail());
+            taskAssignDto.setUniqueTaskNo(taskAssignEntity.getUniqueTaskNo());
             // send mail to customer [Todo]
+            this.notificationServiceI.sendTaskTrackerNotification(taskAssignDto);
             // send notification to employee [todo]
 
             return savedDto;
@@ -185,18 +232,50 @@ public class TaskAssignService implements TaskAssignServiceI {
 
     @Override
     public TaskAssignDto updateData(long taskId, TaskAssignDto taskAssignDto) {
+        int count = 0;
         try {
             Optional<TaskAssignEntity> optionalTaskAssignEntity = taskAssignRepository.findById(taskId);
 
             if(!optionalTaskAssignEntity.isPresent()){
                 throw new AppException("Task Assign Does Not Exist", HttpStatus.BAD_REQUEST);
             }
+
+            count = optionalTaskAssignEntity.get().getSubTasks().size() + 1;
+            taskAssignDto.setUniqueTaskNo(optionalTaskAssignEntity.get().getUniqueTaskNo());
             TaskAssignEntity newTaskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
 
             newTaskAssignEntity.setId(taskId);
+            String customer = newTaskAssignEntity.getCustomerName();
+            newTaskAssignEntity.setUniqueTaskNo(taskAssignDto.getUniqueTaskNo());
+
+            String uniqueTaskNo = optionalTaskAssignEntity.get().getUniqueTaskNo();
+            if (uniqueTaskNo == null || uniqueTaskNo.equals("") || uniqueTaskNo.equals(null)) {
+                uniqueTaskNo = generateTaskNumber(optionalTaskAssignEntity.get());
+                newTaskAssignEntity.setUniqueTaskNo(uniqueTaskNo);
+                count = 0;
+            }
 
             TaskAssignEntity taskAssignEntity = taskAssignRepository.save(newTaskAssignEntity);
             TaskAssignDto responseTaskAssignDto = taskAssignMapper.toTaskAssignDto(taskAssignEntity);
+            Long superVisorId = taskAssignEntity.getSupervisor();
+
+            if (responseTaskAssignDto != null) {
+                List<SubTaskAssignedEntity> subTaskAssignedEntityList = taskAssignEntity.getSubTasks();
+
+                for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
+                    String subTaskNo = "";
+                    if (subTaskAssignedEntity.getUniqueSubTaskNo() == null || subTaskAssignedEntity.getUniqueSubTaskNo().equals("") || subTaskAssignedEntity.getUniqueSubTaskNo().equals(null)) {
+                        subTaskNo  = generateSubTaskNumber(uniqueTaskNo, subTaskAssignedEntity, count);
+                    }
+                    subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
+                    subTaskAssignedEntity.setSupervisor(superVisorId);
+                    subTaskAssignedEntity.setMainUniqueTaskNo(uniqueTaskNo);
+                    subTaskAssignedEntity.setCustomer(customer);
+                    count = count + 1;
+                }
+
+                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
+            }
 
             return responseTaskAssignDto;
         } catch (Exception e){

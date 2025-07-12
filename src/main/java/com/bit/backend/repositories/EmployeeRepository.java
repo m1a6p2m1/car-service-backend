@@ -9,6 +9,6 @@ import java.util.Map;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> {
 
-    @Query("SELECT empNumber as id, fullName as name FROM EmployeeEntity ")
+    @Query("SELECT empNumber as id, fullName as name, jobTitle as position FROM EmployeeEntity ")
     List<Map<String, Object>> getEmployeeList();
 }
