@@ -1,6 +1,8 @@
 package com.bit.backend.services;
 
 import com.bit.backend.dtos.DefinedTasksDto;
+import com.bit.backend.dtos.SubTaskAssignDto;
+import com.bit.backend.dtos.SubTaskStatusChangeDto;
 import com.bit.backend.dtos.TaskAssignDto;
 
 import java.util.List;
@@ -14,4 +16,6 @@ public interface TaskAssignServiceI {
     List<DefinedTasksDto> getDefinedTasksData();
 
     List<TaskAssignDto> getByCustomerId(Long customerId); // customer commonly used tasks loaded into the dashboard
+    List<SubTaskAssignDto> getAssignedSubTasksData(Long userId);
+    SubTaskStatusChangeDto subTaskStatusChange(SubTaskStatusChangeDto subTaskStatusChangeDto);
 }

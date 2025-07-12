@@ -5,12 +5,14 @@ public class SubTaskAssignDto {
     private String description;
     private Long assignedUserId;
     private String uniqueSubTaskNo;
+    private String status;
 
-    public SubTaskAssignDto(Long id, String description, Long assignedUserId, String uniqueSubTaskNo) {
+    public SubTaskAssignDto(Long id, String description, Long assignedUserId, String uniqueSubTaskNo, String status) {
         this.id = id;
         this.description = description;
         this.assignedUserId = assignedUserId;
         this.uniqueSubTaskNo = uniqueSubTaskNo;
+        this.status = status;
     }
 
     public Long getId() {
@@ -43,5 +45,13 @@ public class SubTaskAssignDto {
 
     public void setUniqueSubTaskNo(String uniqueSubTaskNo) {
         this.uniqueSubTaskNo = uniqueSubTaskNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

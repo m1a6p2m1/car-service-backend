@@ -18,6 +18,9 @@ public class SubTaskAssignedEntity {
     @Column(name = "unique_sub_task_no")
     private String uniqueSubTaskNo;
 
+    @Column(name = "status")
+    private String status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskAssignEntity taskAssignEntity;
@@ -57,5 +60,13 @@ public class SubTaskAssignedEntity {
 
     public void setUniqueSubTaskNo(String uniqueSubTaskNo) {
         this.uniqueSubTaskNo = uniqueSubTaskNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
