@@ -19,4 +19,5 @@ public interface TaskAssignServiceI {
     List<SubTaskAssignDto> getAssignedSubTasksData(Long userId);
     SubTaskStatusChangeDto subTaskStatusChange(SubTaskStatusChangeDto subTaskStatusChangeDto);
     List<TaskAssignDto> getMainTaskDetails(String customerId, String taskNo);
+    List<TaskAssignDto> getMainTaskDetailsByUid(String uid);
 }

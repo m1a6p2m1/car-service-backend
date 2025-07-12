@@ -10,6 +10,7 @@ import com.bit.backend.repositories.SubTasksAssignRepository;
 import com.bit.backend.repositories.TaskAssignRepository;
 import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.CustomerServiceI;
+import com.bit.backend.services.NotificationServiceI;
 import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,12 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final SubTasksAssignRepository subTasksAssignRepository;
     private final UserRepository userRepository;
     private final CustomerServiceI customerServiceI;
+    private final NotificationServiceI notificationServiceI;
 
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
                              DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
                              SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository,
-                             CustomerServiceI customerServiceI) {
+                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
@@ -41,6 +43,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         this.subTasksAssignRepository = subTasksAssignRepository;
         this.userRepository = userRepository;
         this.customerServiceI = customerServiceI;
+        this.notificationServiceI = notificationServiceI;
     }
 
     @Override
@@ -125,6 +128,17 @@ public class TaskAssignService implements TaskAssignServiceI {
     }
 
     @Override
+    public List<TaskAssignDto> getMainTaskDetailsByUid(String uid) {
+        try {
+            List<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(uid);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
 //            System.out.println("*******************In get Data**************");
@@ -161,13 +175,16 @@ public class TaskAssignService implements TaskAssignServiceI {
                     subTaskAssignedEntity.setSupervisor(superVisorId);
                     subTaskAssignedEntity.setMainUniqueTaskNo(taskNo);
                     subTaskAssignedEntity.setCustomer(customer);
+                    subTaskAssignedEntity.setStatus("pending");
                     count = count + 1;
                 }
 
                 List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
             }
-
+            taskAssignDto.setEmail(taskAssignEntity.getEmail());
+            taskAssignDto.setUniqueTaskNo(taskAssignEntity.getUniqueTaskNo());
             // send mail to customer [Todo]
+            this.notificationServiceI.sendTaskTrackerNotification(taskAssignDto);
             // send notification to employee [todo]
 
             return savedDto;

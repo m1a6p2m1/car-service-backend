@@ -2,6 +2,7 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.NotificationDto;
 import com.bit.backend.dtos.PasswordResetDto;
+import com.bit.backend.dtos.TaskAssignDto;
 import com.bit.backend.entities.NotificationEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.NotificationMapper;
@@ -113,6 +114,21 @@ public class NotificationService implements NotificationServiceI {
             return true;
         } catch (Exception exception) {
             throw new AppException("Request failed with error: " + exception, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void sendTaskTrackerNotification(TaskAssignDto taskAssignDto) {
+        if (!taskAssignDto.getEmail().isEmpty()) {
+            String taskStatusLink = "http://localhost:4200/task-assign/task-by-uid?uid=" + taskAssignDto.getUniqueTaskNo();
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(taskAssignDto.getEmail());
+            message.setSubject("New Task Created - Task No: " + taskAssignDto.getUniqueTaskNo());
+            message.setText("Dear Customer,\n\nA new task has been created for you.\n\nTask No: " + taskAssignDto.getUniqueTaskNo() +
+                    "\nStatus: " +  taskStatusLink  +
+                    "\n\nThank you.");
+
+            javaMailSender.send(message);
         }
     }
 }
