@@ -29,6 +29,8 @@ public class TaskAssignEntity {
     private List<SubTaskAssignedEntity> subTasks = new ArrayList<>();
     @Column(name = "customer_id")
     private Long customerId;
+    @Column(name="supervisor")
+    private Long supervisor;
 
     public TaskAssignEntity() {
     }
@@ -124,5 +126,13 @@ public class TaskAssignEntity {
     public void removeSubTask(SubTaskAssignedEntity subTaskAssignedEntity) {
         subTasks.remove(subTaskAssignedEntity);
         subTaskAssignedEntity.setTaskAssignEntity(null);
+    }
+
+    public Long getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Long supervisor) {
+        this.supervisor = supervisor;
     }
 }

@@ -21,6 +21,9 @@ public class SubTaskAssignedEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "supervisor")
+    private Long supervisor;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskAssignEntity taskAssignEntity;
@@ -68,5 +71,13 @@ public class SubTaskAssignedEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Long supervisor) {
+        this.supervisor = supervisor;
     }
 }

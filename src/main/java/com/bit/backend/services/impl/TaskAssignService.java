@@ -74,7 +74,7 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
             Long empId = user.getEmployee().getEmpNumber();
 
-            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
+            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
             return taskAssignMapper.toSubTaskAssignDto(subTaskAssignedEntities);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -118,6 +118,7 @@ public class TaskAssignService implements TaskAssignServiceI {
             int count = 1;
 
             String taskNo = generateTaskNumber(savedTask);
+            Long superVisorId = taskAssignDto.getSupervisor();
 
             if (taskNo != null) {
                 taskAssignEntity.setUniqueTaskNo(taskNo);
@@ -131,6 +132,7 @@ public class TaskAssignService implements TaskAssignServiceI {
                 for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
                     String subTaskNo = generateSubTaskNumber(taskNo, subTaskAssignedEntity, count);
                     subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
+                    subTaskAssignedEntity.setSupervisor(superVisorId);
                     count = count + 1;
                 }
 
@@ -185,18 +187,46 @@ public class TaskAssignService implements TaskAssignServiceI {
 
     @Override
     public TaskAssignDto updateData(long taskId, TaskAssignDto taskAssignDto) {
+        int count = 0;
         try {
             Optional<TaskAssignEntity> optionalTaskAssignEntity = taskAssignRepository.findById(taskId);
 
             if(!optionalTaskAssignEntity.isPresent()){
                 throw new AppException("Task Assign Does Not Exist", HttpStatus.BAD_REQUEST);
             }
+
+            count = optionalTaskAssignEntity.get().getSubTasks().size() + 1;
+
             TaskAssignEntity newTaskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
 
             newTaskAssignEntity.setId(taskId);
 
+            String uniqueTaskNo = optionalTaskAssignEntity.get().getUniqueTaskNo();
+            if (uniqueTaskNo == null || uniqueTaskNo.equals("") || uniqueTaskNo.equals(null)) {
+                uniqueTaskNo = generateTaskNumber(optionalTaskAssignEntity.get());
+                newTaskAssignEntity.setUniqueTaskNo(uniqueTaskNo);
+                count = 0;
+            }
+
             TaskAssignEntity taskAssignEntity = taskAssignRepository.save(newTaskAssignEntity);
             TaskAssignDto responseTaskAssignDto = taskAssignMapper.toTaskAssignDto(taskAssignEntity);
+            Long superVisorId = taskAssignEntity.getSupervisor();
+
+            if (responseTaskAssignDto != null) {
+                List<SubTaskAssignedEntity> subTaskAssignedEntityList = taskAssignEntity.getSubTasks();
+
+                for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
+                    String subTaskNo = "";
+                    if (subTaskAssignedEntity.getUniqueSubTaskNo() == null || subTaskAssignedEntity.getUniqueSubTaskNo().equals("") || subTaskAssignedEntity.getUniqueSubTaskNo().equals(null)) {
+                        subTaskNo  = generateSubTaskNumber(uniqueTaskNo, subTaskAssignedEntity, count);
+                    }
+                    subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
+                    subTaskAssignedEntity.setSupervisor(superVisorId);
+                    count = count + 1;
+                }
+
+                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
+            }
 
             return responseTaskAssignDto;
         } catch (Exception e){
