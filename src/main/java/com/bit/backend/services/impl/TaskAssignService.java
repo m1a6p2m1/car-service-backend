@@ -1,14 +1,17 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.DefinedTasksDto;
+import com.bit.backend.dtos.SubTaskAssignDto;
+import com.bit.backend.dtos.SubTaskStatusChangeDto;
 import com.bit.backend.dtos.TaskAssignDto;
-import com.bit.backend.entities.DefinedTasksEntity;
-import com.bit.backend.entities.TaskAssignEntity;
+import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.DefinedTasksMapper;
 import com.bit.backend.mappers.TaskAssignMapper;
 import com.bit.backend.repositories.DefinedTasksRepository;
+import com.bit.backend.repositories.SubTasksAssignRepository;
 import com.bit.backend.repositories.TaskAssignRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,13 +28,18 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final TaskAssignMapper taskAssignMapper;
     private final DefinedTasksRepository definedTasksRepository;
     private final DefinedTasksMapper definedTasksMapper;
+    private final SubTasksAssignRepository subTasksAssignRepository;
+    private final UserRepository userRepository;
 
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
-                             DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper) {
+                             DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
+                             SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
         this.definedTasksMapper = definedTasksMapper;
+        this.subTasksAssignRepository = subTasksAssignRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,19 +65,67 @@ public class TaskAssignService implements TaskAssignServiceI {
     }
 
     @Override
+    public List<SubTaskAssignDto> getAssignedSubTasksData(Long userId) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(() -> new AppException("User Not Found", HttpStatus.INTERNAL_SERVER_ERROR));
+            if (user.getEmployee() == null) {
+                throw new AppException("Invalid Employee. Please login with correct employee Id", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            Long empId = user.getEmployee().getEmpNumber();
+
+            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
+            return taskAssignMapper.toSubTaskAssignDto(subTaskAssignedEntities);
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public SubTaskStatusChangeDto subTaskStatusChange(SubTaskStatusChangeDto subTaskStatusChangeDto) {
+        try {
+            SubTaskAssignDto savedSubTasks = null;
+            Optional<SubTaskAssignedEntity> oSubTaskAssignedEntity = subTasksAssignRepository.findById(subTaskStatusChangeDto.getId());
+
+            if (oSubTaskAssignedEntity.isPresent()) {
+                SubTaskAssignedEntity subTaskAssignedEntity = oSubTaskAssignedEntity.get();
+                subTaskAssignedEntity.setStatus(subTaskStatusChangeDto.getStatus());
+                savedSubTasks = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.save(subTaskAssignedEntity));
+            }
+
+            return subTaskStatusChangeDto;
+        } catch (Exception error) {
+            throw new AppException("Request Failed with Error: " + error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
 //            System.out.println("*******************In get Data**************");
             TaskAssignEntity taskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
             TaskAssignEntity savedTask = taskAssignRepository.save(taskAssignEntity);
             TaskAssignDto savedDto = null;
+            TaskAssignEntity updatedTask = null;
+            int count = 1;
 
             String taskNo = generateTaskNumber(savedTask);
 
             if (taskNo != null) {
                 taskAssignEntity.setUniqueTaskNo(taskNo);
-                TaskAssignEntity updatedTask = taskAssignRepository.save(taskAssignEntity);
+                updatedTask = taskAssignRepository.save(taskAssignEntity);
                 savedDto = taskAssignMapper.toTaskAssignDto(updatedTask);
+            }
+
+            if (savedDto != null) {
+                List<SubTaskAssignedEntity> subTaskAssignedEntityList = updatedTask.getSubTasks();
+
+                for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
+                    String subTaskNo = generateSubTaskNumber(taskNo, subTaskAssignedEntity, count);
+                    subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
+                    count = count + 1;
+                }
+
+                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
             }
 
             // send mail to customer [Todo]
@@ -87,6 +143,10 @@ public class TaskAssignService implements TaskAssignServiceI {
         String uniquePart = String.format("%03d", new Random().nextInt(1000)); // 000 - 999
 
         return datePart + taskIdPart + uniquePart;
+    }
+
+    public String generateSubTaskNumber(String mainTaskNo, SubTaskAssignedEntity subTaskAssignedEntity, int count) {
+        return mainTaskNo + count;
     }
 
     @Override

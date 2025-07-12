@@ -1,6 +1,8 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.DefinedTasksDto;
+import com.bit.backend.dtos.SubTaskAssignDto;
+import com.bit.backend.dtos.SubTaskStatusChangeDto;
 import com.bit.backend.dtos.TaskAssignDto;
 import com.bit.backend.entities.TaskAssignEntity;
 import com.bit.backend.exceptions.AppException;
@@ -98,6 +100,26 @@ public class TaskAssignController {
         }
     }
 
+    @GetMapping("/sub-task-assign/{userId}")
+    public ResponseEntity<List<SubTaskAssignDto>> getData(@PathVariable Long userId){
+        try {
+            List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignServiceI.getAssignedSubTasksData(userId);
+            return ResponseEntity.ok(subTaskAssignDtoList);
+        } catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
+    }
+
+    @PutMapping("/change-sub-task-status")
+    public ResponseEntity<SubTaskStatusChangeDto> subTaskStatusChange(@RequestBody SubTaskStatusChangeDto subTaskStatusChangeDto){
+        try {
+            SubTaskStatusChangeDto subTaskStatusChange = taskAssignServiceI.subTaskStatusChange(subTaskStatusChangeDto);
+            return ResponseEntity.ok(subTaskStatusChange);
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
 }
