@@ -122,4 +122,14 @@ public class TaskAssignController {
 
     }
 
+    @GetMapping("/task-assign/tracker/{customerId}/{taskNo}")
+    public ResponseEntity<List<TaskAssignDto>> getMainTaskDetails(@PathVariable String customerId, @PathVariable String taskNo) {
+        try {
+            List<TaskAssignDto> taskAssignDtoList = taskAssignServiceI.getMainTaskDetails(customerId, taskNo);
+            return ResponseEntity.ok(taskAssignDtoList);
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

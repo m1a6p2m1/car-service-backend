@@ -100,6 +100,31 @@ public class TaskAssignService implements TaskAssignServiceI {
     }
 
     @Override
+    public List<TaskAssignDto> getMainTaskDetails(String customerId, String taskNo) {
+        if (customerId.equals("-1") && taskNo.equals("-1")) {
+            throw new AppException("Invalid Request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // get customerId from userId
+
+        User user = userRepository.findById(Long.parseLong(customerId)).orElseThrow(() -> new AppException("User Not Found", HttpStatus.INTERNAL_SERVER_ERROR));
+
+        if (user.getId() != null) {
+            Long cusId = user.getCustomer().getCusId();
+            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByCustomerId(cusId);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        }
+
+        if (taskNo != null || !taskNo.equals("") || !taskNo.equals(null)) {
+            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByUniqueTaskNo(taskNo);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        }
+        return null;
+    }
+
+    @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
 //            System.out.println("*******************In get Data**************");
