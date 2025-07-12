@@ -22,15 +22,41 @@ public class AppointmentEntity {
     /** 1‑3 for the three washing bays */
     @Column(name = "bay")
     private Integer bay;
+    @Column(name = "task_name")
+    private String taskName;
+    @Column(name = "vehicle_type")
+    private String vehicleType;
+    @Column(name = "service_type")
+    private String serviceType;
+    @Column(name = "additional_services")
+    private String additionalServices;
+    @Column(name = "customer_name")
+    private String customerName;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Column(name = "total_price")
+    private Double totalPrice;
 
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity( LocalDate appointmentDate, LocalTime timeSlot, Integer bay) {
-        this.appointmentDate = appointmentDate;
-        this.timeSlot = timeSlot;
+    public AppointmentEntity(Long id, LocalDate date, LocalTime slot, int bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalPrice) {
+        this.id = id;
+        this.appointmentDate = date;
+        this.timeSlot = slot;
         this.bay = bay;
+        this.taskName = taskName;
+        this.vehicleType = vehicleType;
+        this.serviceType = serviceType;
+        this.additionalServices = additionalServices;
+        this.customerName = customerName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.totalPrice = totalPrice;
     }
+
 
     public Long getId() {
         return id;
@@ -62,5 +88,69 @@ public class AppointmentEntity {
 
     public void setBay(Integer bay) {
         this.bay = bay;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public String getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(String additionalServices) {
+        this.additionalServices = additionalServices;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

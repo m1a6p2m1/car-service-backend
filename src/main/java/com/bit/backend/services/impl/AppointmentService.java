@@ -82,6 +82,16 @@ public class AppointmentService implements AppointmentServiceI {
     public AppointmentDto book(AppointmentDto appointmentDto) {
         LocalDate date = appointmentDto.getAppointmentDate();
         LocalTime slot = appointmentDto.getTimeSlot();
+        long id = appointmentDto.getId();
+        String vehicleType = appointmentDto.getVehicleType();
+        String serviceType = appointmentDto.getServiceType();
+        String taskName = appointmentDto.getTaskName();
+        String additionalServices = appointmentDto.getAdditionalServices();
+        String customerName = appointmentDto.getCustomerName();
+        String email = appointmentDto.getEmail();
+        String phoneNumber = appointmentDto.getPhoneNumber();
+        Double totalPrice = appointmentDto.getTotalPrice();
+
 
         // find a free bay 1‑3
         int bay = IntStream.rangeClosed(1, MAX_BAYS)
@@ -89,9 +99,9 @@ public class AppointmentService implements AppointmentServiceI {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("All bays full for that slot"));
 
-        //Save new appointment
-        AppointmentEntity saved = appointmentRepository.save(
-                new AppointmentEntity(date, slot, bay));
+
+        AppointmentEntity saved = appointmentRepository.save(new AppointmentEntity(id, date, slot, bay, vehicleType, serviceType, taskName, additionalServices, customerName, email, phoneNumber, totalPrice));
+
         System.out.println(" Appointment saved: " + saved.getAppointmentDate() + " " + saved.getTimeSlot() + " Bay: " + saved.getBay());
         System.out.println("************************appointment book service********************");
         // Recount how many appointments are now booked for this slot
@@ -103,9 +113,15 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getAppointmentDate(),
                 saved.getTimeSlot(),
                 saved.getBay(),
-                bookedCount
+                bookedCount,
+                saved.getTaskName(),
+                saved.getVehicleType(),
+                saved.getServiceType(),
+                saved.getAdditionalServices(),
+                saved.getCustomerName(),
+                saved.getEmail(),
+                saved.getPhoneNumber(),
+                saved.getTotalPrice()
         );
     }
-
-
 }

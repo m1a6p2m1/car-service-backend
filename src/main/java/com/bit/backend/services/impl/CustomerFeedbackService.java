@@ -26,19 +26,19 @@ public class CustomerFeedbackService implements CustomerFeedbackServiceI {
         this.customerFeedbackRepository = customerFeedbackRepository;
     }
 
-//    @Override
-//    public CustomerFeedbackDto addCustomerFeedbackEntity(CustomerFeedbackDto customerFeedbackDto){
-////        System.out.println("****************In Backend****************");
-//        try {
-//            CustomerFeedbackEntity customerFeedbackEntity = customerFeedbackMapper.toCustomerFeedbackEntity(customerFeedbackDto);
-//            CustomerFeedbackEntity savedItem = customerFeedbackRepository.save(customerFeedbackEntity);
-//            CustomerFeedbackDto savedDto = customerFeedbackMapper.toCustomerFeedbackDto(savedItem);
-//
-//            return savedDto;
-//        }catch (Exception e){
-//            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @Override
+    public CustomerFeedbackDto addCustomerFeedbackEntity(CustomerFeedbackDto customerFeedbackDto){
+//        System.out.println("****************In Backend****************");
+        try {
+            CustomerFeedbackEntity customerFeedbackEntity = customerFeedbackMapper.toCustomerFeedbackEntity(customerFeedbackDto);
+            CustomerFeedbackEntity savedItem = customerFeedbackRepository.save(customerFeedbackEntity);
+            CustomerFeedbackDto savedDto = customerFeedbackMapper.toCustomerFeedbackDto(savedItem);
+
+            return savedDto;
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @Override
     public List<CustomerFeedbackDto> getData(long id) {
