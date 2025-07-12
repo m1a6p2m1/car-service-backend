@@ -1,17 +1,15 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.config.RSADecryptor;
 import com.bit.backend.dtos.*;
-import com.bit.backend.entities.CustomerEntity;
-import com.bit.backend.entities.EmployeeEntity;
-import com.bit.backend.entities.PrivilegeGroup;
-import com.bit.backend.entities.User;
+import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
+import com.bit.backend.mappers.PasswordResetMapper;
 import com.bit.backend.mappers.UserMapper;
-import com.bit.backend.repositories.CustomerRepository;
-import com.bit.backend.repositories.EmployeeRepository;
-import com.bit.backend.repositories.PrivilegeGroupRepository;
-import com.bit.backend.repositories.UserRepository;
+import com.bit.backend.repositories.*;
+import com.bit.backend.services.NotificationServiceI;
 import com.bit.backend.services.UserServiceI;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,35 +33,48 @@ public class UserService implements UserServiceI {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final PrivilegeGroupRepository privilegeGroupRepository;
+    private final PasswordResetMapper passwordResetMapper;
+    private final NotificationServiceI notificationServiceI;
+    private final PasswordResetRepository passwordResetRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, PrivilegeGroupRepository privilegeGroupRepository) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository,
+                       PasswordEncoder passwordEncoder, UserMapper userMapper, PrivilegeGroupRepository privilegeGroupRepository,
+                       PasswordResetMapper passwordResetMapper, NotificationServiceI notificationServiceI,
+                       PasswordResetRepository passwordResetRepository) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.privilegeGroupRepository = privilegeGroupRepository;
+        this.passwordResetMapper = passwordResetMapper;
+        this.notificationServiceI = notificationServiceI;
+        this.passwordResetRepository = passwordResetRepository;
     }
 
     @Override
-    public UserDto login(CredentialsDto credentialsDto) {
+    public UserDto login(CredentialsDto credentialsDto) throws Exception {
         logger.debug("Entering in login Method...");
         User user = userRepository.findByLogin(credentialsDto.login()).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+        String decryptedPassword = RSADecryptor.decrypt(new String(credentialsDto.password()));
+        try {
+            if (passwordEncoder.matches(CharBuffer.wrap(decryptedPassword.toCharArray()), user.getPassword())) {
+                UserDto userDto = userMapper.toUserDto(user);
 
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-            UserDto userDto = userMapper.toUserDto(user);
-
-            // Add employee image details here:
-            if (user.getEmployee() != null) {
-                userDto.setImage(user.getEmployee().getImage());
-                userDto.setImageName(user.getEmployee().getImageName());
-                userDto.setImageType(user.getEmployee().getImageType());
-                userDto.setImageType(user.getEmployee().getEmail());
-                userDto.setImageType(user.getEmployee().getPhoneNumber());
+                // Add employee image details here:
+                if (user.getEmployee() != null) {
+                    userDto.setImage(user.getEmployee().getImage());
+                    userDto.setImageName(user.getEmployee().getImageName());
+                    userDto.setImageType(user.getEmployee().getImageType());
+                    userDto.setImageType(user.getEmployee().getEmail());
+                    userDto.setImageType(user.getEmployee().getPhoneNumber());
+                }
+                return userDto;
             }
-            return userDto;
+        } catch (Exception exception) {
+            throw new AppException("Error Occurred", HttpStatus.BAD_REQUEST);
         }
 
 
@@ -212,5 +225,46 @@ public class UserService implements UserServiceI {
         User savedUser = userRepository.save(user);
         UserDto responseUserDto = userMapper.toUserDto(savedUser);
         return responseUserDto;
+    }
+
+    @Override
+    public PasswordResetDto forgotPassword(PasswordResetDto passwordResetDto) {
+
+        // check if the user from relevant mail exist (Make user fill profile with email)
+        // check in Login [TODO]
+
+        passwordResetDto.setToken(UUID.randomUUID().toString());
+        passwordResetDto.setExpiryDate(LocalDateTime.now().plusMinutes(5));
+        String resetLink = "http://localhost:4200/reset-password?token=" + passwordResetDto.getToken();
+
+        boolean isPasswordResetLinkSent = this.notificationServiceI.sendPasswordResetLink(passwordResetDto, resetLink);
+
+        PasswordResetDto savedDto = new PasswordResetDto();
+        if (isPasswordResetLinkSent == true) {
+            PasswordResetEntity passwordResetEntity = this.passwordResetMapper.toPasswordResetEntity(passwordResetDto);
+            PasswordResetEntity savedEntity = passwordResetRepository.save(passwordResetEntity);
+            savedDto  = passwordResetMapper.toPasswordResetDto(savedEntity);
+        }
+
+        return savedDto;
+    }
+
+    public boolean isTokenValid(String token) {
+        PasswordResetEntity resetToken = passwordResetRepository.findByToken(token);
+        return resetToken != null && resetToken.getExpiryDate().isAfter(LocalDateTime.now());
+    }
+
+    @Override
+    public void resetPassword(String token, String newPassword) {
+        PasswordResetEntity resetToken = passwordResetRepository.findByToken(token);
+        if (resetToken != null && isTokenValid(token)) {
+//            [TODO]
+            // find user by email and update password (loginRepository.findByEmail())
+            // update user password logic
+            // userRepo.updatePassword(resetToken.getUserEmail(), newPassword);
+            passwordResetRepository.delete(resetToken); // remove token after reset
+        } else {
+            throw new RuntimeException("Invalid or expired token");
+        }
     }
 }

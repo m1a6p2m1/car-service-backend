@@ -23,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto) {
+    public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto) throws Exception {
         UserDto user = userServiceI.login(credentialsDto);
         user.setToken(userAuthProvider.createToken(user));
         return ResponseEntity.ok(user);
@@ -57,4 +57,17 @@ public class AuthController {
 //    public ResponseEntity<List<Integer>> saveSystemPrivileges(@RequestBody SystemPrivilegeListDto systemPrivilegeListDto) {
 //        return ResponseEntity.ok(userServiceI.setSystemPrivileges(systemPrivilegeListDto));
 //    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<PasswordResetDto> forgotPassword(@RequestBody PasswordResetDto passwordResetDto) throws Exception {
+        PasswordResetDto resetPassword = userServiceI.forgotPassword(passwordResetDto);
+        return ResponseEntity.ok(resetPassword);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam String token,
+                                           @RequestParam String newPassword) {
+        userServiceI.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Password updated successfully");
+    }
 }

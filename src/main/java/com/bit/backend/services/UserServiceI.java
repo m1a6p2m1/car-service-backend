@@ -5,7 +5,7 @@ import com.bit.backend.dtos.*;
 import java.util.List;
 
 public interface UserServiceI {
-    UserDto login(CredentialsDto credentialsDto);
+    UserDto login(CredentialsDto credentialsDto) throws Exception;
     UserDto register(SignUpDto signUpDto);
     List<Integer> getAuthIds(long userId);
     SystemPrivilegeListDto getSystemPrivileges();
@@ -15,4 +15,6 @@ public interface UserServiceI {
     UserDto getUserProfile(String login);
     //user profile update
     UserDto updateUserProfile(Long id, UserDto userDto);
+    PasswordResetDto forgotPassword(PasswordResetDto passwordResetDto);
+    void resetPassword(String token, String newPassword);
 }

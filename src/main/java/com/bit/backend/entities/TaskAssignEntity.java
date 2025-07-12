@@ -17,10 +17,14 @@ public class TaskAssignEntity {
     private String taskCreatedBy;
     @Column(name = "customer_name")
     private String customerName;
+    @Column(name = "email")
+    private String email;
     @Column (name = "description")
     private String description;
     @Column(name = "status")
     private String status;
+    @Column(name = "unique_task_no")
+    private String uniqueTaskNo;
     @OneToMany(mappedBy = "taskAssignEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SubTaskAssignedEntity> subTasks = new ArrayList<>();
     @Column(name = "customer_id")
@@ -88,12 +92,28 @@ public class TaskAssignEntity {
         }
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Long getCustomerId() {
         return customerId;
     }
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getUniqueTaskNo() {
+        return uniqueTaskNo;
+    }
+
+    public void setUniqueTaskNo(String uniqueTaskNo) {
+        this.uniqueTaskNo = uniqueTaskNo;
     }
 
     public void addSubTask(SubTaskAssignedEntity subTaskAssignedEntity) {

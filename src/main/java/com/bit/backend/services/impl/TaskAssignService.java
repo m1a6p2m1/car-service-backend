@@ -13,8 +13,11 @@ import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class TaskAssignService implements TaskAssignServiceI {
@@ -59,12 +62,31 @@ public class TaskAssignService implements TaskAssignServiceI {
 //            System.out.println("*******************In get Data**************");
             TaskAssignEntity taskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
             TaskAssignEntity savedTask = taskAssignRepository.save(taskAssignEntity);
-            TaskAssignDto savedDto = taskAssignMapper.toTaskAssignDto(savedTask);
+            TaskAssignDto savedDto = null;
+
+            String taskNo = generateTaskNumber(savedTask);
+
+            if (taskNo != null) {
+                taskAssignEntity.setUniqueTaskNo(taskNo);
+                TaskAssignEntity updatedTask = taskAssignRepository.save(taskAssignEntity);
+                savedDto = taskAssignMapper.toTaskAssignDto(updatedTask);
+            }
+
+            // send mail to customer [Todo]
+
             return savedDto;
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public String generateTaskNumber(TaskAssignEntity taskAssignEntity) {
+        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String taskIdPart = String.valueOf(taskAssignEntity.getId());
+        String uniquePart = String.format("%03d", new Random().nextInt(1000)); // 000 - 999
+
+        return datePart + taskIdPart + uniquePart;
     }
 
     @Override

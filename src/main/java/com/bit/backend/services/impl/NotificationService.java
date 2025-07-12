@@ -1,6 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.NotificationDto;
+import com.bit.backend.dtos.PasswordResetDto;
 import com.bit.backend.entities.NotificationEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.NotificationMapper;
@@ -98,6 +99,20 @@ public class NotificationService implements NotificationServiceI {
             } else return false;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public boolean sendPasswordResetLink(PasswordResetDto passwordResetDto, String resetLink) {
+        try {
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo(passwordResetDto.getEmail());
+            mail.setSubject("Password Reset");
+            mail.setText("Click the link to reset your password: " + resetLink);
+            javaMailSender.send(mail);
+            return true;
+        } catch (Exception exception) {
+            throw new AppException("Request failed with error: " + exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
