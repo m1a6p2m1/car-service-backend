@@ -11,4 +11,5 @@ public interface CustomerServiceI {
     CustomerDto updateForm(long cusId, CustomerDto customerDto);
     CustomerDto deleteData(long cusId);
     List<Map<String, Object>> getTaskListCustomers();
+    CustomerDto getCustomerById(Long id);
 }

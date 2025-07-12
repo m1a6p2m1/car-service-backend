@@ -87,4 +87,17 @@ public class CustomerService implements CustomerServiceI {
     public List<Map<String, Object>> getTaskListCustomers() {
         return customerRepository.getTaskCustomerList();
     }
+
+    @Override
+    public CustomerDto getCustomerById(Long id) {
+        try {
+            Optional<CustomerEntity> oCustomerEntity = customerRepository.findById(id);
+            if (oCustomerEntity.isPresent()) {
+                return customerMapper.toCustomerDto(oCustomerEntity.get());
+            }
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new CustomerDto();
+    }
 }

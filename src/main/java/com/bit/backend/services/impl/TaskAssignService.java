@@ -1,9 +1,6 @@
 package com.bit.backend.services.impl;
 
-import com.bit.backend.dtos.DefinedTasksDto;
-import com.bit.backend.dtos.SubTaskAssignDto;
-import com.bit.backend.dtos.SubTaskStatusChangeDto;
-import com.bit.backend.dtos.TaskAssignDto;
+import com.bit.backend.dtos.*;
 import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.DefinedTasksMapper;
@@ -12,6 +9,7 @@ import com.bit.backend.repositories.DefinedTasksRepository;
 import com.bit.backend.repositories.SubTasksAssignRepository;
 import com.bit.backend.repositories.TaskAssignRepository;
 import com.bit.backend.repositories.UserRepository;
+import com.bit.backend.services.CustomerServiceI;
 import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,16 +28,19 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final DefinedTasksMapper definedTasksMapper;
     private final SubTasksAssignRepository subTasksAssignRepository;
     private final UserRepository userRepository;
+    private final CustomerServiceI customerServiceI;
 
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
                              DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
-                             SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository) {
+                             SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository,
+                             CustomerServiceI customerServiceI) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
         this.definedTasksMapper = definedTasksMapper;
         this.subTasksAssignRepository = subTasksAssignRepository;
         this.userRepository = userRepository;
+        this.customerServiceI = customerServiceI;
     }
 
     @Override
@@ -103,6 +104,14 @@ public class TaskAssignService implements TaskAssignServiceI {
         try {
 //            System.out.println("*******************In get Data**************");
             TaskAssignEntity taskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
+
+            if ((taskAssignDto.getEmail() == null || taskAssignDto.getEmail().equals("")) && taskAssignDto.getCustomerId() != null) {
+                CustomerDto customerDto = customerServiceI.getCustomerById(taskAssignDto.getCustomerId());
+                if (customerDto.getEmail() != null) {
+                    taskAssignEntity.setEmail(customerDto.getEmail());
+                }
+            }
+
             TaskAssignEntity savedTask = taskAssignRepository.save(taskAssignEntity);
             TaskAssignDto savedDto = null;
             TaskAssignEntity updatedTask = null;
@@ -129,6 +138,7 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
 
             // send mail to customer [Todo]
+            // send notification to employee [todo]
 
             return savedDto;
         } catch (Exception e){
