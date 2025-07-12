@@ -1,5 +1,6 @@
 package com.bit.backend.services;
 
+import com.bit.backend.dtos.AppointmentAssigneeChangeDto;
 import com.bit.backend.dtos.AppointmentDto;
 import com.bit.backend.dtos.TimeSlotDto;
 
@@ -13,4 +14,6 @@ public interface AppointmentServiceI {
     AppointmentDto book(AppointmentDto dto);
 
     List<AppointmentDto> getAllAppointments();
+
+    AppointmentAssigneeChangeDto changeAssignee(AppointmentAssigneeChangeDto appointmentAssigneeChangeDto);
 }

@@ -38,11 +38,15 @@ public class AppointmentEntity {
     private String phoneNumber;
     @Column(name = "total_service_price")
     private Double totalServicePrice;
+    @Column(name="assignee")
+    private Long assignee;
+    @Column(name = "assignee_name")
+    private String assigneeName;
 
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice) {
+    public AppointmentEntity(Long id, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, Long assignee, String assigneeName) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -55,6 +59,8 @@ public class AppointmentEntity {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.totalServicePrice = totalServicePrice;
+        this.assignee = assignee;
+        this.assigneeName = assigneeName;
     }
 
     public Long getId() {
@@ -151,5 +157,21 @@ public class AppointmentEntity {
 
     public void setTotalServicePrice(Double totalServicePrice) {
         this.totalServicePrice = totalServicePrice;
+    }
+
+    public Long getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(Long assignee) {
+        this.assignee = assignee;
+    }
+
+    public String getAssigneeName() {
+        return assigneeName;
+    }
+
+    public void setAssigneeName(String assigneeName) {
+        this.assigneeName = assigneeName;
     }
 }

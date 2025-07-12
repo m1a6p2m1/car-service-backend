@@ -1,9 +1,13 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.AppointmentAssigneeChangeDto;
 import com.bit.backend.dtos.AppointmentDto;
+import com.bit.backend.dtos.SubTaskStatusChangeDto;
 import com.bit.backend.dtos.TimeSlotDto;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AppointmentServiceI;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +36,19 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentServiceI.book(appointmentDto));
     }
 
-    @GetMapping("/get-all-appointments")
+    @GetMapping("/appointment-service/get-all-appointments")
     public ResponseEntity<List<AppointmentDto>> getAllAppointments() {
         return ResponseEntity.ok(appointmentServiceI.getAllAppointments());
+    }
+
+    @PutMapping("/change-appointment-assignee")
+    public ResponseEntity<AppointmentAssigneeChangeDto> changeAssignee(@RequestBody AppointmentAssigneeChangeDto appointmentAssigneeChangeDto){
+        try {
+            AppointmentAssigneeChangeDto appointmentAssigneeChangeDtoResponse = appointmentServiceI.changeAssignee(appointmentAssigneeChangeDto);
+            return ResponseEntity.ok(appointmentAssigneeChangeDtoResponse);
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

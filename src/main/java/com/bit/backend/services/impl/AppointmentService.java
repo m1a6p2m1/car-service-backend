@@ -1,11 +1,14 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.dtos.AppointmentAssigneeChangeDto;
 import com.bit.backend.dtos.AppointmentDto;
 import com.bit.backend.dtos.TimeSlotDto;
 import com.bit.backend.entities.AppointmentEntity;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AppointmentMapper;
 import com.bit.backend.repositories.AppointmentRepository;
 import com.bit.backend.services.AppointmentServiceI;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -14,6 +17,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -123,12 +127,33 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getCustomerName(),
                 saved.getEmail(),
                 saved.getPhoneNumber(),
-                saved.getTotalServicePrice()
+                saved.getTotalServicePrice(),
+                saved.getAssignee(),
+                saved.getAssigneeName()
         );
     }
 
     @Override
     public List<AppointmentDto> getAllAppointments() {
         return appointmentMapper.toAppointmentDtoList(appointmentRepository.findAll());
+    }
+
+    @Override
+    public AppointmentAssigneeChangeDto changeAssignee(AppointmentAssigneeChangeDto appointmentAssigneeChangeDto) {
+        try {
+            Optional<AppointmentEntity> oAppointmentEntity = appointmentRepository.findById(appointmentAssigneeChangeDto.getId());
+
+            if (!oAppointmentEntity.isPresent()) {
+                throw  new AppException("Appointment not exists", HttpStatus.BAD_REQUEST);
+            }
+
+            AppointmentEntity oldAppointmentEntity = oAppointmentEntity.get();
+            oldAppointmentEntity.setAssignee(appointmentAssigneeChangeDto.getAssignee());
+            oldAppointmentEntity.setAssigneeName(appointmentAssigneeChangeDto.getAssigneeName());
+            AppointmentEntity savedEntity = appointmentRepository.save(oldAppointmentEntity);
+            return appointmentAssigneeChangeDto;
+        } catch (Exception e) {
+            throw  new AppException("Error Occured: Please try again!", HttpStatus.BAD_REQUEST);
+        }
     }
 }
