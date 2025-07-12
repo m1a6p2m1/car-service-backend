@@ -9,10 +9,12 @@ import com.bit.backend.mappers.CommonDataMapper;
 import com.bit.backend.repositories.CommonDataRepository;
 import com.bit.backend.repositories.PrivilegeGroupAuthRepository;
 import com.bit.backend.repositories.PrivilegeGroupUserRepository;
+import com.bit.backend.repositories.TaskAssignRepository;
 import com.bit.backend.services.CommonDataServiceI;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CommonDataService implements CommonDataServiceI {
@@ -21,15 +23,18 @@ public class CommonDataService implements CommonDataServiceI {
     private final CommonDataMapper commonDataMapper;
     private final PrivilegeGroupAuthRepository privilegeGroupAuthRepository;
     private final PrivilegeGroupUserRepository privilegeGroupUserRepository;
+    private final TaskAssignRepository taskAssignRepository;
 
     CommonDataService(CommonDataRepository commonDataRepository,
                       CommonDataMapper commonDataMapper,
                       PrivilegeGroupAuthRepository privilegeGroupAuthRepository,
-                      PrivilegeGroupUserRepository privilegeGroupUserRepository) {
+                      PrivilegeGroupUserRepository privilegeGroupUserRepository,
+                      TaskAssignRepository taskAssignRepository) {
         this.commonDataRepository = commonDataRepository;
         this.commonDataMapper = commonDataMapper;
         this.privilegeGroupAuthRepository = privilegeGroupAuthRepository;
         this.privilegeGroupUserRepository = privilegeGroupUserRepository;
+        this.taskAssignRepository = taskAssignRepository;
     }
 
     @Override
@@ -116,5 +121,10 @@ public class CommonDataService implements CommonDataServiceI {
 
         }
         return commonDataListDto;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCommonUserServices() {
+        return taskAssignRepository.getCommonTaskStats();
     }
 }

@@ -11,4 +11,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> 
 
     @Query("SELECT empNumber as id, fullName as name, jobTitle as position FROM EmployeeEntity ")
     List<Map<String, Object>> getEmployeeList();
+
+    @Query("SELECT jobTitle as title, count(jobTitle) as cnt FROM EmployeeEntity group by jobTitle")
+    List<Map<String, Object>> getEmployeeCountByJobRole();
 }

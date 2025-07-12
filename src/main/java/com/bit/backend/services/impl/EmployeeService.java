@@ -101,4 +101,9 @@ public class EmployeeService implements EmployeeServiceI {
     public List<Map<String, Object>> getEmployees() {
         return employeeRepository.getEmployeeList();
     }
+
+    @Override
+    public List<Map<String, Object>> getEmployeeCountByJobRole() {
+        return employeeRepository.getEmployeeCountByJobRole();
+    }
 }

@@ -115,4 +115,14 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/employee/get-employee-count-by-role")
+    public ResponseEntity<List<Map<String, Object>>> getEmployeeCountByJobRole(){
+        try {
+            List<Map<String, Object>> employeeList = employeeServiceI.getEmployeeCountByJobRole();
+            return ResponseEntity.ok(employeeList);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

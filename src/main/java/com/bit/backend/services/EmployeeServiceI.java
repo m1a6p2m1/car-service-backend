@@ -18,4 +18,5 @@ public interface EmployeeServiceI {
     EmployeeDto deleteData(long empNumber);
 
     List<Map<String, Object>> getEmployees();
+    List<Map<String, Object>>getEmployeeCountByJobRole();
 }
