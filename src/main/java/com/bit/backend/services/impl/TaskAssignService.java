@@ -119,6 +119,7 @@ public class TaskAssignService implements TaskAssignServiceI {
 
             String taskNo = generateTaskNumber(savedTask);
             Long superVisorId = taskAssignDto.getSupervisor();
+            String customer = taskAssignDto.getCustomerName();
 
             if (taskNo != null) {
                 taskAssignEntity.setUniqueTaskNo(taskNo);
@@ -133,6 +134,8 @@ public class TaskAssignService implements TaskAssignServiceI {
                     String subTaskNo = generateSubTaskNumber(taskNo, subTaskAssignedEntity, count);
                     subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
                     subTaskAssignedEntity.setSupervisor(superVisorId);
+                    subTaskAssignedEntity.setMainUniqueTaskNo(taskNo);
+                    subTaskAssignedEntity.setCustomer(customer);
                     count = count + 1;
                 }
 
@@ -196,10 +199,12 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
 
             count = optionalTaskAssignEntity.get().getSubTasks().size() + 1;
-
+            taskAssignDto.setUniqueTaskNo(optionalTaskAssignEntity.get().getUniqueTaskNo());
             TaskAssignEntity newTaskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
 
             newTaskAssignEntity.setId(taskId);
+            String customer = newTaskAssignEntity.getCustomerName();
+            newTaskAssignEntity.setUniqueTaskNo(taskAssignDto.getUniqueTaskNo());
 
             String uniqueTaskNo = optionalTaskAssignEntity.get().getUniqueTaskNo();
             if (uniqueTaskNo == null || uniqueTaskNo.equals("") || uniqueTaskNo.equals(null)) {
@@ -222,6 +227,8 @@ public class TaskAssignService implements TaskAssignServiceI {
                     }
                     subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
                     subTaskAssignedEntity.setSupervisor(superVisorId);
+                    subTaskAssignedEntity.setMainUniqueTaskNo(uniqueTaskNo);
+                    subTaskAssignedEntity.setCustomer(customer);
                     count = count + 1;
                 }
 
