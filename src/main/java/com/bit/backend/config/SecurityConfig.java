@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // to handle csrf so you don't have to worry about session id
                 .authorizeHttpRequests((request) ->
-                        request.requestMatchers(HttpMethod.POST, "/login", "/register","/forgot-password","/task-tracker","/task-by-uid").permitAll()
+                        request.requestMatchers(HttpMethod.POST, "/login", "/register","/forgot-password","/task-tracker","/customer-task-by-uid**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/customer-task-by-uid**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

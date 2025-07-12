@@ -132,9 +132,9 @@ public class TaskAssignController {
         }
     }
 
-    @GetMapping("/task-assign/task-by-uid")
+    @GetMapping("/customer-task-by-uid")
     public ResponseEntity<List<TaskAssignDto>> getMainTaskDetailsByUid(@RequestParam String uid) {
-        // http://localhost:4200/task-assign/task-by-uid
+        // http://localhost:4200/task-by-uid
         try {
             List<TaskAssignDto> taskAssignDtoList = taskAssignServiceI.getMainTaskDetailsByUid(uid);
             return ResponseEntity.ok(taskAssignDtoList);

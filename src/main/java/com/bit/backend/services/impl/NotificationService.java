@@ -120,7 +120,7 @@ public class NotificationService implements NotificationServiceI {
     @Override
     public void sendTaskTrackerNotification(TaskAssignDto taskAssignDto) {
         if (!taskAssignDto.getEmail().isEmpty()) {
-            String taskStatusLink = "http://localhost:4200/task-assign/task-by-uid?uid=" + taskAssignDto.getUniqueTaskNo();
+            String taskStatusLink = "http://localhost:4200/customer-task-by-uid?uid=" + taskAssignDto.getUniqueTaskNo();
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(taskAssignDto.getEmail());
             message.setSubject("New Task Created - Task No: " + taskAssignDto.getUniqueTaskNo());
