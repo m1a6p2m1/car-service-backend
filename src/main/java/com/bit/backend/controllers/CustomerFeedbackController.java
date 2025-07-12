@@ -20,16 +20,16 @@ public class CustomerFeedbackController {
         this.customerFeedbackServiceI = customerFeedbackServiceI;
     }
 
-    @PostMapping("/customer-feedback")
-    public ResponseEntity<CustomerFeedbackDto> addForm(@RequestBody CustomerFeedbackDto customerFeedbackDto){
-        try{
-            CustomerFeedbackDto customerFeedbackDtoResponse = customerFeedbackServiceI.addCustomerFeedbackEntity(customerFeedbackDto);
-            return ResponseEntity.created(URI.create("/customer-feedback"+customerFeedbackDtoResponse.getId())).body(customerFeedbackDtoResponse);
-        }catch (Exception e){
-            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
+//    @PostMapping("/customer-feedback")
+//    public ResponseEntity<CustomerFeedbackDto> addForm(@RequestBody CustomerFeedbackDto customerFeedbackDto){
+//        try{
+//            CustomerFeedbackDto customerFeedbackDtoResponse = customerFeedbackServiceI.addCustomerFeedbackEntity(customerFeedbackDto);
+//            return ResponseEntity.created(URI.create("/customer-feedback"+customerFeedbackDtoResponse.getId())).body(customerFeedbackDtoResponse);
+//        }catch (Exception e){
+//            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//    }
 
     @GetMapping("/customer-feedback/{id}")
     public ResponseEntity<List<CustomerFeedbackDto>> getData(@PathVariable long id){
