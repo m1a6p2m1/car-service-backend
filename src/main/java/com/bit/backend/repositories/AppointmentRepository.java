@@ -12,17 +12,17 @@ import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long> {
 
-    long countByAppointmentDateAndTimeSlot(LocalDate appointmentDate, LocalTime timeSlot);
+    long countByDateAndTime(LocalDate appointmentDate, LocalTime timeSlot);
 
     @Query("""
-           SELECT a.timeSlot, COUNT(a.id)
+           SELECT a.time, COUNT(a.id)
            FROM AppointmentEntity a
-           WHERE a.appointmentDate = :day
-           GROUP BY a.timeSlot
+           WHERE a.date = :day
+           GROUP BY a.time
            """)
     List<Object[]> countPerTimeSlot(@Param("day") LocalDate day);
 
     /** Check if a bay is free at a slot */
-    Optional<AppointmentEntity> findByAppointmentDateAndTimeSlotAndBay(
+    Optional<AppointmentEntity> findByDateAndTimeAndBay(
             LocalDate appointmentDate, LocalTime timeSlot, Integer bay);
 }

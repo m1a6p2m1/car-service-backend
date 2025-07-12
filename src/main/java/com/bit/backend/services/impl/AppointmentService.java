@@ -80,9 +80,9 @@ public class AppointmentService implements AppointmentServiceI {
 
     @Override
     public AppointmentDto book(AppointmentDto appointmentDto) {
-        LocalDate date = appointmentDto.getAppointmentDate();
-        LocalTime slot = appointmentDto.getTimeSlot();
-        long id = appointmentDto.getId();
+        LocalDate date = appointmentDto.getDate();
+        LocalTime slot = appointmentDto.getTime();
+//        long id = appointmentDto.getId();
         String vehicleType = appointmentDto.getVehicleType();
         String serviceType = appointmentDto.getServiceType();
         String taskName = appointmentDto.getTaskName();
@@ -90,28 +90,30 @@ public class AppointmentService implements AppointmentServiceI {
         String customerName = appointmentDto.getCustomerName();
         String email = appointmentDto.getEmail();
         String phoneNumber = appointmentDto.getPhoneNumber();
-        Double totalPrice = appointmentDto.getTotalPrice();
+        Double totalPrice = appointmentDto.getTotalServicePrice();
 
 
         // find a free bay 1‑3
         int bay = IntStream.rangeClosed(1, MAX_BAYS)
-                .filter(b -> appointmentRepository.findByAppointmentDateAndTimeSlotAndBay(date, slot, b).isEmpty())
+                .filter(b -> appointmentRepository.findByDateAndTimeAndBay(date, slot, b).isEmpty())
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("All bays full for that slot"));
 
+        AppointmentEntity appointmentEntity = appointmentMapper.toAppointmentEntity(appointmentDto);
 
-        AppointmentEntity saved = appointmentRepository.save(new AppointmentEntity(id, date, slot, bay, vehicleType, serviceType, taskName, additionalServices, customerName, email, phoneNumber, totalPrice));
+        AppointmentEntity saved = appointmentRepository.save(appointmentEntity);
+//        AppointmentEntity saved = appointmentRepository.save(new AppointmentEntity(id, date, slot, bay, vehicleType, serviceType, taskName, additionalServices, customerName, email, phoneNumber, totalPrice));
 
-        System.out.println(" Appointment saved: " + saved.getAppointmentDate() + " " + saved.getTimeSlot() + " Bay: " + saved.getBay());
+        System.out.println(" Appointment saved: " + saved.getDate() + " " + saved.getTime() + " Bay: " + saved.getBay());
         System.out.println("************************appointment book service********************");
         // Recount how many appointments are now booked for this slot
-        long bookedCount = appointmentRepository.countByAppointmentDateAndTimeSlot(date, slot);
+        long bookedCount = appointmentRepository.countByDateAndTime(date, slot);
 
         // Return DTO with updated data
         return new AppointmentDto(
                 saved.getId(),
-                saved.getAppointmentDate(),
-                saved.getTimeSlot(),
+                saved.getDate(),
+                saved.getTime(),
                 saved.getBay(),
                 bookedCount,
                 saved.getTaskName(),
@@ -121,7 +123,12 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getCustomerName(),
                 saved.getEmail(),
                 saved.getPhoneNumber(),
-                saved.getTotalPrice()
+                saved.getTotalServicePrice()
         );
+    }
+
+    @Override
+    public List<AppointmentDto> getAllAppointments() {
+        return appointmentMapper.toAppointmentDtoList(appointmentRepository.findAll());
     }
 }

@@ -14,10 +14,10 @@ public class AppointmentEntity {
     private Long id;
 
     @Column(name = "appointment_date")
-    private LocalDate appointmentDate;
+    private LocalDate date;
 
     @Column(name = "appointment_time")
-    private LocalTime timeSlot;
+    private LocalTime time;
 
     /** 1‑3 for the three washing bays */
     @Column(name = "bay")
@@ -36,16 +36,16 @@ public class AppointmentEntity {
     private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "total_price")
-    private Double totalPrice;
+    @Column(name = "total_service_price")
+    private Double totalServicePrice;
 
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, LocalDate date, LocalTime slot, int bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalPrice) {
+    public AppointmentEntity(Long id, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice) {
         this.id = id;
-        this.appointmentDate = date;
-        this.timeSlot = slot;
+        this.date = date;
+        this.time = time;
         this.bay = bay;
         this.taskName = taskName;
         this.vehicleType = vehicleType;
@@ -54,9 +54,8 @@ public class AppointmentEntity {
         this.customerName = customerName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.totalPrice = totalPrice;
+        this.totalServicePrice = totalServicePrice;
     }
-
 
     public Long getId() {
         return id;
@@ -66,20 +65,20 @@ public class AppointmentEntity {
         this.id = id;
     }
 
-    public LocalDate getAppointmentDate() {
-        return appointmentDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setAppointmentDate(LocalDate appointmentDate) {
-        this.appointmentDate = appointmentDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public LocalTime getTimeSlot() {
-        return timeSlot;
+    public LocalTime getTime() {
+        return time;
     }
 
-    public void setTimeSlot(LocalTime timeSlot) {
-        this.timeSlot = timeSlot;
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public Integer getBay() {
@@ -146,11 +145,11 @@ public class AppointmentEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
+    public Double getTotalServicePrice() {
+        return totalServicePrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalServicePrice(Double totalServicePrice) {
+        this.totalServicePrice = totalServicePrice;
     }
 }

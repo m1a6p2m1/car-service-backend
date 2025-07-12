@@ -5,8 +5,8 @@ import java.time.LocalTime;
 
 public class AppointmentDto {
     private Long id;
-    private LocalDate appointmentDate;
-    private LocalTime timeSlot;
+    private LocalDate date;
+    private LocalTime time;
     private Integer bay;
     private Long bookedCount;
     private String taskName;
@@ -16,16 +16,16 @@ public class AppointmentDto {
     private String customerName;
     private String email;
     private String phoneNumber;
-    private Double totalPrice;
+    private Double totalServicePrice;
 
 
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, LocalDate appointmentDate, LocalTime timeSlot, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalPrice) {
+    public AppointmentDto(Long id, LocalDate date, LocalTime time, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice) {
         this.id = id;
-        this.appointmentDate = appointmentDate;
-        this.timeSlot = timeSlot;
+        this.date = date;
+        this.time = time;
         this.bay = bay;
         this.bookedCount = bookedCount;
         this.taskName = taskName;
@@ -35,7 +35,7 @@ public class AppointmentDto {
         this.customerName = customerName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.totalPrice = totalPrice;
+        this.totalServicePrice = totalServicePrice;
     }
 
     public Long getId() {
@@ -46,20 +46,20 @@ public class AppointmentDto {
         this.id = id;
     }
 
-    public LocalDate getAppointmentDate() {
-        return appointmentDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setAppointmentDate(LocalDate appointmentDate) {
-        this.appointmentDate = appointmentDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public LocalTime getTimeSlot() {
-        return timeSlot;
+    public LocalTime getTime() {
+        return time;
     }
 
-    public void setTimeSlot(LocalTime timeSlot) {
-        this.timeSlot = timeSlot;
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public Integer getBay() {
@@ -70,20 +70,20 @@ public class AppointmentDto {
         this.bay = bay;
     }
 
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
     public Long getBookedCount() {
         return bookedCount;
     }
 
     public void setBookedCount(Long bookedCount) {
         this.bookedCount = bookedCount;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public String getVehicleType() {
@@ -134,12 +134,12 @@ public class AppointmentDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
+    public Double getTotalServicePrice() {
+        return totalServicePrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalServicePrice(Double totalServicePrice) {
+        this.totalServicePrice = totalServicePrice;
     }
 
     //    public LocalDate appointmentDate() {

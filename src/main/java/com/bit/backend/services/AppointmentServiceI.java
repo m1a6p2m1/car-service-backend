@@ -11,4 +11,6 @@ public interface AppointmentServiceI {
     List<TimeSlotDto> getAvailableSlots(LocalDate date);
 
     AppointmentDto book(AppointmentDto dto);
+
+    List<AppointmentDto> getAllAppointments();
 }

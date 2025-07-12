@@ -31,4 +31,9 @@ public class AppointmentController {
         System.out.println("************************appointment book********************");
         return ResponseEntity.ok(appointmentServiceI.book(appointmentDto));
     }
+
+    @GetMapping("/get-all-appointments")
+    public ResponseEntity<List<AppointmentDto>> getAllAppointments() {
+        return ResponseEntity.ok(appointmentServiceI.getAllAppointments());
+    }
 }
