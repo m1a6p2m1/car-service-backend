@@ -38,6 +38,10 @@ public class UserController {
                 signUpDto.id(),
                 signUpDto.firstName(),
                 signUpDto.lastName(),
+                signUpDto.nic(),
+                signUpDto.email(),
+                signUpDto.contactNumber(),
+                signUpDto.address(),
                 signUpDto.login(),
                 signUpDto.password(),
                 "EMPLOYEE",                     // set role here
@@ -56,6 +60,10 @@ public class UserController {
                 signUpDto.id(),
                 signUpDto.firstName(),
                 signUpDto.lastName(),
+                signUpDto.nic(),
+                signUpDto.email(),
+                signUpDto.contactNumber(),
+                signUpDto.address(),
                 signUpDto.login(),
                 signUpDto.password(),
                 "CUSTOMER",                     // set role here

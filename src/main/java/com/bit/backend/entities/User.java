@@ -9,10 +9,14 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String login, String password, String role) {
+    public User(Long id, String firstName, String lastName,String nic, String email , String contactNumber , String address , String login, String password, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.nic = nic;
+        this.email = email;
+        this.contactNumber = contactNumber;
+        this.address = address;
         this.login = login;
         this.password = password;
         this.role = role;
@@ -27,6 +31,18 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "nic_number", nullable = false)
+    private String nic;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "contact_number", nullable = false)
+    private String contactNumber;
+
+    @Column(name = "address")
+    private String address;
 
     @Column(nullable = false)
     private String login;
@@ -67,6 +83,38 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getNic() {
+        return nic;
+    }
+
+    public void setNic(String nic) {
+        this.nic = nic;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getLogin() {
