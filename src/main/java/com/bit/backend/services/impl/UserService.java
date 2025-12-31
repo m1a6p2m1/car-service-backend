@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.nio.CharBuffer;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -267,4 +268,8 @@ public class UserService implements UserServiceI {
             throw new RuntimeException("Invalid or expired token");
         }
     }
+
+    //get customer names list into the vehiclesForm customer name field
+    @Override
+    public List<Map<String, Object>> getVehicleRegUsers() { return userRepository.getVehicleRegUsersList();}
 }

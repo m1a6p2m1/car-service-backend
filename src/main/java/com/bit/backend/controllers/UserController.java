@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -113,6 +115,17 @@ public class UserController {
 
         } catch (Exception e) {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //get customer names list into the vehiclesForm customer name field
+    @GetMapping("/register/users")
+    public ResponseEntity<List<Map<String, Object>>> getVehicleRegUsers(){
+        try {
+            List<Map<String, Object>> vehicleRegUserList = userServiceI.getVehicleRegUsers();
+            return ResponseEntity.ok(vehicleRegUserList);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

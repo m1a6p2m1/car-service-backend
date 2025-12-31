@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -30,4 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(nativeQuery = true, value = "SELECT id, description FROM get_available_system_auth_details WHERE assigned = 1")
     List<Tuple> getAssignedSystemPrivileges();
+
+    //get customer names list into the vehiclesForm customer name field
+    @Query("SELECT id as id, firstName as firstName, lastName as lastName FROM User WHERE role = 'CUSTOMER'")
+    List<Map<String, Object>> getVehicleRegUsersList();
 }
