@@ -10,6 +10,6 @@ public interface CustomerServiceI {
     List<CustomerDto> getData();
     CustomerDto updateForm(long cusId, CustomerDto customerDto);
     CustomerDto deleteData(long cusId);
-    List<Map<String, Object>> getTaskListCustomers();
+//    List<Map<String, Object>> getTaskListCustomers();
     CustomerDto getCustomerById(Long id);
 }

@@ -7,6 +7,8 @@ public class TaskAssignDto {
     private String taskName;
     private String taskCreatedBy;
     private String customerName;
+    private String licencePlate;
+    private String vehicleType;
     private String email;
     private String description;
     private String status;
@@ -15,19 +17,22 @@ public class TaskAssignDto {
     private Long customerId;
     private Long supervisor;
 
-    public TaskAssignDto(Long id, String taskName, String taskCreatedBy,
-                         String customerName, String description, String email, String status, List<SubTaskAssignDto> subTasks,
-                         Long customerId, String uniqueTaskNo, Long supervisor) {
+    public TaskAssignDto() {
+    }
+
+    public TaskAssignDto(Long id, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignDto> subTasks, Long customerId, Long supervisor) {
         this.id = id;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
+        this.licencePlate = licencePlate;
+        this.vehicleType = vehicleType;
+        this.email = email;
         this.description = description;
         this.status = status;
+        this.uniqueTaskNo = uniqueTaskNo;
         this.subTasks = subTasks;
         this.customerId = customerId;
-        this.email = email;
-        this.uniqueTaskNo = uniqueTaskNo;
         this.supervisor = supervisor;
     }
 
@@ -62,6 +67,23 @@ public class TaskAssignDto {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
+
+    public String getLicencePlate() {
+        return licencePlate;
+    }
+
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
     public String getDescription() {
         return description;
     }

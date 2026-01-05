@@ -9,4 +9,5 @@ public interface VehiclesServiceI {
     List<VehiclesDto> getData();
     VehiclesDto updateForm(long id, VehiclesDto vehiclesDto);
     VehiclesDto deleteData(long id);
+    VehiclesDto getVehicleByCustomerId(Long customerId);
 }

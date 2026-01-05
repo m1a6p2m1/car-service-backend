@@ -17,6 +17,10 @@ public class TaskAssignEntity {
     private String taskCreatedBy;
     @Column(name = "customer_name")
     private String customerName;
+    @Column(name = "licence_plate")
+    private String licencePlate;
+    @Column(name = "vehicle_type")
+    private String vehicleType;
     @Column(name = "email")
     private String email;
     @Column (name = "description")
@@ -33,6 +37,22 @@ public class TaskAssignEntity {
     private Long supervisor;
 
     public TaskAssignEntity() {
+    }
+
+    public TaskAssignEntity(Long id, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignedEntity> subTasks, Long customerId, Long supervisor) {
+        this.id = id;
+        this.taskName = taskName;
+        this.taskCreatedBy = taskCreatedBy;
+        this.customerName = customerName;
+        this.licencePlate = licencePlate;
+        this.vehicleType = vehicleType;
+        this.email = email;
+        this.description = description;
+        this.status = status;
+        this.uniqueTaskNo = uniqueTaskNo;
+        this.subTasks = subTasks;
+        this.customerId = customerId;
+        this.supervisor = supervisor;
     }
 
     public Long getId() {
@@ -65,6 +85,22 @@ public class TaskAssignEntity {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getLicencePlate() {
+        return licencePlate;
+    }
+
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public String getDescription() {

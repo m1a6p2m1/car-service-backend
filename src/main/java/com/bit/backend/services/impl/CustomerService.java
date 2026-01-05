@@ -82,11 +82,11 @@ public class CustomerService implements CustomerServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @Override
-    public List<Map<String, Object>> getTaskListCustomers() {
-        return customerRepository.getTaskCustomerList();
-    }
+// get customer list from customer table
+//    @Override
+//    public List<Map<String, Object>> getTaskListCustomers() {
+//        return customerRepository.getTaskCustomerList();
+//    }
 
     @Override
     public CustomerDto getCustomerById(Long id) {

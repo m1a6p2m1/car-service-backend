@@ -78,4 +78,15 @@ public class VehiclesService implements VehiclesServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //Auto load licence_plate and vehicle_type when select customer_name
+    @Override
+    public VehiclesDto getVehicleByCustomerId(Long customerId) {
+        try {
+            VehiclesEntity vehicles = vehiclesRepository.findByCustomerId(customerId);
+            return vehiclesMapper.toVehiclesDto(vehicles);
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -66,15 +66,15 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/customer/task-list-customers")
-    public ResponseEntity<List<Map<String, Object>>> getTaskListCustomers(){
-        try {
-            List<Map<String, Object>> taskListCustomerLIst = customerServiceI.getTaskListCustomers();
-            return ResponseEntity.ok(taskListCustomerLIst);
-        }catch (Exception e){
-            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping("/customer/task-list-customers")
+//    public ResponseEntity<List<Map<String, Object>>> getTaskListCustomers(){
+//        try {
+//            List<Map<String, Object>> taskListCustomerLIst = customerServiceI.getTaskListCustomers();
+//            return ResponseEntity.ok(taskListCustomerLIst);
+//        }catch (Exception e){
+//            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @PostMapping("/customer/register")
     public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {

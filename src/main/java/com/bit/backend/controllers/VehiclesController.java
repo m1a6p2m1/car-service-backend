@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.VehiclesDto;
+import com.bit.backend.entities.VehiclesEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.VehiclesServiceI;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,21 @@ public class VehiclesController {
             return ResponseEntity.ok(vehiclesDto);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //Auto load licence_plate and vehicle_type when select customer_name
+    @GetMapping("/register/vehicles/{customerId}")
+    public ResponseEntity<VehiclesDto> getVehicleByCustomer(@PathVariable Long customerId) {
+
+        try {
+            VehiclesDto vehicle = vehiclesServiceI.getVehicleByCustomerId(customerId);
+            return ResponseEntity.ok(vehicle);
+
+        } catch (Exception e) {
+            throw new AppException(
+                    "Request Failed With Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 }
