@@ -17,6 +17,6 @@ public interface EmployeeServiceI {
 
     EmployeeDto deleteData(long empNumber);
 
-    List<Map<String, Object>> getEmployees();
+    List<Map<String, Object>> getEmployees(); //get employee list to set supervisors list task_assign form supervisor field
     List<Map<String, Object>>getEmployeeCountByJobRole();
 }

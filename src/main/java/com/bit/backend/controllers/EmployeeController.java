@@ -106,6 +106,7 @@ public class EmployeeController {
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
 
+    //get employee list to set supervisors list task_assign form supervisor field
     @GetMapping("/employee/get-employee-list")
     public ResponseEntity<List<Map<String, Object>>> getEmployees(){
         try {
