@@ -6,32 +6,30 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "attendance_mark")
+@Table(name = "attendance_mark",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"employee_id", "attendance_date"})
+        })
 public class AttendanceMarkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private long id;
-    @Column(name = "employee_id")
-    private String empId;
-    @Column(name = "date_and_time")
-    private LocalDateTime dateAndTime;
-    @Column(name = "date")
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private EmployeeEntity employee;
+    @Column(name = "attendance_date")
     private LocalDate date;
-    @Column(name = "status")
-    private String status;
+    @Column(name = "attendance_status", nullable = false)
+    private String attendanceStatus;
 
-    public AttendanceMarkEntity() {
-        this.dateAndTime = LocalDateTime.now(); // Auto-set current date-time
-        this.date = LocalDate.now(); // Auto-set current date
-    }
+    public AttendanceMarkEntity() { }
 
-    public AttendanceMarkEntity(long id, String empId, String status) {
+    public AttendanceMarkEntity(long id, EmployeeEntity employee, String attendanceStatus) {
         this.id = id;
-        this.empId = empId;
-        this.dateAndTime = LocalDateTime.now();
+        this.employee = employee;
         this.date = LocalDate.now();
-        this.status = status;
+        this.attendanceStatus = attendanceStatus;
     }
 
     public long getId() {
@@ -42,20 +40,12 @@ public class AttendanceMarkEntity {
         this.id = id;
     }
 
-    public String getEmpId() {
-        return empId;
+    public EmployeeEntity getEmployee() {
+        return employee;
     }
 
-    public void setEmpId(String empId) {
-        this.empId = empId;
-    }
-
-    public LocalDateTime getDateAndTime() {
-        return dateAndTime;
-    }
-
-    public void setDateAndTime(LocalDateTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
     }
 
     public LocalDate getDate() {
@@ -66,11 +56,11 @@ public class AttendanceMarkEntity {
         this.date = date;
     }
 
-    public String getStatus() {
-        return status;
+    public String getAttendanceStatus() {
+        return attendanceStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setAttendanceStatus(String attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
     }
 }
