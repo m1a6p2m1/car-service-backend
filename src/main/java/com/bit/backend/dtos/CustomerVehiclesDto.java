@@ -1,36 +1,24 @@
-package com.bit.backend.entities;
+package com.bit.backend.dtos;
 
-import jakarta.persistence.*;
+public class CustomerVehiclesDto {
 
-@Entity
-@Table(name = "vehicles")
-public class VehiclesEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "customer_name")
+    private Long customerId;
     private String customerName;
-    @Column(name = "licence_plate")
     private String licencePlate;
-    @Column(name = "vehicle_type")
     private String vehicleType;
-    @Column(name = "vehicle_model")
     private String vehicleModel;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private User user;
-
-    public VehiclesEntity() {
+    public CustomerVehiclesDto() {
     }
 
-    public VehiclesEntity(Long id, String customerName, String licencePlate, String vehicleType, String vehicleModel, User user) {
+    public CustomerVehiclesDto(Long id, Long customerId, String customerName, String licencePlate, String vehicleType, String vehicleModel) {
         this.id = id;
+        this.customerId = customerId;
         this.customerName = customerName;
         this.licencePlate = licencePlate;
         this.vehicleType = vehicleType;
         this.vehicleModel = vehicleModel;
-        this.user = user;
     }
 
     public Long getId() {
@@ -39,6 +27,14 @@ public class VehiclesEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerName() {
@@ -71,13 +67,5 @@ public class VehiclesEntity {
 
     public void setVehicleModel(String vehicleModel) {
         this.vehicleModel = vehicleModel;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

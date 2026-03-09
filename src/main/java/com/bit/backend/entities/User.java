@@ -2,6 +2,9 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "app_user")
 public class User {
@@ -57,9 +60,12 @@ public class User {
     @JoinColumn(name = "employee_id", referencedColumnName = "empNumber", unique = true)
     private EmployeeEntity employee;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "cusId", unique = true)
-    private CustomerEntity customer;
+//    @OneToOne
+//    @JoinColumn(name = "customer_id", referencedColumnName = "cusId", unique = true)
+//    private CustomerEntity customer;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VehiclesEntity> vehicles = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -148,10 +154,18 @@ public class User {
         this.employee = employee;
     }
 
-    public CustomerEntity getCustomer() {
-        return customer;
+//    public CustomerEntity getCustomer() {
+//        return customer;
+//    }
+//    public void setCustomer(CustomerEntity customer) {
+//        this.customer = customer;
+//    }
+
+    public List<VehiclesEntity> getVehicles() {
+        return vehicles;
     }
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
+
+    public void setVehicles(List<VehiclesEntity> vehicles) {
+        this.vehicles = vehicles;
     }
 }

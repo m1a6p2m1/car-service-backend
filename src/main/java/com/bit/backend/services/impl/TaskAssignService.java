@@ -112,12 +112,12 @@ public class TaskAssignService implements TaskAssignServiceI {
 
         User user = userRepository.findById(Long.parseLong(customerId)).orElseThrow(() -> new AppException("User Not Found", HttpStatus.INTERNAL_SERVER_ERROR));
 
-        if (user.getId() != null) {
-            Long cusId = user.getCustomer().getCusId();
-            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByCustomerId(cusId);
-            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
-            return taskAssignDtoList;
-        }
+//        if (user.getId() != null) {
+//            Long cusId = user.getCustomer().getCusId();
+//            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByCustomerId(cusId);
+//            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+//            return taskAssignDtoList;
+//        }
 
         if (taskNo != null || !taskNo.equals("") || !taskNo.equals(null)) {
             List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByUniqueTaskNo(taskNo);

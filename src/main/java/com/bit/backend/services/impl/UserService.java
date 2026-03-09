@@ -104,11 +104,11 @@ public class UserService implements UserServiceI {
             user.setEmployee(employee);
         }
 
-        if ("CUSTOMER".equalsIgnoreCase(signUpDto.role()) && signUpDto.customerId() != null) {
-            CustomerEntity customer = customerRepository.findById(signUpDto.customerId())
-                    .orElseThrow(() -> new AppException("Customer Not Found", HttpStatus.NOT_FOUND));
-            user.setCustomer(customer);
-        }
+//        if ("CUSTOMER".equalsIgnoreCase(signUpDto.role()) && signUpDto.customerId() != null) {
+//            CustomerEntity customer = customerRepository.findById(signUpDto.customerId())
+//                    .orElseThrow(() -> new AppException("Customer Not Found", HttpStatus.NOT_FOUND));
+//            user.setCustomer(customer);
+//        }
 
         // get image from employee form to show in the profile
         User savedUser = userRepository.save(user);
@@ -190,10 +190,10 @@ public class UserService implements UserServiceI {
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
+        dto.setEmail(user.getEmail());
+        dto.setPhoneNumber(user.getContactNumber());
 
         if (user.getEmployee() != null) {
-            dto.setEmail(user.getEmployee().getEmail());
-            dto.setPhoneNumber(user.getEmployee().getPhoneNumber());
             dto.setImage(user.getEmployee().getImage());
             dto.setImageType(user.getEmployee().getImageType());
             dto.setImageName(user.getEmployee().getImageName());
