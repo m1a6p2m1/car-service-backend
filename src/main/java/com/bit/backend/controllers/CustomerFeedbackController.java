@@ -23,6 +23,7 @@ public class CustomerFeedbackController {
     @PostMapping("/customer-feedback")
     public ResponseEntity<CustomerFeedbackDto> addForm(@RequestBody CustomerFeedbackDto customerFeedbackDto){
         try{
+            System.out.println("****************In Backend Cus Feedback Controller****************");
             CustomerFeedbackDto customerFeedbackDtoResponse = customerFeedbackServiceI.addCustomerFeedbackEntity(customerFeedbackDto);
             return ResponseEntity.created(URI.create("/customer-feedback"+customerFeedbackDtoResponse.getId())).body(customerFeedbackDtoResponse);
         }catch (Exception e){
@@ -31,10 +32,10 @@ public class CustomerFeedbackController {
 
     }
 
-    @GetMapping("/customer-feedback/{id}")
-    public ResponseEntity<List<CustomerFeedbackDto>> getData(@PathVariable long id){
+    @GetMapping("/customer-feedback/{uniqueCusNo}")
+    public ResponseEntity<List<CustomerFeedbackDto>> getCusFeedbackByCusNo(@PathVariable String uniqueCusNo){
         try {
-            List<CustomerFeedbackDto> customerFeedbackDtoList = customerFeedbackServiceI.getData(id);
+            List<CustomerFeedbackDto> customerFeedbackDtoList = customerFeedbackServiceI.getCusFeedbackByCusNo(uniqueCusNo);
             return ResponseEntity.ok(customerFeedbackDtoList);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);

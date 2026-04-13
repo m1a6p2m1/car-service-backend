@@ -9,11 +9,12 @@ public class CustomerFeedbackDto {
     private String serviceDate;
     private String recommendation;
     private String complaint;
+    private Long userId;
 
     public CustomerFeedbackDto() {
     }
 
-    public CustomerFeedbackDto(long id, String userName, String taskNumber, String serviceQuality, String serviceType, String serviceDate, String recommendation, String complaint) {
+    public CustomerFeedbackDto(long id, String userName, String taskNumber, String serviceQuality, String serviceType, String serviceDate, String recommendation, String complaint, Long userId) {
         this.id = id;
         this.userName = userName;
         this.taskNumber = taskNumber;
@@ -22,6 +23,7 @@ public class CustomerFeedbackDto {
         this.serviceDate = serviceDate;
         this.recommendation = recommendation;
         this.complaint = complaint;
+        this.userId = userId;
     }
 
     public long getId() {
@@ -86,5 +88,13 @@ public class CustomerFeedbackDto {
 
     public void setComplaint(String complaint) {
         this.complaint = complaint;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

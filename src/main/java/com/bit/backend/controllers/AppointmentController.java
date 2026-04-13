@@ -1,9 +1,6 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.AppointmentAssigneeChangeDto;
-import com.bit.backend.dtos.AppointmentDto;
-import com.bit.backend.dtos.SubTaskStatusChangeDto;
-import com.bit.backend.dtos.TimeSlotDto;
+import com.bit.backend.dtos.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AppointmentServiceI;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,5 +47,26 @@ public class AppointmentController {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping("/appointment-service/get-all-appointments/{uniqueCusNo}")
+    public ResponseEntity<List<AppointmentDto>> getAppointmentsByCusId(@PathVariable String uniqueCusNo) {
+        try {
+            System.out.println("Controller reached: " + uniqueCusNo);
+            List<AppointmentDto> appointmentDtoList = appointmentServiceI.getAppointmentsByCusId(uniqueCusNo);
+            return ResponseEntity.ok(appointmentDtoList);
+        } catch (Exception e) {
+            throw new AppException("Failed to get employee with ID " + uniqueCusNo + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/all-appointments/{id}")
+    public ResponseEntity<AppointmentDto> deleteAppointment(@PathVariable long id){
+        try {
+            AppointmentDto appointmentDto = appointmentServiceI.deleteAppointment(id);
+            return ResponseEntity.ok(appointmentDto);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

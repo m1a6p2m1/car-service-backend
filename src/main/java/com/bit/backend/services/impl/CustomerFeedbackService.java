@@ -1,14 +1,12 @@
 package com.bit.backend.services.impl;
 
-import com.bit.backend.dtos.CustomerDto;
 import com.bit.backend.dtos.CustomerFeedbackDto;
-import com.bit.backend.dtos.EmployeeDto;
-import com.bit.backend.entities.CustomerEntity;
 import com.bit.backend.entities.CustomerFeedbackEntity;
-import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.CustomerFeedbackMapper;
 import com.bit.backend.repositories.CustomerFeedbackRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.CustomerFeedbackServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,17 +18,25 @@ import java.util.Optional;
 public class CustomerFeedbackService implements CustomerFeedbackServiceI {
     private final CustomerFeedbackMapper customerFeedbackMapper;
     private final CustomerFeedbackRepository customerFeedbackRepository;
+    private final UserRepository userRepository;
 
-    public CustomerFeedbackService(CustomerFeedbackMapper customerFeedbackMapper, CustomerFeedbackRepository customerFeedbackRepository) {
+    public CustomerFeedbackService(CustomerFeedbackMapper customerFeedbackMapper, CustomerFeedbackRepository customerFeedbackRepository, UserRepository userRepository) {
         this.customerFeedbackMapper = customerFeedbackMapper;
         this.customerFeedbackRepository = customerFeedbackRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public CustomerFeedbackDto addCustomerFeedbackEntity(CustomerFeedbackDto customerFeedbackDto){
-//        System.out.println("****************In Backend****************");
+        System.out.println("****************In Backend Cus Feedback****************");
         try {
             CustomerFeedbackEntity customerFeedbackEntity = customerFeedbackMapper.toCustomerFeedbackEntity(customerFeedbackDto);
+
+            if (customerFeedbackDto.getUserId() != null){
+                User user = userRepository.findById(customerFeedbackDto.getUserId())
+                        .orElseThrow(() -> new RuntimeException("User not Found"));
+                customerFeedbackEntity.setUser((user));
+            }
             CustomerFeedbackEntity savedItem = customerFeedbackRepository.save(customerFeedbackEntity);
             CustomerFeedbackDto savedDto = customerFeedbackMapper.toCustomerFeedbackDto(savedItem);
 
@@ -41,10 +47,10 @@ public class CustomerFeedbackService implements CustomerFeedbackServiceI {
     }
 
     @Override
-    public List<CustomerFeedbackDto> getData(long id) {
+    public List<CustomerFeedbackDto> getCusFeedbackByCusNo(String uniqueCusNo) {
 //        System.out.println("****************In Backend****************");
         try {
-            List<CustomerFeedbackEntity> customerFeedbackEntityList = customerFeedbackRepository.findAll();
+            List<CustomerFeedbackEntity> customerFeedbackEntityList = customerFeedbackRepository.findByUser_UniqueCusNo(uniqueCusNo);
             List<CustomerFeedbackDto> customerFeedbackDtoList = customerFeedbackMapper.toCustomerFeedbackDtoList(customerFeedbackEntityList);
             return customerFeedbackDtoList;
         }catch (Exception e){

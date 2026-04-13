@@ -7,6 +7,7 @@ import lombok.Builder;
 public class UserDto {
 
     private Long id;
+    private String uniqueCusNo;
     private String firstName;
     private String lastName;
     private String login;
@@ -27,9 +28,10 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(Long id, String firstName, String lastName, String login, String token, String role, Long employeeId, Long customerId, byte[] image,
+    public UserDto(Long id, String uniqueCusNo, String firstName, String lastName, String login, String token, String role, Long employeeId, Long customerId, byte[] image,
                    String imageName, String imageType, String email , String phoneNumber) {
         this.id = id;
+        this.uniqueCusNo = uniqueCusNo;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
@@ -50,6 +52,14 @@ public class UserDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueCusNo() {
+        return uniqueCusNo;
+    }
+
+    public void setUniqueCusNo(String uniqueCusNo) {
+        this.uniqueCusNo = uniqueCusNo;
     }
 
     public String getFirstName() {

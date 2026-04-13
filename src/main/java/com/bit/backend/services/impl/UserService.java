@@ -18,11 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,11 +103,15 @@ public class UserService implements UserServiceI {
             user.setEmployee(employee);
         }
 
-//        if ("CUSTOMER".equalsIgnoreCase(signUpDto.role()) && signUpDto.customerId() != null) {
-//            CustomerEntity customer = customerRepository.findById(signUpDto.customerId())
-//                    .orElseThrow(() -> new AppException("Customer Not Found", HttpStatus.NOT_FOUND));
-//            user.setCustomer(customer);
-//        }
+        if ("CUSTOMER".equalsIgnoreCase(signUpDto.role()) && signUpDto.customerId() != null) {
+            CustomerEntity customer = customerRepository.findById(signUpDto.customerId())
+                    .orElseThrow(() -> new AppException("Customer Not Found", HttpStatus.NOT_FOUND));
+            user.setCustomer(customer);
+        }
+
+        if ("CUSTOMER".equalsIgnoreCase(signUpDto.role())) {
+            user.setUniqueCusNo(generateCustomerNumber(user));
+        }
 
         // get image from employee form to show in the profile
         User savedUser = userRepository.save(user);
@@ -272,4 +275,16 @@ public class UserService implements UserServiceI {
     //get customer names list into the vehiclesForm customer name field
     @Override
     public List<Map<String, Object>> getVehicleRegUsers() { return userRepository.getVehicleRegUsersList();}
+
+    public String generateCustomerNumber(User user) {
+        String unique;
+        do {
+            String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            String uniquePart = String.format("%03d", new Random().nextInt(1000)); // 000 - 999
+
+            unique = "CUS" + datePart + uniquePart;
+        } while (userRepository.existsByUniqueCusNo(unique));
+          return unique;
+
+    }
 }

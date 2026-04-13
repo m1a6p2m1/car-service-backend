@@ -17,6 +17,8 @@ public class AppointmentDto {
     private String email;
     private String phoneNumber;
     private Double totalServicePrice;
+    private String role;
+    private String login;
     private Long assignee;
     private String assigneeName;
 
@@ -24,7 +26,7 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, LocalDate date, LocalTime time, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, Long assignee, String assigneeName) {
+    public AppointmentDto(Long id, LocalDate date, LocalTime time, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -38,6 +40,8 @@ public class AppointmentDto {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.totalServicePrice = totalServicePrice;
+        this.role = role;
+        this.login = login;
         this.assignee = assignee;
         this.assigneeName = assigneeName;
     }
@@ -144,6 +148,22 @@ public class AppointmentDto {
 
     public void setTotalServicePrice(Double totalServicePrice) {
         this.totalServicePrice = totalServicePrice;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public Long getAssignee() {

@@ -38,15 +38,21 @@ public class AppointmentEntity {
     private String phoneNumber;
     @Column(name = "total_service_price")
     private Double totalServicePrice;
+    @Column(name = "role")
+    private String role;
     @Column(name="assignee")
     private Long assignee;
     @Column(name = "assignee_name")
     private String assigneeName;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, Long assignee, String assigneeName) {
+    public AppointmentEntity(Long id, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, Long assignee, String assigneeName) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -59,6 +65,7 @@ public class AppointmentEntity {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.totalServicePrice = totalServicePrice;
+        this.role = role;
         this.assignee = assignee;
         this.assigneeName = assigneeName;
     }
@@ -159,6 +166,14 @@ public class AppointmentEntity {
         this.totalServicePrice = totalServicePrice;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public Long getAssignee() {
         return assignee;
     }
@@ -173,5 +188,13 @@ public class AppointmentEntity {
 
     public void setAssigneeName(String assigneeName) {
         this.assigneeName = assigneeName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

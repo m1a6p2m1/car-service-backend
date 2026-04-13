@@ -23,10 +23,14 @@ public class CustomerFeedbackEntity {
     @Column(name = "user_recommendation")
     private String recommendation;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public CustomerFeedbackEntity() {
     }
 
-    public CustomerFeedbackEntity(long id, String userName, String taskNumber, String serviceType, String serviceDate, String serviceQuality, String complaint, String recommendation) {
+    public CustomerFeedbackEntity(long id, String userName, String taskNumber, String serviceType, String serviceDate, String serviceQuality, String complaint, String recommendation, User user) {
         this.id = id;
         this.userName = userName;
         this.taskNumber = taskNumber;
@@ -35,6 +39,7 @@ public class CustomerFeedbackEntity {
         this.serviceQuality = serviceQuality;
         this.complaint = complaint;
         this.recommendation = recommendation;
+        this.user = user;
     }
 
     public long getId() {
@@ -99,5 +104,13 @@ public class CustomerFeedbackEntity {
 
     public void setRecommendation(String recommendation) {
         this.recommendation = recommendation;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

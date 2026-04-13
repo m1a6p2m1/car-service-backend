@@ -3,6 +3,7 @@ package com.bit.backend.services;
 import com.bit.backend.dtos.AppointmentAssigneeChangeDto;
 import com.bit.backend.dtos.AppointmentDto;
 import com.bit.backend.dtos.TimeSlotDto;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,4 +17,8 @@ public interface AppointmentServiceI {
     List<AppointmentDto> getAllAppointments();
 
     AppointmentAssigneeChangeDto changeAssignee(AppointmentAssigneeChangeDto appointmentAssigneeChangeDto);
+
+    AppointmentDto deleteAppointment(long id);
+
+    List<AppointmentDto> getAppointmentsByCusId(String uniqueCusNo);
 }

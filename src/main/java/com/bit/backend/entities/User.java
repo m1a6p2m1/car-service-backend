@@ -12,8 +12,9 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName,String nic, String email , String contactNumber , String address , String login, String password, String role) {
+    public User(Long id, String uniqueCusNo, String firstName, String lastName,String nic, String email , String contactNumber , String address , String login, String password, String role) {
         this.id = id;
+        this.uniqueCusNo = uniqueCusNo;
         this.firstName = firstName;
         this.lastName = lastName;
         this.nic = nic;
@@ -29,19 +30,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "unique_cus_no")
+    private String uniqueCusNo;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "nic_number", nullable = false)
+    @Column(name = "nic_number")
     private String nic;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "contact_number", nullable = false)
+    @Column(name = "contact_number")
     private String contactNumber;
 
     @Column(name = "address")
@@ -60,9 +64,9 @@ public class User {
     @JoinColumn(name = "employee_id", referencedColumnName = "empNumber", unique = true)
     private EmployeeEntity employee;
 
-//    @OneToOne
-//    @JoinColumn(name = "customer_id", referencedColumnName = "cusId", unique = true)
-//    private CustomerEntity customer;
+    @OneToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "cusId", unique = true)
+    private CustomerEntity customer;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehiclesEntity> vehicles = new ArrayList<>();
@@ -73,6 +77,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueCusNo() {
+        return uniqueCusNo;
+    }
+
+    public void setUniqueCusNo(String uniqueCusNo) {
+        this.uniqueCusNo = uniqueCusNo;
     }
 
     public String getFirstName() {
@@ -154,12 +166,12 @@ public class User {
         this.employee = employee;
     }
 
-//    public CustomerEntity getCustomer() {
-//        return customer;
-//    }
-//    public void setCustomer(CustomerEntity customer) {
-//        this.customer = customer;
-//    }
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
+    }
 
     public List<VehiclesEntity> getVehicles() {
         return vehicles;

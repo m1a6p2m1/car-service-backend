@@ -25,4 +25,6 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     /** Check if a bay is free at a slot */
     Optional<AppointmentEntity> findByDateAndTimeAndBay(
             LocalDate appointmentDate, LocalTime timeSlot, Integer bay);
+
+    List<AppointmentEntity> findByUser_UniqueCusNo(String uniqueCusNo);
 }

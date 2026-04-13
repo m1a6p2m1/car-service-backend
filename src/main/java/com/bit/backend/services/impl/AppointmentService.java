@@ -1,15 +1,22 @@
 package com.bit.backend.services.impl;
 
-import com.bit.backend.dtos.AppointmentAssigneeChangeDto;
-import com.bit.backend.dtos.AppointmentDto;
-import com.bit.backend.dtos.TimeSlotDto;
+import com.bit.backend.dtos.*;
 import com.bit.backend.entities.AppointmentEntity;
+import com.bit.backend.entities.CustomerEntity;
+import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AppointmentMapper;
 import com.bit.backend.repositories.AppointmentRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.AppointmentServiceI;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -25,6 +32,7 @@ import java.util.stream.IntStream;
 public class AppointmentService implements AppointmentServiceI {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
+    private final UserRepository userRepository;
 
     private static final LocalTime OPEN = LocalTime.of(9, 0);
     private static final LocalTime CLOSE_WEEKDAY = LocalTime.of(17, 0);
@@ -34,9 +42,10 @@ public class AppointmentService implements AppointmentServiceI {
     private static final int SLOT_MINUTES = 60;
     private static final int MAX_BAYS = 3;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper) {
+    public AppointmentService(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, UserRepository userRepository) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -86,16 +95,24 @@ public class AppointmentService implements AppointmentServiceI {
     public AppointmentDto book(AppointmentDto appointmentDto) {
         LocalDate date = appointmentDto.getDate();
         LocalTime slot = appointmentDto.getTime();
-//        long id = appointmentDto.getId();
-        String vehicleType = appointmentDto.getVehicleType();
-        String serviceType = appointmentDto.getServiceType();
-        String taskName = appointmentDto.getTaskName();
-        String additionalServices = appointmentDto.getAdditionalServices();
-        String customerName = appointmentDto.getCustomerName();
-        String email = appointmentDto.getEmail();
-        String phoneNumber = appointmentDto.getPhoneNumber();
-        Double totalPrice = appointmentDto.getTotalServicePrice();
+        String login = appointmentDto.getLogin();
 
+        if (login == null || login.isEmpty()) {
+            throw new RuntimeException("Login is missing in request");
+        }
+
+        // Find user from DB
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        // decide role
+        String roleToSave;
+        if ("EMPLOYEE".equalsIgnoreCase(user.getRole())) {
+            roleToSave = "SYSTEM";
+        } else {
+            roleToSave = "CUSTOMER";
+        }
 
         // find a free bay 1‑3
         int bay = IntStream.rangeClosed(1, MAX_BAYS)
@@ -105,11 +122,16 @@ public class AppointmentService implements AppointmentServiceI {
 
         AppointmentEntity appointmentEntity = appointmentMapper.toAppointmentEntity(appointmentDto);
 
+        // set role
+        appointmentEntity.setRole(roleToSave);
+        appointmentEntity.setBay(bay);
+        appointmentEntity.setUser(user);
+
         AppointmentEntity saved = appointmentRepository.save(appointmentEntity);
 //        AppointmentEntity saved = appointmentRepository.save(new AppointmentEntity(id, date, slot, bay, vehicleType, serviceType, taskName, additionalServices, customerName, email, phoneNumber, totalPrice));
 
-        System.out.println(" Appointment saved: " + saved.getDate() + " " + saved.getTime() + " Bay: " + saved.getBay());
-        System.out.println("************************appointment book service********************");
+//        System.out.println(" Appointment saved: " + saved.getDate() + " " + saved.getTime() + " Bay: " + saved.getBay());
+//        System.out.println("************************appointment book service********************");
         // Recount how many appointments are now booked for this slot
         long bookedCount = appointmentRepository.countByDateAndTime(date, slot);
 
@@ -128,6 +150,8 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getEmail(),
                 saved.getPhoneNumber(),
                 saved.getTotalServicePrice(),
+                saved.getRole(),
+                login,
                 saved.getAssignee(),
                 saved.getAssigneeName()
         );
@@ -156,4 +180,40 @@ public class AppointmentService implements AppointmentServiceI {
             throw  new AppException("Error Occured: Please try again!", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public AppointmentDto deleteAppointment(long id) {
+//        System.out.println("******In DataBase**********");
+        try {
+            Optional<AppointmentEntity> optionalAppointmentEntity = appointmentRepository.findById(id);
+            if (!optionalAppointmentEntity.isPresent()){
+                throw new AppException("Form Does Not Exist", HttpStatus.BAD_REQUEST);
+            }
+            appointmentRepository.deleteById(id);
+            return appointmentMapper.toAppointmentDto(optionalAppointmentEntity.get());
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<AppointmentDto> getAppointmentsByCusId(String uniqueCusNo) {
+        System.out.println("******Customer Unique No**********");
+        List<AppointmentEntity> appointments = appointmentRepository.findByUser_UniqueCusNo(uniqueCusNo);
+        if (appointments.isEmpty()) {
+            throw new AppException("No appointments found for customer ID: " + uniqueCusNo, HttpStatus.NOT_FOUND);
+        }
+        return appointmentMapper.toAppointmentDtoList(appointments);
+    }
+
+//    @Override
+//    public List<AppointmentDto> getAppointmentsByCusId(Long id) {
+//        Optional<AppointmentEntity> optional = appointmentRepository.findById(id);
+//        if (!optional.isPresent()) {
+//            throw new AppException("Employee not found with ID: " + id, HttpStatus.NOT_FOUND);
+//        }
+//
+//        AppointmentEntity appointmentEntity = optional.get();
+//        return appointmentMapper.toAppointmentDto(appointmentEntity);
+//    }
 }
