@@ -1,5 +1,6 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.AppointmentDto;
 import com.bit.backend.dtos.CustomerVehiclesDto;
 import com.bit.backend.dtos.VehiclesDto;
 import com.bit.backend.exceptions.AppException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class VehiclesController {
@@ -29,10 +31,21 @@ public class VehiclesController {
         }
     }
 
+//    @GetMapping("/vehicles")
+//    public ResponseEntity<List<CustomerVehiclesDto>> getData(){
+//        try {
+//            List<CustomerVehiclesDto> vehiclesDtoList = vehiclesServiceI.getData();
+//            return ResponseEntity.ok(vehiclesDtoList);
+//        }catch (Exception e){
+//            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @GetMapping("/vehicles")
-    public ResponseEntity<List<CustomerVehiclesDto>> getData(){
+    public ResponseEntity<List<Map<String, Object>>> getData(){
         try {
-            List<CustomerVehiclesDto> vehiclesDtoList = vehiclesServiceI.getData();
+//            System.out.println(" Vehicle controller==============");
+            List<Map<String, Object>> vehiclesDtoList = vehiclesServiceI.getData();
             return ResponseEntity.ok(vehiclesDtoList);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,17 +80,30 @@ public class VehiclesController {
     }
 
     //Auto load licence_plate and vehicle_type when select customer_name
-//    @GetMapping("/register/vehicles/{customerId}")
-//    public ResponseEntity<List<VehiclesDto>> getVehicleByUser(@PathVariable Long UserId) {
-//
-//        try {
-//            List<VehiclesDto> vehicle = vehiclesServiceI.getVehicleByUserId(UserId);
-//            return ResponseEntity.ok(vehicle);
-//
-//        } catch (Exception e) {
-//            throw new AppException(
-//                    "Request Failed With Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR
-//            );
-//        }
-//    }
+    @GetMapping("/vehicles/vehicles-by-Customer/{customerId}")
+    public ResponseEntity<List<CustomerVehiclesDto>> getVehicleByUser(@PathVariable Long customerId) {
+
+        try {
+            System.out.println(" VehiclesByCustomerId controller==============");
+            List<CustomerVehiclesDto> vehicle = vehiclesServiceI.getVehicleByUserId(customerId);
+            System.out.println("Controller Hit: " + customerId);
+            return ResponseEntity.ok(vehicle);
+
+        } catch (Exception e) {
+            throw new AppException(
+                    "Request Failed With Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @GetMapping("/vehicles/{uniqueCusNo}")
+    public ResponseEntity<List<CustomerVehiclesDto>> getVehiclesByCusId(@PathVariable String uniqueCusNo) {
+        try {
+            System.out.println("Controller reached: " + uniqueCusNo);
+            List<CustomerVehiclesDto> appointmentDtoList = vehiclesServiceI.getVehiclesByCusId(uniqueCusNo);
+            return ResponseEntity.ok(appointmentDtoList);
+        } catch (Exception e) {
+            throw new AppException("Failed to get employee with ID " + uniqueCusNo + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -8,8 +8,8 @@ public class VehiclesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "customer_name")
-    private String customerName;
+//    @Column(name = "customer_name")
+//    private String customerName;
     @Column(name = "licence_plate")
     private String licencePlate;
     @Column(name = "vehicle_type")
@@ -24,9 +24,9 @@ public class VehiclesEntity {
     public VehiclesEntity() {
     }
 
-    public VehiclesEntity(Long id, String customerName, String licencePlate, String vehicleType, String vehicleModel, User user) {
+    public VehiclesEntity(Long id,  String licencePlate, String vehicleType, String vehicleModel, User user) {
         this.id = id;
-        this.customerName = customerName;
+//        this.customerName = customerName;
         this.licencePlate = licencePlate;
         this.vehicleType = vehicleType;
         this.vehicleModel = vehicleModel;
@@ -41,13 +41,13 @@ public class VehiclesEntity {
         this.id = id;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
+//    public String getCustomerName() {
+//        return customerName;
+//    }
+//
+//    public void setCustomerName(String customerName) {
+//        this.customerName = customerName;
+//    }
 
     public String getLicencePlate() {
         return licencePlate;

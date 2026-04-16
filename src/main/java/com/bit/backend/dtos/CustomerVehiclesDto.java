@@ -5,6 +5,7 @@ public class CustomerVehiclesDto {
     private Long id;
     private Long customerId;
     private String customerName;
+    private String uniqueCusNo;
     private String licencePlate;
     private String vehicleType;
     private String vehicleModel;
@@ -12,10 +13,11 @@ public class CustomerVehiclesDto {
     public CustomerVehiclesDto() {
     }
 
-    public CustomerVehiclesDto(Long id, Long customerId, String customerName, String licencePlate, String vehicleType, String vehicleModel) {
+    public CustomerVehiclesDto(Long id, Long customerId, String customerName, String uniqueCusNo, String licencePlate, String vehicleType, String vehicleModel) {
         this.id = id;
         this.customerId = customerId;
         this.customerName = customerName;
+        this.uniqueCusNo = uniqueCusNo;
         this.licencePlate = licencePlate;
         this.vehicleType = vehicleType;
         this.vehicleModel = vehicleModel;
@@ -43,6 +45,14 @@ public class CustomerVehiclesDto {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getUniqueCusNo() {
+        return uniqueCusNo;
+    }
+
+    public void setUniqueCusNo(String uniqueCusNo) {
+        this.uniqueCusNo = uniqueCusNo;
     }
 
     public String getLicencePlate() {
