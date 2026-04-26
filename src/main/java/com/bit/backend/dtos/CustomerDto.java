@@ -5,7 +5,7 @@ public class CustomerDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String phoneNumber;
+    private String contactNumber;
     private String gender;
     private String address;
     private String nic;
@@ -16,12 +16,12 @@ public class CustomerDto {
     public CustomerDto() {
     }
 
-    public CustomerDto(long cusId, String firstName, String lastName, String email, String phoneNumber, String gender, String address, String nic, String licencePlate, String vehicleType, String vehicleModel) {
+    public CustomerDto(long cusId, String firstName, String lastName, String email, String contactNumber, String gender, String address, String nic, String licencePlate, String vehicleType, String vehicleModel) {
         this.cusId = cusId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.contactNumber = contactNumber;
         this.gender = gender;
         this.address = address;
         this.nic = nic;
@@ -62,12 +62,12 @@ public class CustomerDto {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public String getGender() {

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class AttendanceMarkDto {
     private long employeeId;
+    private String employeeName;
     private LocalDate date;
     private String attendanceStatus;
 
@@ -12,13 +13,14 @@ public class AttendanceMarkDto {
         this.date = LocalDate.now(); // Auto-set current date
     }
 
-    public AttendanceMarkDto(long employeeId, LocalDate date, String attendanceStatus) {
+    public AttendanceMarkDto(long employeeId, String employeeName, LocalDate date, String attendanceStatus) {
         this.employeeId = employeeId;
+        this.employeeName = employeeName;
         this.date = date;
         this.attendanceStatus = attendanceStatus;
     }
 
-//    // Constructor to convert Entity -> DTO
+    //    // Constructor to convert Entity -> DTO
 //    public AttendanceMarkDto(AttendanceMarkEntity entity) {
 //        this.id = entity.getId();
 //        this.date = entity.getDate();
@@ -45,6 +47,14 @@ public class AttendanceMarkDto {
 
     public void setEmployeeId(long employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
     public LocalDate getDate() {

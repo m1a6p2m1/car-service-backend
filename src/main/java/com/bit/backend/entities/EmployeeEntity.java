@@ -10,6 +10,9 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long empNumber;
 
+    @Column(name = "unique_emp_no")
+    private String uniqueEmpNo;
+
     @Column(name = "full_name")
     private String fullName;
     @Column(name = "calling_name")
@@ -45,9 +48,9 @@ public class EmployeeEntity {
 
     public EmployeeEntity() { }
 
-    public EmployeeEntity(long empNumber, String fullName, String callingName, String nic, String dob, String gender, String address, String email, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle,
-                          byte[] image, String imageType, String imageName) {
+    public EmployeeEntity(long empNumber, String uniqueEmpNo, String fullName, String callingName, String nic, String dob, String gender, String address, String email, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle, byte[] image, String imageName, String imageType) {
         this.empNumber = empNumber;
+        this.uniqueEmpNo = uniqueEmpNo;
         this.fullName = fullName;
         this.callingName = callingName;
         this.nic = nic;
@@ -72,6 +75,14 @@ public class EmployeeEntity {
 
     public void setEmpNumber(long empNumber) {
         this.empNumber = empNumber;
+    }
+
+    public String getUniqueEmpNo() {
+        return uniqueEmpNo;
+    }
+
+    public void setUniqueEmpNo(String uniqueEmpNo) {
+        this.uniqueEmpNo = uniqueEmpNo;
     }
 
     public String getFullName() {

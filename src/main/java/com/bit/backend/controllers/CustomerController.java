@@ -29,7 +29,7 @@ public class CustomerController {
     public ResponseEntity<CustomerDto> addForm(@RequestBody CustomerDto customerDto){
         try{
             CustomerDto customerDtoResponse = customerServiceI.addCustomerEntity(customerDto);
-            return ResponseEntity.created(URI.create("/customer"+customerDtoResponse.getFirstName())).body(customerDtoResponse);
+            return ResponseEntity.ok(customerDtoResponse);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

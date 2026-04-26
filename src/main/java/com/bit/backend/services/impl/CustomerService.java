@@ -5,12 +5,13 @@ import com.bit.backend.entities.CustomerEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.CustomerMapper;
 import com.bit.backend.repositories.CustomerRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.CustomerServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -18,10 +19,12 @@ public class CustomerService implements CustomerServiceI {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final UserRepository userRepository;
 
-    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, UserRepository userRepository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -69,6 +72,7 @@ public class CustomerService implements CustomerServiceI {
     }
 
     @Override
+    @Transactional
     public CustomerDto deleteData(long cusId) {
 //        System.out.println("******In DataBase**********");
         try {
@@ -76,6 +80,7 @@ public class CustomerService implements CustomerServiceI {
             if (!optionalCustomerEntity.isPresent()){
                 throw new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST);
             }
+            userRepository.deleteByCustomer_CusId(cusId);
             customerRepository.deleteById(cusId);
             return customerMapper.toCustomerDto(optionalCustomerEntity.get());
         }catch (Exception e){

@@ -22,14 +22,14 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imageType;
     private String email;
-    private String phoneNumber;
+    private String contactNumber;
 
 
     public UserDto() {
     }
 
     public UserDto(Long id, String uniqueCusNo, String firstName, String lastName, String login, String token, String role, Long employeeId, Long customerId, byte[] image,
-                   String imageName, String imageType, String email , String phoneNumber) {
+                   String imageName, String imageType, String email , String contactNumber) {
         this.id = id;
         this.uniqueCusNo = uniqueCusNo;
         this.firstName = firstName;
@@ -43,7 +43,7 @@ public class UserDto {
         this.imageName = imageName;
         this.imageType = imageType;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.contactNumber = contactNumber;
     }
 
     public Long getId() {
@@ -105,6 +105,7 @@ public class UserDto {
     public Long getEmployeeId() {
         return employeeId;
     }
+
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }
@@ -112,6 +113,7 @@ public class UserDto {
     public Long getCustomerId() {
         return customerId;
     }
+
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
@@ -139,6 +141,7 @@ public class UserDto {
     public void setImageType(String imageType) {
         this.imageType = imageType;
     }
+
     public String getEmail() {
         return email;
     }
@@ -147,12 +150,11 @@ public class UserDto {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
-
 }

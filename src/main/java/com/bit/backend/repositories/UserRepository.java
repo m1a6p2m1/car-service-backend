@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    void deleteByCustomer_CusId(Long cusId);
     boolean existsByUniqueCusNo(String uniqueCusNo);
     Optional<User> findByLogin(String login);
     // auth_group_users - auth_group_id against user_id

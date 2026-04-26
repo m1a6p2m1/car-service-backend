@@ -14,6 +14,7 @@ public interface AttendanceMarkMapper {
         AttendanceMarkDto dto = new AttendanceMarkDto();
 
         dto.setEmployeeId(entity.getEmployee().getEmpNumber());
+        dto.setEmployeeName(entity.getEmployee().getFullName());
         dto.setDate(entity.getDate());
         dto.setAttendanceStatus(entity.getAttendanceStatus());
 

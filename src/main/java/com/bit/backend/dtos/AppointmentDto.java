@@ -5,6 +5,7 @@ import java.time.LocalTime;
 
 public class AppointmentDto {
     private Long id;
+    private String appointmentUniqueNo;
     private LocalDate date;
     private LocalTime time;
     private Integer bay;
@@ -26,8 +27,9 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, LocalDate date, LocalTime time, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
+    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
         this.id = id;
+        this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.bay = bay;
@@ -52,6 +54,13 @@ public class AppointmentDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAppointmentUniqueNo() {
+        return appointmentUniqueNo;
+    }
+    public void setAppointmentUniqueNo(String appointmentUniqueNo) {
+        this.appointmentUniqueNo = appointmentUniqueNo;
     }
 
     public LocalDate getDate() {

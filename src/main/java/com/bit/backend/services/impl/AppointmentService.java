@@ -1,10 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.*;
-import com.bit.backend.entities.AppointmentEntity;
-import com.bit.backend.entities.CustomerEntity;
-import com.bit.backend.entities.EmployeeEntity;
-import com.bit.backend.entities.User;
+import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AppointmentMapper;
 import com.bit.backend.repositories.AppointmentRepository;
@@ -21,10 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -128,16 +123,20 @@ public class AppointmentService implements AppointmentServiceI {
         appointmentEntity.setUser(user);
 
         AppointmentEntity saved = appointmentRepository.save(appointmentEntity);
-//        AppointmentEntity saved = appointmentRepository.save(new AppointmentEntity(id, date, slot, bay, vehicleType, serviceType, taskName, additionalServices, customerName, email, phoneNumber, totalPrice));
 
-//        System.out.println(" Appointment saved: " + saved.getDate() + " " + saved.getTime() + " Bay: " + saved.getBay());
-//        System.out.println("************************appointment book service********************");
+        //Generate Unique No
+        String uniqueNo = generateAppointmentNumber(saved);
+        saved.setAppointmentUniqueNo(uniqueNo);
+        //Save again with unique No
+        saved = appointmentRepository.save(saved);
+//
         // Recount how many appointments are now booked for this slot
         long bookedCount = appointmentRepository.countByDateAndTime(date, slot);
 
         // Return DTO with updated data
         return new AppointmentDto(
                 saved.getId(),
+                saved.getAppointmentUniqueNo(),
                 saved.getDate(),
                 saved.getTime(),
                 saved.getBay(),
@@ -204,6 +203,14 @@ public class AppointmentService implements AppointmentServiceI {
             throw new AppException("No appointments found for customer ID: " + uniqueCusNo, HttpStatus.NOT_FOUND);
         }
         return appointmentMapper.toAppointmentDtoList(appointments);
+    }
+
+    public String generateAppointmentNumber(AppointmentEntity appointmentEntity) {
+        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+//        String idPart = String.valueOf(appointmentEntity.getId());
+        String idPart = String.format("%06d", appointmentEntity.getId()); // 000 - 999
+
+        return "APP" + datePart + idPart;
     }
 
 //    @Override

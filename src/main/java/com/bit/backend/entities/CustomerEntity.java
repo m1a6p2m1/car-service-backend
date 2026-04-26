@@ -19,8 +19,8 @@ public class CustomerEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "contact_number")
+    private String contactNumber;
 
     @Column(name = "gender")
     private String gender;
@@ -40,21 +40,25 @@ public class CustomerEntity {
     @Column(name = "vehicle_model")
     private String vehicleModel;
 
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private User user;
+
     public CustomerEntity() {
     }
 
-    public CustomerEntity(long cusId, String firstName, String lastName, String email, String phoneNumber, String gender, String nic, String address, String licencePlate, String vehicleType, String vehicleModel) {
+    public CustomerEntity(long cusId, String firstName, String lastName, String email, String contactNumber, String gender, String nic, String address, String licencePlate, String vehicleType, String vehicleModel, User user) {
         this.cusId = cusId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.contactNumber = contactNumber;
         this.gender = gender;
         this.nic = nic;
         this.address = address;
         this.licencePlate = licencePlate;
         this.vehicleType = vehicleType;
         this.vehicleModel = vehicleModel;
+        this.user = user;
     }
 
     public long getCusId() {
@@ -89,12 +93,12 @@ public class CustomerEntity {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public String getGender() {
@@ -143,5 +147,13 @@ public class CustomerEntity {
 
     public void setVehicleModel(String vehicleModel) {
         this.vehicleModel = vehicleModel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

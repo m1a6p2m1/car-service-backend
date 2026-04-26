@@ -5,6 +5,7 @@ import com.bit.backend.dtos.AttendanceMarkEmployeeDto;
 import com.bit.backend.entities.AttendanceMarkEntity;
 import com.bit.backend.entities.EmployeeEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ public interface AttendanceMarkServiceI {
     List<Map<String, Object>> getActiveEmployees();
 
     List<AttendanceMarkDto> saveAttendance(List<AttendanceMarkDto> attendanceList);
+
+    List<AttendanceMarkDto> getAttendanceByDate(LocalDate date);
 
 //    AttendanceMarkDto saveAttendance(List<AttendanceMarkDto> attendanceList);
 }

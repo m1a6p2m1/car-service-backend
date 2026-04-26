@@ -194,7 +194,7 @@ public class UserService implements UserServiceI {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getContactNumber());
+        dto.setContactNumber(user.getContactNumber());
 
         if (user.getEmployee() != null) {
             dto.setImage(user.getEmployee().getImage());
@@ -218,7 +218,7 @@ public class UserService implements UserServiceI {
         if (user.getEmployee() != null) {
             EmployeeEntity employee = user.getEmployee();
             employee.setEmail(userDto.getEmail());
-            employee.setPhoneNumber(userDto.getPhoneNumber());
+            employee.setPhoneNumber(userDto.getContactNumber());
             employee.setImage(userDto.getImage());
             employee.setImageName(userDto.getImageName());
             employee.setImageType(userDto.getImageType());

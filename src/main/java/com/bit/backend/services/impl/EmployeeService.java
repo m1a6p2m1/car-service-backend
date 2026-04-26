@@ -4,6 +4,7 @@ import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.FormDemoDto;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.FormDemoEntity;
+import com.bit.backend.entities.TaskAssignEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
 import com.bit.backend.repositories.EmployeeRepository;
@@ -11,9 +12,12 @@ import com.bit.backend.services.EmployeeServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class EmployeeService implements EmployeeServiceI {
@@ -30,9 +34,17 @@ public class EmployeeService implements EmployeeServiceI {
     public EmployeeDto addEmployeeEntity(EmployeeDto employeeDto) {
         try {
             System.out.println("****************In Backend****************");
+            //convert DTO -> ENTITY
             EmployeeEntity employeeEntity = employeeMapper.toEmployeeEntity(employeeDto);
             EmployeeEntity savedItem = employeeRepository.save(employeeEntity);
-            EmployeeDto savedDto = employeeMapper.toEmployeeDto(savedItem);
+            //Generate Unique No
+            String uniqueNo = generateEmpNumber(savedItem);
+            savedItem.setUniqueEmpNo(uniqueNo);
+            //Save again with unique No
+            EmployeeEntity updateEntity = employeeRepository.save(savedItem);
+
+            EmployeeDto savedDto = employeeMapper.toEmployeeDto(updateEntity);
+
             return savedDto;
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,5 +118,13 @@ public class EmployeeService implements EmployeeServiceI {
     @Override
     public List<Map<String, Object>> getEmployeeCountByJobRole() {
         return employeeRepository.getEmployeeCountByJobRole();
+    }
+
+    public String generateEmpNumber(EmployeeEntity employeeEntity) {
+        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String empNumberPart = String.valueOf(employeeEntity.getEmpNumber());
+        String uniquePart = String.format("%03d", new Random().nextInt(1000)); // 000 - 999
+
+        return "EMP" + datePart + empNumberPart + uniquePart;
     }
 }

@@ -13,6 +13,9 @@ public class AppointmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "appointment_unique_no")
+    private String appointmentUniqueNo;
+
     @Column(name = "appointment_date")
     private LocalDate date;
 
@@ -52,8 +55,9 @@ public class AppointmentEntity {
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, Long assignee, String assigneeName) {
+    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
         this.id = id;
+        this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.bay = bay;
@@ -68,6 +72,7 @@ public class AppointmentEntity {
         this.role = role;
         this.assignee = assignee;
         this.assigneeName = assigneeName;
+        this.user = user;
     }
 
     public Long getId() {
@@ -76,6 +81,14 @@ public class AppointmentEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAppointmentUniqueNo() {
+        return appointmentUniqueNo;
+    }
+
+    public void setAppointmentUniqueNo(String appointmentUniqueNo) {
+        this.appointmentUniqueNo = appointmentUniqueNo;
     }
 
     public LocalDate getDate() {
