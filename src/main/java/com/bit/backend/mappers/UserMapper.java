@@ -22,6 +22,8 @@ public interface UserMapper {
 //    @Mapping(target = "customer", ignore = true) // Will be set manually in service(customer and employee login)
     @Mapping(target = "id", ignore = true)       // New user(customer and employee login)
     @Mapping(target = "password", ignore = true) // Set manually after encoding
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "contactNumber", source = "contactNumber")
     User signUpToUser(SignUpDto signUpDto);
 
     AuthDto toAuthDto(Integer authId);

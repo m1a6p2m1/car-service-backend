@@ -28,7 +28,7 @@ public class AuthController {
         user.setToken(userAuthProvider.createToken(user));
         return ResponseEntity.ok(user);
     }
-
+    //Self Registration of Customer using SignUp
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
         UserDto user = userServiceI.register(signUpDto);

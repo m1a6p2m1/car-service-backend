@@ -136,8 +136,10 @@ public class UserService implements UserServiceI {
             userDto.setImageName(savedUser.getEmployee().getImageName());
             userDto.setImageType(savedUser.getEmployee().getImageType());
             userDto.setImageType(savedUser.getEmployee().getImageType());
-            userDto.setImageType(savedUser.getEmployee().getEmail());
-            userDto.setImageType(savedUser.getEmployee().getPhoneNumber());
+            userDto.setEmail(savedUser.getEmail());
+            userDto.setContactNumber(savedUser.getContactNumber());
+//            userDto.setImageType(savedUser.getEmployee().getEmail());
+//            userDto.setImageType(savedUser.getEmployee().getPhoneNumber());
         }
 
         return userDto;
