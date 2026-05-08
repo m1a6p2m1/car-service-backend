@@ -78,7 +78,8 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
             Long empId = user.getEmployee().getEmpNumber();
 
-            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
+//            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
+              List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
             return taskAssignMapper.toSubTaskAssignDto(subTaskAssignedEntities);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,8 +121,13 @@ public class TaskAssignService implements TaskAssignServiceI {
 //            return taskAssignDtoList;
 //        }
 
-        if (taskNo != null || !taskNo.equals("") || !taskNo.equals(null)) {
+        if ((!taskNo.equals("-1")) && (taskNo != null || !taskNo.equals("") || !taskNo.equals(null))) {
             List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByUniqueTaskNo(taskNo);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        } else if (taskNo.equals("-1")) {
+            Long cusId = Long.parseLong(customerId);
+            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByCustomerId(cusId);
             List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
             return taskAssignDtoList;
         }
