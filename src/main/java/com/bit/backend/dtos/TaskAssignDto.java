@@ -1,9 +1,14 @@
 package com.bit.backend.dtos;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class TaskAssignDto {
     private Long id;
+    private String appointmentUniqueNo;
+    private LocalDate date;
+    private LocalTime time;
     private String taskName;
     private String taskCreatedBy;
     private String customerName;
@@ -20,8 +25,11 @@ public class TaskAssignDto {
     public TaskAssignDto() {
     }
 
-    public TaskAssignDto(Long id, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignDto> subTasks, Long customerId, Long supervisor) {
+    public TaskAssignDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignDto> subTasks, Long customerId, Long supervisor) {
         this.id = id;
+        this.appointmentUniqueNo = appointmentUniqueNo;
+        this.date = date;
+        this.time = time;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
@@ -42,6 +50,30 @@ public class TaskAssignDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAppointmentUniqueNo() {
+        return appointmentUniqueNo;
+    }
+
+    public void setAppointmentUniqueNo(String appointmentUniqueNo) {
+        this.appointmentUniqueNo = appointmentUniqueNo;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public String getTaskName() {

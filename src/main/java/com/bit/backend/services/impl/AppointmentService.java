@@ -30,8 +30,8 @@ public class AppointmentService implements AppointmentServiceI {
     private final UserRepository userRepository;
 
     private static final LocalTime OPEN = LocalTime.of(9, 0);
-    private static final LocalTime CLOSE_WEEKDAY = LocalTime.of(17, 0);
-    private static final LocalTime CLOSE_SATURDAY = LocalTime.of(15, 0);
+    private static final LocalTime CLOSE_WEEKDAY = LocalTime.of(18, 0);
+    private static final LocalTime CLOSE_SATURDAY = LocalTime.of(16, 0);
     private static final LocalTime LUNCH_START = LocalTime.of(13, 0);
     private static final LocalTime LUNCH_END = LocalTime.of(14, 0);
     private static final int SLOT_MINUTES = 60;
@@ -75,7 +75,7 @@ public class AppointmentService implements AppointmentServiceI {
 
         if (day == DayOfWeek.SATURDAY) {
             close = CLOSE_SATURDAY;
-            skipLunch = true; // no Lunch break on saturday
+            skipLunch = false; // Lunch break on saturday
         }else {
             close = CLOSE_WEEKDAY;
         }
@@ -140,9 +140,11 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getDate(),
                 saved.getTime(),
                 saved.getBay(),
+                saved.getStatus(),
                 bookedCount,
                 saved.getTaskName(),
                 saved.getVehicleType(),
+                saved.getLicencePlate(),
                 saved.getServiceType(),
                 saved.getAdditionalServices(),
                 saved.getCustomerName(),
@@ -203,6 +205,24 @@ public class AppointmentService implements AppointmentServiceI {
             throw new AppException("No appointments found for customer ID: " + uniqueCusNo, HttpStatus.NOT_FOUND);
         }
         return appointmentMapper.toAppointmentDtoList(appointments);
+    }
+
+    // get Appointment numbers related to the date and time(taskAssign)
+    @Override
+    public List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time){
+        List<AppointmentEntity> list = appointmentRepository.findByDateAndTime(date, time);
+        if (list.isEmpty()) {
+            throw new AppException("No appointments found " ,HttpStatus.NOT_FOUND);
+        }
+        return appointmentMapper.toAppointmentDtoList(list);
+    }
+
+    //get Appointments details when select the appointment no(taskAssign)
+    @Override
+    public AppointmentDto getAppointmentsByAppointmentNo(String appointmentUniqueNo) {
+        AppointmentEntity details = appointmentRepository.findByAppointment_UniqueNo(appointmentUniqueNo)
+                .orElseThrow(() -> new AppException("Appointment not found", HttpStatus.NOT_FOUND));
+        return appointmentMapper.toAppointmentDto(details);
     }
 
     public String generateAppointmentNumber(AppointmentEntity appointmentEntity) {

@@ -6,6 +6,7 @@ import com.bit.backend.dtos.TimeSlotDto;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface AppointmentServiceI {
@@ -21,4 +22,8 @@ public interface AppointmentServiceI {
     AppointmentDto deleteAppointment(long id);
 
     List<AppointmentDto> getAppointmentsByCusId(String uniqueCusNo);
+
+    List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time);
+
+    AppointmentDto getAppointmentsByAppointmentNo(String appointmentUniqueNo);
 }

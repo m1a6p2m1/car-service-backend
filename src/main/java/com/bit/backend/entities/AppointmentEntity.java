@@ -25,10 +25,14 @@ public class AppointmentEntity {
     /** 1‑3 for the three washing bays */
     @Column(name = "bay")
     private Integer bay;
+    @Column(name = "status")
+    private String status;
     @Column(name = "task_name")
     private String taskName;
     @Column(name = "vehicle_type")
     private String vehicleType;
+    @Column(name = "licence_plate")
+    private String licencePlate;
     @Column(name = "service_type")
     private String serviceType;
     @Column(name = "additional_services")
@@ -55,14 +59,16 @@ public class AppointmentEntity {
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
+    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.bay = bay;
+        this.status = status;
         this.taskName = taskName;
         this.vehicleType = vehicleType;
+        this.licencePlate = licencePlate;
         this.serviceType = serviceType;
         this.additionalServices = additionalServices;
         this.customerName = customerName;
@@ -115,6 +121,14 @@ public class AppointmentEntity {
         this.bay = bay;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getTaskName() {
         return taskName;
     }
@@ -129,6 +143,14 @@ public class AppointmentEntity {
 
     public void setVehicleType(String vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    public String getLicencePlate() {
+        return licencePlate;
+    }
+
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
     }
 
     public String getServiceType() {

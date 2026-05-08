@@ -80,19 +80,30 @@ public class VehiclesService implements VehiclesServiceI {
 
     @Override
     public CustomerVehiclesDto updateForm(long id, CustomerVehiclesDto customerVehiclesDto) {
-        try {
-            Optional<VehiclesEntity> optionalVehiclesEntity = vehiclesRepository.findById(id);
-            if (!optionalVehiclesEntity.isPresent()){
-                throw new AppException("Vehicles Form Does Not Exist", HttpStatus.BAD_REQUEST);
+
+            VehiclesEntity existingVehicle = vehiclesRepository.findById(id)
+                    .orElseThrow(() ->
+                            new AppException("Vehicle Not Found", HttpStatus.NOT_FOUND)) ;
+
+            existingVehicle.setLicencePlate(customerVehiclesDto.getLicencePlate());
+            existingVehicle.setVehicleType(customerVehiclesDto.getVehicleType());
+            existingVehicle.setVehicleModel(customerVehiclesDto.getVehicleModel());
+
+            if (customerVehiclesDto.getCustomerId() != null) {
+
+                User user = userRepository.findById(
+                        customerVehiclesDto.getCustomerId()
+                ).orElseThrow(() ->
+                        new AppException("Customer Not Found",
+                                HttpStatus.NOT_FOUND));
+
+                existingVehicle.setUser(user);
             }
-            VehiclesEntity newVehiclesEntity = vehiclesMapper.toVehiclesEntity(customerVehiclesDto);
-            newVehiclesEntity.setId(id);
-            VehiclesEntity vehiclesEntity = vehiclesRepository.save(newVehiclesEntity);
+
+            VehiclesEntity vehiclesEntity = vehiclesRepository.save(existingVehicle);
             CustomerVehiclesDto vehiclesDtoResponse = vehiclesMapper.toCustomerVehiclesDto(vehiclesEntity);
             return vehiclesDtoResponse;
-        }catch (Exception e){
-            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
     @Override
@@ -136,7 +147,7 @@ public class VehiclesService implements VehiclesServiceI {
         System.out.println("******Customer Unique No**********");
         List<VehiclesEntity> vehicles = vehiclesRepository.findByUser_UniqueCusNo(uniqueCusNo);
         if (vehicles.isEmpty()) {
-            throw new AppException("No appointments found for customer ID: " + uniqueCusNo, HttpStatus.NOT_FOUND);
+            return  List.of();
         }
         return vehiclesMapper.toCustomerVehiclesDtoList(vehicles);
     }

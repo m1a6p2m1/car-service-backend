@@ -2,6 +2,8 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,14 @@ public class TaskAssignEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "appointment_unique_no")
+    private String appointmentUniqueNo;
+
+    @Column(name = "appointment_date")
+    private LocalDate date;
+
+    @Column(name = "appointment_time")
+    private LocalTime time;
     @Column(name = "task_name")
     private String taskName;
     @Column(name = "task_created_by")
@@ -39,8 +49,11 @@ public class TaskAssignEntity {
     public TaskAssignEntity() {
     }
 
-    public TaskAssignEntity(Long id, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignedEntity> subTasks, Long customerId, Long supervisor) {
+    public TaskAssignEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignedEntity> subTasks, Long customerId, Long supervisor) {
         this.id = id;
+        this.appointmentUniqueNo = appointmentUniqueNo;
+        this.date = date;
+        this.time = time;
         this.taskName = taskName;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
@@ -61,6 +74,30 @@ public class TaskAssignEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAppointmentUniqueNo() {
+        return appointmentUniqueNo;
+    }
+
+    public void setAppointmentUniqueNo(String appointmentUniqueNo) {
+        this.appointmentUniqueNo = appointmentUniqueNo;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public String getTaskName() {

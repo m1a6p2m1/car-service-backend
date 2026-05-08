@@ -5,15 +5,13 @@ import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.DefinedTasksMapper;
 import com.bit.backend.mappers.TaskAssignMapper;
-import com.bit.backend.repositories.DefinedTasksRepository;
-import com.bit.backend.repositories.SubTasksAssignRepository;
-import com.bit.backend.repositories.TaskAssignRepository;
-import com.bit.backend.repositories.UserRepository;
+import com.bit.backend.repositories.*;
 import com.bit.backend.services.CustomerServiceI;
 import com.bit.backend.services.NotificationServiceI;
 import com.bit.backend.services.TaskAssignServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,10 +30,12 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final CustomerServiceI customerServiceI;
     private final NotificationServiceI notificationServiceI;
 
+    private final AppointmentRepository appointmentRepository;
+
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
                              DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
                              SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository,
-                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI) {
+                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI, AppointmentRepository appointmentRepository) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
@@ -44,6 +44,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         this.userRepository = userRepository;
         this.customerServiceI = customerServiceI;
         this.notificationServiceI = notificationServiceI;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @Override
@@ -138,6 +139,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         }
     }
 
+    @Transactional
     @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
@@ -155,6 +157,8 @@ public class TaskAssignService implements TaskAssignServiceI {
             TaskAssignDto savedDto = null;
             TaskAssignEntity updatedTask = null;
             int count = 1;
+
+            updateAppointmentStatus(taskAssignDto.getAppointmentUniqueNo());
 
             String taskNo = generateTaskNumber(savedTask);
             Long superVisorId = taskAssignDto.getSupervisor();
@@ -192,6 +196,16 @@ public class TaskAssignService implements TaskAssignServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    //update status in appointment table after appointment assign to the task
+    private void updateAppointmentStatus(String appointmentUniqueNo) {
+        AppointmentEntity appointment = appointmentRepository
+                .findByAppointment_UniqueNo(appointmentUniqueNo)
+                .orElseThrow(() -> new RuntimeException("Appointment not Found: " + appointmentUniqueNo));
+
+            appointment.setStatus("ASSIGNED_TO_TASK");
+            appointmentRepository.save(appointment);
     }
 
     public String generateTaskNumber(TaskAssignEntity taskAssignEntity) {

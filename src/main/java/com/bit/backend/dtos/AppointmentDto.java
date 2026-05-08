@@ -1,5 +1,7 @@
 package com.bit.backend.dtos;
 
+import jakarta.persistence.Column;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -9,9 +11,11 @@ public class AppointmentDto {
     private LocalDate date;
     private LocalTime time;
     private Integer bay;
+    private String status;
     private Long bookedCount;
     private String taskName;
     private String vehicleType;
+    private String licencePlate;
     private String serviceType;
     private String additionalServices;
     private String customerName;
@@ -27,15 +31,17 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, Long bookedCount, String taskName, String vehicleType, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
+    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, Long bookedCount, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.bay = bay;
+        this.status = status;
         this.bookedCount = bookedCount;
         this.taskName = taskName;
         this.vehicleType = vehicleType;
+        this.licencePlate = licencePlate;
         this.serviceType = serviceType;
         this.additionalServices = additionalServices;
         this.customerName = customerName;
@@ -79,6 +85,14 @@ public class AppointmentDto {
         this.time = time;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Integer getBay() {
         return bay;
     }
@@ -109,6 +123,14 @@ public class AppointmentDto {
 
     public void setVehicleType(String vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    public String getLicencePlate() {
+        return licencePlate;
+    }
+
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
     }
 
     public String getServiceType() {

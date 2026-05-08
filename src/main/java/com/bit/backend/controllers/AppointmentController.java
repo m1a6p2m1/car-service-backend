@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,28 @@ public class AppointmentController {
     public ResponseEntity<AppointmentDto> book(@RequestBody AppointmentDto appointmentDto) {
         System.out.println("************************appointment book********************");
         return ResponseEntity.ok(appointmentServiceI.book(appointmentDto));
+    }
+
+    @GetMapping("/appointment-service/by-date-time")
+    public ResponseEntity<List<AppointmentDto>> getByDataAndTime(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time) {
+//        System.out.println("************************appointment book********************");
+//        LocalDate localDate = LocalDate.parse(date);
+//        LocalTime localTime = LocalTime.parse(time);
+
+        return ResponseEntity.ok(appointmentServiceI.getAppointmentsByDateAndTime(date, time));
+    }
+
+    @GetMapping("/appointment-service/{appointmentUniqueNo}")
+    public ResponseEntity<AppointmentDto> getDetailsByAppointmentNo(@PathVariable String appointmentUniqueNo){
+        try {
+            System.out.println("Controller reached: " + appointmentUniqueNo);
+            AppointmentDto appointmentDetails = appointmentServiceI.getAppointmentsByAppointmentNo(appointmentUniqueNo);
+            return ResponseEntity.ok(appointmentDetails);
+        } catch (Exception e) {
+            throw new AppException("Failed to get appointment details " + appointmentUniqueNo + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/appointment-service/get-all-appointments")

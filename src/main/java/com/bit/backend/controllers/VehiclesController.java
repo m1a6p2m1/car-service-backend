@@ -98,12 +98,9 @@ public class VehiclesController {
 
     @GetMapping("/vehicles/{uniqueCusNo}")
     public ResponseEntity<List<CustomerVehiclesDto>> getVehiclesByCusId(@PathVariable String uniqueCusNo) {
-        try {
-            System.out.println("Controller reached: " + uniqueCusNo);
-            List<CustomerVehiclesDto> appointmentDtoList = vehiclesServiceI.getVehiclesByCusId(uniqueCusNo);
-            return ResponseEntity.ok(appointmentDtoList);
-        } catch (Exception e) {
-            throw new AppException("Failed to get employee with ID " + uniqueCusNo + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        System.out.println("Controller reached: " + uniqueCusNo);
+        List<CustomerVehiclesDto> appointmentDtoList = vehiclesServiceI.getVehiclesByCusId(uniqueCusNo);
+
+        return ResponseEntity.ok(appointmentDtoList);
     }
 }
