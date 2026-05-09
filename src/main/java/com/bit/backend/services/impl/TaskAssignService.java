@@ -78,8 +78,8 @@ public class TaskAssignService implements TaskAssignServiceI {
             }
             Long empId = user.getEmployee().getEmpNumber();
 
-//            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
-              List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
+            List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
+//              List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
             return taskAssignMapper.toSubTaskAssignDto(subTaskAssignedEntities);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
