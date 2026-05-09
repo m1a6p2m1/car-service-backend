@@ -209,8 +209,8 @@ public class AppointmentService implements AppointmentServiceI {
 
     // get Appointment numbers related to the date and time(taskAssign)
     @Override
-    public List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time){
-        List<AppointmentEntity> list = appointmentRepository.findByDateAndTime(date, time);
+    public List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time, String currentNo){
+        List<AppointmentEntity> list = appointmentRepository.findByDateAndTime(date, time, currentNo);
         if (list.isEmpty()) {
             throw new AppException("No appointments found " ,HttpStatus.NOT_FOUND);
         }

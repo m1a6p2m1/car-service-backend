@@ -29,10 +29,17 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     List<AppointmentEntity> findByUser_UniqueCusNo(String uniqueCusNo);
 
 //   get Appointment numbers related to the date and time(taskAssign)
-    @Query("SELECT a FROM AppointmentEntity a WHERE a.date = :date AND a.time = :time AND (a.status IS NULL OR a.status != 'ASSIGNED_TO_TASK')")
+    @Query("""
+            SELECT a FROM AppointmentEntity a 
+            WHERE a.date = :date 
+            AND a.time = :time 
+            AND (a.status IS NULL OR a.status != 'ASSIGNED_TO_TASK'
+                    OR a.appointmentUniqueNo = :currentNo)
+            """)
     List<AppointmentEntity> findByDateAndTime(
             @Param("date") LocalDate date,
-            @Param("time") LocalTime time);
+            @Param("time") LocalTime time,
+            @Param("currentNo") String currentNo);
 
     //get Appointments details when select the appointment no(taskAssign)
     @Query("SELECT a FROM AppointmentEntity a WHERE a.appointmentUniqueNo = :no")

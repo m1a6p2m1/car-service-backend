@@ -23,7 +23,7 @@ public interface AppointmentServiceI {
 
     List<AppointmentDto> getAppointmentsByCusId(String uniqueCusNo);
 
-    List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time);
+    List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time, String currentNo);
 
     AppointmentDto getAppointmentsByAppointmentNo(String appointmentUniqueNo);
 }

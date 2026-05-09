@@ -34,15 +34,29 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentServiceI.book(appointmentDto));
     }
 
+//    @GetMapping("/appointment-service/by-date-time")
+//    public ResponseEntity<List<AppointmentDto>> getByDataAndTime(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time) {
+////        System.out.println("************************appointment book********************");
+////        LocalDate localDate = LocalDate.parse(date);
+////        LocalTime localTime = LocalTime.parse(time);
+//
+//        return ResponseEntity.ok(appointmentServiceI.getAppointmentsByDateAndTime(date, time, current));
+//    }
+
     @GetMapping("/appointment-service/by-date-time")
     public ResponseEntity<List<AppointmentDto>> getByDataAndTime(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time) {
-//        System.out.println("************************appointment book********************");
-//        LocalDate localDate = LocalDate.parse(date);
-//        LocalTime localTime = LocalTime.parse(time);
+            @RequestParam String date,
+            @RequestParam String time,
+            @RequestParam(required = false) String currentNo) {
 
-        return ResponseEntity.ok(appointmentServiceI.getAppointmentsByDateAndTime(date, time));
+        LocalDate localDate = LocalDate.parse(date);
+        LocalTime localTime = LocalTime.parse(time);
+
+        return ResponseEntity.ok(
+                appointmentServiceI.getAppointmentsByDateAndTime(localDate, localTime, currentNo)
+        );
     }
 
     @GetMapping("/appointment-service/{appointmentUniqueNo}")
