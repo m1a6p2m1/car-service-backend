@@ -211,9 +211,9 @@ public class AppointmentService implements AppointmentServiceI {
     @Override
     public List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time, String currentNo){
         List<AppointmentEntity> list = appointmentRepository.findByDateAndTime(date, time, currentNo);
-        if (list.isEmpty()) {
-            throw new AppException("No appointments found " ,HttpStatus.NOT_FOUND);
-        }
+//        if (list.isEmpty()) {
+//            throw new AppException("No appointments found " ,HttpStatus.NOT_FOUND);
+//        }
         return appointmentMapper.toAppointmentDtoList(list);
     }
 

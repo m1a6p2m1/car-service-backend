@@ -45,10 +45,12 @@ public class EmployeeEntity {
     private String imageName;
     @Column(name = "image_type")
     private String imageType;
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private User user;
 
     public EmployeeEntity() { }
 
-    public EmployeeEntity(long empNumber, String uniqueEmpNo, String fullName, String callingName, String nic, String dob, String gender, String address, String email, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle, byte[] image, String imageName, String imageType) {
+    public EmployeeEntity(long empNumber, String uniqueEmpNo, String fullName, String callingName, String nic, String dob, String gender, String address, String email, String phoneNumber, String emergencyPhoneNumber, String bloodGroup, String employmentType, String employeeStatus, String jobTitle, byte[] image, String imageName, String imageType, User user) {
         this.empNumber = empNumber;
         this.uniqueEmpNo = uniqueEmpNo;
         this.fullName = fullName;
@@ -67,6 +69,7 @@ public class EmployeeEntity {
         this.image = image;
         this.imageName = imageName;
         this.imageType = imageType;
+        this.user = user;
     }
 
     public long getEmpNumber() {
@@ -212,5 +215,11 @@ public class EmployeeEntity {
         this.imageType = imageType;
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

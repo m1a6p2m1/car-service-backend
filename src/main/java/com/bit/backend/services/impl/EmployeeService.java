@@ -1,16 +1,16 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.EmployeeDto;
-import com.bit.backend.dtos.FormDemoDto;
 import com.bit.backend.entities.EmployeeEntity;
-import com.bit.backend.entities.FormDemoEntity;
-import com.bit.backend.entities.TaskAssignEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
+import com.bit.backend.repositories.AttendanceMarkRepository;
 import com.bit.backend.repositories.EmployeeRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.EmployeeServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,10 +24,14 @@ public class EmployeeService implements EmployeeServiceI {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final UserRepository userRepository;
+    private final AttendanceMarkRepository attendanceMarkRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserRepository userRepository, AttendanceMarkRepository attendanceMarkRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.userRepository = userRepository;
+        this.attendanceMarkRepository = attendanceMarkRepository;
     }
 
     @Override
@@ -95,6 +99,7 @@ public class EmployeeService implements EmployeeServiceI {
     }
 
     @Override
+    @Transactional
     public EmployeeDto deleteData(long empNumber) {
         try {
             Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(empNumber);
@@ -102,6 +107,8 @@ public class EmployeeService implements EmployeeServiceI {
             if(!optionalEmployeeEntity.isPresent()){
                 throw new AppException("Employee Does Not Exist", HttpStatus.BAD_REQUEST);
             }
+            attendanceMarkRepository.deleteByEmployee_EmpNumber(empNumber);
+            userRepository.deleteByEmployee_EmpNumber(empNumber);
             employeeRepository.deleteById(empNumber);
             return employeeMapper.toEmployeeDto(optionalEmployeeEntity.get());
         } catch (Exception e){

@@ -27,8 +27,12 @@ public interface AttendanceMarkRepository extends JpaRepository<AttendanceMarkEn
 //            LocalDate date
 //    );
     List<AttendanceMarkEntity> findByDate(LocalDate date);
-     Optional<AttendanceMarkEntity> findByEmployee_EmpNumberAndDate(
+    Optional<AttendanceMarkEntity> findByEmployee_EmpNumberAndDate(
             Long empNumber,
             LocalDate date
     );
+
+    void deleteByEmployee_EmpNumber(Long empNumber);
+
+
 }

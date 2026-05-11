@@ -29,13 +29,14 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final UserRepository userRepository;
     private final CustomerServiceI customerServiceI;
     private final NotificationServiceI notificationServiceI;
+    private final EmployeeRepository employeeRepository;
 
     private final AppointmentRepository appointmentRepository;
 
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
                              DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
                              SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository,
-                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI, AppointmentRepository appointmentRepository) {
+                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI, EmployeeRepository employeeRepository, AppointmentRepository appointmentRepository) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
@@ -44,6 +45,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         this.userRepository = userRepository;
         this.customerServiceI = customerServiceI;
         this.notificationServiceI = notificationServiceI;
+        this.employeeRepository = employeeRepository;
         this.appointmentRepository = appointmentRepository;
     }
 
@@ -81,6 +83,7 @@ public class TaskAssignService implements TaskAssignServiceI {
             List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findBySupervisor(empId);
 //              List<SubTaskAssignedEntity> subTaskAssignedEntities = subTasksAssignRepository.findByAssignedUserId(empId);
             return taskAssignMapper.toSubTaskAssignDto(subTaskAssignedEntities);
+
         } catch (Exception e) {
             throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -186,6 +189,16 @@ public class TaskAssignService implements TaskAssignServiceI {
                     subTaskAssignedEntity.setMainUniqueTaskNo(taskNo);
                     subTaskAssignedEntity.setCustomer(customer);
                     subTaskAssignedEntity.setStatus("pending");
+
+                    if(subTaskAssignedEntity.getAssignedUserId() != null) {
+                        EmployeeEntity employee = employeeRepository
+                                .findById(subTaskAssignedEntity.getAssignedUserId())
+                                .orElse(null);
+                        if (employee != null) {
+                            subTaskAssignedEntity.setAssigneUserName(employee.getFullName());
+                        }
+                    }
+//                    System.out.println("Saving Name: " + subTaskAssignedEntity.getAssigneUserName());
                     count = count + 1;
                 }
 
