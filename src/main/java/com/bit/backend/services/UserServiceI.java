@@ -19,5 +19,9 @@ public interface UserServiceI {
     PasswordResetDto forgotPassword(PasswordResetDto passwordResetDto);
     void resetPassword(String token, String newPassword);
 
-    List<Map<String, Object>> getVehicleRegUsers(); //get customer names list into the vehiclesForm customer name field
+    //get customer names list into the vehiclesForm customer name field
+    List<Map<String, Object>> getVehicleRegUsers();
+
+    //get customer details when enter phone number in appointment form
+    UserDto getCustomerByPhone(String contactNumber);
 }

@@ -38,4 +38,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //get customer names list into the vehiclesForm customer name field
     @Query("SELECT id as id, firstName as firstName, lastName as lastName FROM User WHERE role = 'CUSTOMER'")
     List<Map<String, Object>> getVehicleRegUsersList();
+
+    //get customer details when enter phone number in appointment form
+    Optional<User> findByContactNumber(String contactNumber);
 }

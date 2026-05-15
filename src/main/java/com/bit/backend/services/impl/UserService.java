@@ -289,4 +289,13 @@ public class UserService implements UserServiceI {
           return unique;
 
     }
+
+    //get customer details when enter phone number in appointment form
+    @Override
+    public UserDto getCustomerByPhone(String contactNumber) {
+        User customerDetails = userRepository.findByContactNumber(contactNumber)
+                .orElseThrow(() -> new RuntimeException("Customer Not Found"));
+        return userMapper.toUserDto(customerDetails);
+
+    }
 }

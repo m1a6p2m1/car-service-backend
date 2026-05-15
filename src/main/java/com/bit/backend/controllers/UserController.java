@@ -129,4 +129,11 @@ public class UserController {
         }
     }
 
+    //get customer details when enter phone number in appointment form
+    @GetMapping("/user/by-phone/{contactNumber}")
+    public ResponseEntity<UserDto> getCustomerByPhone(@PathVariable String contactNumber){
+        UserDto userDto = userServiceI.getCustomerByPhone(contactNumber);
+        return ResponseEntity.ok(userDto);
+    }
+
 }
