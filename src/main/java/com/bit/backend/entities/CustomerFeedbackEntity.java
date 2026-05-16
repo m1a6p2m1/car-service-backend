@@ -2,6 +2,8 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "customer_feedback")
 public class CustomerFeedbackEntity {
@@ -10,12 +12,14 @@ public class CustomerFeedbackEntity {
     private long id;
     @Column(name = "user_name")
     private String userName;
+    @Column(name = "licence_plate")
+    private String licencePlate;
     @Column(name = "task_number")
-    private String taskNumber;
+    private String uniqueTaskNo;
     @Column(name = "service_type")
     private String serviceType;
     @Column(name = "service_date")
-    private String serviceDate;
+    private LocalDate serviceDate;
     @Column(name = "service_quality")
     private String serviceQuality;
     @Column(name = "complaint")
@@ -30,10 +34,11 @@ public class CustomerFeedbackEntity {
     public CustomerFeedbackEntity() {
     }
 
-    public CustomerFeedbackEntity(long id, String userName, String taskNumber, String serviceType, String serviceDate, String serviceQuality, String complaint, String recommendation, User user) {
+    public CustomerFeedbackEntity(long id, String userName, String licencePlate, String uniqueTaskNo, String serviceType, LocalDate serviceDate, String serviceQuality, String complaint, String recommendation, User user) {
         this.id = id;
         this.userName = userName;
-        this.taskNumber = taskNumber;
+        this.licencePlate = licencePlate;
+        this.uniqueTaskNo = uniqueTaskNo;
         this.serviceType = serviceType;
         this.serviceDate = serviceDate;
         this.serviceQuality = serviceQuality;
@@ -58,12 +63,20 @@ public class CustomerFeedbackEntity {
         this.userName = userName;
     }
 
-    public String getTaskNumber() {
-        return taskNumber;
+    public String getLicencePlate() {
+        return licencePlate;
     }
 
-    public void setTaskNumber(String taskNumber) {
-        this.taskNumber = taskNumber;
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
+    }
+
+    public String getUniqueTaskNo() {
+        return uniqueTaskNo;
+    }
+
+    public void setUniqueTaskNo(String uniqueTaskNo) {
+        this.uniqueTaskNo = uniqueTaskNo;
     }
 
     public String getServiceType() {
@@ -74,11 +87,11 @@ public class CustomerFeedbackEntity {
         this.serviceType = serviceType;
     }
 
-    public String getServiceDate() {
+    public LocalDate getServiceDate() {
         return serviceDate;
     }
 
-    public void setServiceDate(String serviceDate) {
+    public void setServiceDate(LocalDate serviceDate) {
         this.serviceDate = serviceDate;
     }
 

@@ -23,6 +23,8 @@ public class TaskAssignEntity {
     private LocalTime time;
     @Column(name = "task_name")
     private String taskName;
+    @Column(name = "service_type")
+    private String serviceType;
     @Column(name = "task_created_by")
     private String taskCreatedBy;
     @Column(name = "customer_name")
@@ -49,12 +51,13 @@ public class TaskAssignEntity {
     public TaskAssignEntity() {
     }
 
-    public TaskAssignEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignedEntity> subTasks, Long customerId, Long supervisor) {
+    public TaskAssignEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, String taskName, String serviceType, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignedEntity> subTasks, Long customerId, Long supervisor) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.taskName = taskName;
+        this.serviceType = serviceType;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
         this.licencePlate = licencePlate;
@@ -106,6 +109,14 @@ public class TaskAssignEntity {
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public String getTaskCreatedBy() {

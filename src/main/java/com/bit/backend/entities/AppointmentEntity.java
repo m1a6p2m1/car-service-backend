@@ -41,8 +41,8 @@ public class AppointmentEntity {
     private String customerName;
     @Column(name = "email")
     private String email;
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "contact_number")
+    private String contactNumber;
     @Column(name = "total_service_price")
     private Double totalServicePrice;
     @Column(name = "role")
@@ -59,7 +59,7 @@ public class AppointmentEntity {
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
+    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
@@ -73,7 +73,7 @@ public class AppointmentEntity {
         this.additionalServices = additionalServices;
         this.customerName = customerName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.contactNumber = contactNumber;
         this.totalServicePrice = totalServicePrice;
         this.role = role;
         this.assignee = assignee;
@@ -185,12 +185,10 @@ public class AppointmentEntity {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getContactNumber() {return contactNumber; }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public Double getTotalServicePrice() {

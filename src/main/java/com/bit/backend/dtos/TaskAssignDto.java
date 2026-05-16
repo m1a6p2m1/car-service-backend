@@ -10,6 +10,7 @@ public class TaskAssignDto {
     private LocalDate date;
     private LocalTime time;
     private String taskName;
+    private String serviceType;
     private String taskCreatedBy;
     private String customerName;
     private String licencePlate;
@@ -25,12 +26,13 @@ public class TaskAssignDto {
     public TaskAssignDto() {
     }
 
-    public TaskAssignDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, String taskName, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignDto> subTasks, Long customerId, Long supervisor) {
+    public TaskAssignDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, String taskName, String serviceType, String taskCreatedBy, String customerName, String licencePlate, String vehicleType, String email, String description, String status, String uniqueTaskNo, List<SubTaskAssignDto> subTasks, Long customerId, Long supervisor) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.taskName = taskName;
+        this.serviceType = serviceType;
         this.taskCreatedBy = taskCreatedBy;
         this.customerName = customerName;
         this.licencePlate = licencePlate;
@@ -82,6 +84,14 @@ public class TaskAssignDto {
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public String getTaskCreatedBy() {

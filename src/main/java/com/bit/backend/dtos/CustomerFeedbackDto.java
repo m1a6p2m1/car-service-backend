@@ -1,12 +1,16 @@
 package com.bit.backend.dtos;
 
+import java.time.LocalDate;
+
 public class CustomerFeedbackDto {
     private long id;
     private String userName;
-    private String taskNumber;
+    private String licencePlate;
+
+    private String uniqueTaskNo;
     private String serviceQuality;
     private String serviceType;
-    private String serviceDate;
+    private LocalDate serviceDate;
     private String recommendation;
     private String complaint;
     private Long userId;
@@ -14,10 +18,11 @@ public class CustomerFeedbackDto {
     public CustomerFeedbackDto() {
     }
 
-    public CustomerFeedbackDto(long id, String userName, String taskNumber, String serviceQuality, String serviceType, String serviceDate, String recommendation, String complaint, Long userId) {
+    public CustomerFeedbackDto(long id, String userName, String licencePlate, String uniqueTaskNo, String serviceQuality, String serviceType, LocalDate serviceDate, String recommendation, String complaint, Long userId) {
         this.id = id;
         this.userName = userName;
-        this.taskNumber = taskNumber;
+        this.licencePlate = licencePlate;
+        this.uniqueTaskNo = uniqueTaskNo;
         this.serviceQuality = serviceQuality;
         this.serviceType = serviceType;
         this.serviceDate = serviceDate;
@@ -42,12 +47,20 @@ public class CustomerFeedbackDto {
         this.userName = userName;
     }
 
-    public String getTaskNumber() {
-        return taskNumber;
+    public String getLicencePlate() {
+        return licencePlate;
     }
 
-    public void setTaskNumber(String taskNumber) {
-        this.taskNumber = taskNumber;
+    public void setLicencePlate(String licencePlate) {
+        this.licencePlate = licencePlate;
+    }
+
+    public String getUniqueTaskNo() {
+        return uniqueTaskNo;
+    }
+
+    public void setUniqueTaskNo(String uniqueTaskNo) {
+        this.uniqueTaskNo = uniqueTaskNo;
     }
 
     public String getServiceQuality() {
@@ -66,11 +79,11 @@ public class CustomerFeedbackDto {
         this.serviceType = serviceType;
     }
 
-    public String getServiceDate() {
+    public LocalDate getServiceDate() {
         return serviceDate;
     }
 
-    public void setServiceDate(String serviceDate) {
+    public void setServiceDate(LocalDate serviceDate) {
         this.serviceDate = serviceDate;
     }
 

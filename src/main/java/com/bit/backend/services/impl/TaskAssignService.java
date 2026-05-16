@@ -330,4 +330,19 @@ public class TaskAssignService implements TaskAssignServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //get licenceplate for customer Feedback form
+    @Override
+    public List<TaskAssignDto> getLicenseByDateAndCustomer(LocalDate date, Long customerId){
+        List<TaskAssignEntity> list = taskAssignRepository.findLicenseByDateAndCustomer(date, customerId);
+        return taskAssignMapper.toTaskAssignDtoList(list);
+    }
+
+    //get Appointments details when select the license plate no for customer feedback
+    @Override
+    public TaskAssignDto getDetailsByLicensePlate(LocalDate date, String licencePlate) {
+        TaskAssignEntity details = taskAssignRepository.findByLicensePlate(date, licencePlate)
+                .orElseThrow(() -> new AppException("Appointment not found", HttpStatus.NOT_FOUND));
+        return taskAssignMapper.toTaskAssignDto(details);
+    }
 }

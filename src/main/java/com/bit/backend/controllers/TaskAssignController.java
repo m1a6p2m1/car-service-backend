@@ -1,10 +1,6 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.DefinedTasksDto;
-import com.bit.backend.dtos.SubTaskAssignDto;
-import com.bit.backend.dtos.SubTaskStatusChangeDto;
-import com.bit.backend.dtos.TaskAssignDto;
-import com.bit.backend.entities.TaskAssignEntity;
+import com.bit.backend.dtos.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.repositories.TaskAssignRepository;
 import com.bit.backend.services.TaskAssignServiceI;
@@ -13,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -140,6 +137,33 @@ public class TaskAssignController {
             return ResponseEntity.ok(taskAssignDtoList);
         } catch (Exception e) {
             throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/task-assign/by-date-customerId")
+    public ResponseEntity<List<TaskAssignDto>> getLicenseByDateAndCustomer(
+            @RequestParam String date,
+            @RequestParam Long userId) {
+
+        LocalDate localDate = LocalDate.parse(date);
+
+        return ResponseEntity.ok(
+                taskAssignServiceI.getLicenseByDateAndCustomer(localDate, userId)
+        );
+    }
+    //get Appointments details when select the license plate no for customer feedback
+    @GetMapping("/task-assign/by-date-licensePlate")
+    public ResponseEntity<TaskAssignDto> getDetailsByLicensePlate(
+            @RequestParam String date,
+            @RequestParam String licencePlate
+    ){
+        try {
+            System.out.println("Controller reached: " + licencePlate);
+            LocalDate localDate = LocalDate.parse(date);
+            TaskAssignDto details = taskAssignServiceI.getDetailsByLicensePlate(localDate,licencePlate);
+            return ResponseEntity.ok(details);
+        } catch (Exception e) {
+            throw new AppException("Failed to get appointment details " + licencePlate + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -1,10 +1,8 @@
 package com.bit.backend.services;
 
-import com.bit.backend.dtos.DefinedTasksDto;
-import com.bit.backend.dtos.SubTaskAssignDto;
-import com.bit.backend.dtos.SubTaskStatusChangeDto;
-import com.bit.backend.dtos.TaskAssignDto;
+import com.bit.backend.dtos.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskAssignServiceI {
@@ -20,4 +18,9 @@ public interface TaskAssignServiceI {
     SubTaskStatusChangeDto subTaskStatusChange(SubTaskStatusChangeDto subTaskStatusChangeDto);
     List<TaskAssignDto> getMainTaskDetails(String customerId, String taskNo);
     List<TaskAssignDto> getMainTaskDetailsByUid(String uid);
+
+    List<TaskAssignDto> getLicenseByDateAndCustomer(LocalDate date, Long customerId);
+
+    //get Appointments details when select the license plate no for customer feedback
+    TaskAssignDto getDetailsByLicensePlate(LocalDate date, String licencePlate);
 }

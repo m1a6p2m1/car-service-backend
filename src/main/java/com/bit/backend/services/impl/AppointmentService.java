@@ -149,7 +149,7 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getAdditionalServices(),
                 saved.getCustomerName(),
                 saved.getEmail(),
-                saved.getPhoneNumber(),
+                saved.getContactNumber(),
                 saved.getTotalServicePrice(),
                 saved.getRole(),
                 login,

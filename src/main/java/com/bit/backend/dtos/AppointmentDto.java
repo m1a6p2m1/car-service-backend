@@ -20,7 +20,7 @@ public class AppointmentDto {
     private String additionalServices;
     private String customerName;
     private String email;
-    private String phoneNumber;
+    private String contactNumber;
     private Double totalServicePrice;
     private String role;
     private String login;
@@ -31,7 +31,7 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, Long bookedCount, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String phoneNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
+    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, Long bookedCount, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
@@ -46,7 +46,7 @@ public class AppointmentDto {
         this.additionalServices = additionalServices;
         this.customerName = customerName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.contactNumber = contactNumber;
         this.totalServicePrice = totalServicePrice;
         this.role = role;
         this.login = login;
@@ -165,12 +165,12 @@ public class AppointmentDto {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public Double getTotalServicePrice() {
