@@ -11,4 +11,6 @@ public interface CustomerFeedbackServiceI {
 //    CustomerFeedbackDto getFeedbackById(long id);
     CustomerFeedbackDto updateForm(long id, CustomerFeedbackDto customerFeedbackDto);
     CustomerFeedbackDto deleteData(long id);
+    //update reviewed feedbacks
+    CustomerFeedbackDto updateReview(long id);
 }

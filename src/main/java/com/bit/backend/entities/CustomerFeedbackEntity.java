@@ -26,6 +26,8 @@ public class CustomerFeedbackEntity {
     private String complaint;
     @Column(name = "user_recommendation")
     private String recommendation;
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -34,7 +36,7 @@ public class CustomerFeedbackEntity {
     public CustomerFeedbackEntity() {
     }
 
-    public CustomerFeedbackEntity(long id, String userName, String licencePlate, String uniqueTaskNo, String serviceType, LocalDate serviceDate, String serviceQuality, String complaint, String recommendation, User user) {
+    public CustomerFeedbackEntity(long id, String userName, String licencePlate, String uniqueTaskNo, String serviceType, LocalDate serviceDate, String serviceQuality, String complaint, String recommendation, String status, User user) {
         this.id = id;
         this.userName = userName;
         this.licencePlate = licencePlate;
@@ -44,6 +46,7 @@ public class CustomerFeedbackEntity {
         this.serviceQuality = serviceQuality;
         this.complaint = complaint;
         this.recommendation = recommendation;
+        this.status = status;
         this.user = user;
     }
 
@@ -117,6 +120,14 @@ public class CustomerFeedbackEntity {
 
     public void setRecommendation(String recommendation) {
         this.recommendation = recommendation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public User getUser() {

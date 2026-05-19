@@ -81,4 +81,15 @@ public class CustomerFeedbackController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //update reviewed feedbacks
+    @PutMapping("/customer-feedback/review/{id}")
+    public ResponseEntity<CustomerFeedbackDto> updateReview(@PathVariable long id){
+        try {
+            CustomerFeedbackDto customerFeedbackDtoResponse = customerFeedbackServiceI.updateReview(id);
+            return ResponseEntity.ok(customerFeedbackDtoResponse);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

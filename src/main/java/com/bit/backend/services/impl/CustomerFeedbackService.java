@@ -37,6 +37,7 @@ public class CustomerFeedbackService implements CustomerFeedbackServiceI {
                         .orElseThrow(() -> new RuntimeException("User not Found"));
                 customerFeedbackEntity.setUser((user));
             }
+            customerFeedbackEntity.setStatus("UNREVIEWED");
             CustomerFeedbackEntity savedItem = customerFeedbackRepository.save(customerFeedbackEntity);
             CustomerFeedbackDto savedDto = customerFeedbackMapper.toCustomerFeedbackDto(savedItem);
 
@@ -62,7 +63,7 @@ public class CustomerFeedbackService implements CustomerFeedbackServiceI {
     public List<CustomerFeedbackDto> getAllData() {
 //        System.out.println("****************In Backend****************");
         try {
-            List<CustomerFeedbackEntity> customerFeedbackEntityList = customerFeedbackRepository.findAll();
+            List<CustomerFeedbackEntity> customerFeedbackEntityList = customerFeedbackRepository.findByStatus("UNREVIEWED");
             List<CustomerFeedbackDto> customerFeedbackDtoList = customerFeedbackMapper.toCustomerFeedbackDtoList(customerFeedbackEntityList);
             return customerFeedbackDtoList;
         }catch (Exception e){
@@ -111,6 +112,26 @@ public class CustomerFeedbackService implements CustomerFeedbackServiceI {
             return customerFeedbackMapper.toCustomerFeedbackDto(optionalCustomerFeedbackEntity.get());
         }catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //update reviewed feedbacks
+    @Override
+    public CustomerFeedbackDto updateReview(long id){
+        System.out.println("******Update Review**********");
+        try{
+            CustomerFeedbackEntity feedback = customerFeedbackRepository.findById(id)
+                    .orElseThrow(()->
+                            new AppException("Feedback Not Found",
+                                    HttpStatus.NOT_FOUND));
+
+            feedback.setStatus("REVIEWED");
+
+            CustomerFeedbackEntity updated = customerFeedbackRepository.save(feedback);
+            return customerFeedbackMapper.toCustomerFeedbackDto(updated);
+        }catch (Exception e){
+            throw new AppException("Request Failed With Error:" + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

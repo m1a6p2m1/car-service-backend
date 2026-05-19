@@ -13,12 +13,13 @@ public class CustomerFeedbackDto {
     private LocalDate serviceDate;
     private String recommendation;
     private String complaint;
+    private String status;
     private Long userId;
 
     public CustomerFeedbackDto() {
     }
 
-    public CustomerFeedbackDto(long id, String userName, String licencePlate, String uniqueTaskNo, String serviceQuality, String serviceType, LocalDate serviceDate, String recommendation, String complaint, Long userId) {
+    public CustomerFeedbackDto(long id, String userName, String licencePlate, String uniqueTaskNo, String serviceQuality, String serviceType, LocalDate serviceDate, String recommendation, String complaint, String status, Long userId) {
         this.id = id;
         this.userName = userName;
         this.licencePlate = licencePlate;
@@ -28,6 +29,7 @@ public class CustomerFeedbackDto {
         this.serviceDate = serviceDate;
         this.recommendation = recommendation;
         this.complaint = complaint;
+        this.status = status;
         this.userId = userId;
     }
 
@@ -101,6 +103,14 @@ public class CustomerFeedbackDto {
 
     public void setComplaint(String complaint) {
         this.complaint = complaint;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getUserId() {

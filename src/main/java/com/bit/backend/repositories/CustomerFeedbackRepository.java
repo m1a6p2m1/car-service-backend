@@ -9,4 +9,6 @@ import java.util.List;
 public interface CustomerFeedbackRepository extends JpaRepository<CustomerFeedbackEntity, Long> {
 
     List<CustomerFeedbackEntity> findByUser_UniqueCusNo(String uniqueCusNo);
+    //update reviewed feedbacks
+    List<CustomerFeedbackEntity> findByStatus(String status);
 }
