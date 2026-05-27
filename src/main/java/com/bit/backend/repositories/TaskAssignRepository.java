@@ -17,6 +17,11 @@ public interface TaskAssignRepository extends JpaRepository<TaskAssignEntity, Lo
 
     List<TaskAssignEntity> findByUniqueTaskNo(String parseLong);
 
+    //get tasks that assign to the supervisor into the task tracker
+    List<TaskAssignEntity> findBySupervisor(Long supervisor);
+    List<TaskAssignEntity> findBySupervisorAndUniqueTaskNo(Long supervisor, String taskNo);
+
+
     @Query("SELECT taskName as name, count(taskName) as cnt FROM TaskAssignEntity group by taskName")
     List<Map<String, Object>> getCommonTaskStats();
 

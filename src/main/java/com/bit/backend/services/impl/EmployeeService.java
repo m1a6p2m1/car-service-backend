@@ -1,6 +1,8 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.dtos.CustomerFeedbackDto;
 import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.entities.CustomerFeedbackEntity;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
@@ -133,5 +135,29 @@ public class EmployeeService implements EmployeeServiceI {
         String uniquePart = String.format("%03d", new Random().nextInt(1000)); // 000 - 999
 
         return "EMP" + datePart + empNumberPart + uniquePart;
+    }
+
+    //Enable and Disable the Employee Login (EmployeeStatus update to the Active and Inactive)
+    @Override
+    public EmployeeDto updateEmpStatus(long empNumber){
+        System.out.println("******Update EmpStatus**********");
+        EmployeeEntity emp = employeeRepository.findById(empNumber)
+                .orElseThrow(()->
+                        new AppException("Feedback Not Found",
+                                HttpStatus.NOT_FOUND));
+        try{
+            String currentStatus = emp.getEmployeeStatus();
+            if (currentStatus == null || currentStatus.equals("Active")) {
+                emp.setEmployeeStatus("Inactive");
+            }else {
+                emp.setEmployeeStatus("Active");
+            }
+
+            EmployeeEntity updated = employeeRepository.save(emp);
+            return employeeMapper.toEmployeeDto(updated);
+        }catch (Exception e){
+            throw new AppException("Request Failed With Error:" + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

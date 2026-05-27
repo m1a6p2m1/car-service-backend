@@ -70,6 +70,7 @@ public class UserService implements UserServiceI {
                     userDto.setImageType(user.getEmployee().getImageType());
                     userDto.setImageType(user.getEmployee().getEmail());
                     userDto.setImageType(user.getEmployee().getPhoneNumber());
+                    userDto.setJobTitle(user.getEmployee().getJobTitle());
                 }
                 return userDto;
             }

@@ -71,6 +71,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         }
     }
 
+    //supervisor's my tasks table
     @Override
     public List<SubTaskAssignDto> getAssignedSubTasksData(Long userId) {
         try {
@@ -148,6 +149,38 @@ public class TaskAssignService implements TaskAssignServiceI {
         }
     }
 
+    //get tasks that assign to the supervisor into the task tracker
+    @Override
+    public List<TaskAssignDto> getSupervisorTasks(String employeeId, String taskNo){
+        if (employeeId == null || employeeId.equals("-1") || employeeId.isEmpty()){
+            throw new AppException("Invalid Supervisor Id", HttpStatus.BAD_REQUEST);
+        }
+        Long supervisor;
+        try {
+            supervisor = Long.parseLong(employeeId);
+        }catch (NumberFormatException e){
+            throw new AppException("Invalid Employee Id format", HttpStatus.BAD_REQUEST);
+        }
+        List<TaskAssignEntity> taskAssignEntityList;
+
+        if (taskNo != null && !taskNo.equals("-1") && !taskNo.isEmpty()){
+            taskAssignEntityList = taskAssignRepository.findBySupervisorAndUniqueTaskNo(supervisor, taskNo);
+        } else {
+            taskAssignEntityList = taskAssignRepository.findBySupervisor(supervisor);
+        }
+        return taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+    }
+
+    @Override
+    public List<TaskAssignDto> getSupervisorTasksByEmployeeId(String employeeId) {
+        try {
+            List<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(employeeId);
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+            return taskAssignDtoList;
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @Transactional
     @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){

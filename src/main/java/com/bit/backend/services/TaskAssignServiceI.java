@@ -19,6 +19,10 @@ public interface TaskAssignServiceI {
     List<TaskAssignDto> getMainTaskDetails(String customerId, String taskNo);
     List<TaskAssignDto> getMainTaskDetailsByUid(String uid);
 
+    //get tasks that assign to the supervisor into the task tracker
+    List<TaskAssignDto> getSupervisorTasks(String employeeId, String taskNo);
+    List<TaskAssignDto> getSupervisorTasksByEmployeeId(String employeeId);
+
     List<TaskAssignDto> getLicenseByDateAndCustomer(LocalDate date, Long customerId);
 
     //get Appointments details when select the license plate no for customer feedback

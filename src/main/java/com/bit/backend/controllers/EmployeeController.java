@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.config.UserAuthProvider;
+import com.bit.backend.dtos.CustomerFeedbackDto;
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.SignUpDto;
 import com.bit.backend.dtos.UserDto;
@@ -122,6 +123,16 @@ public class EmployeeController {
         try {
             List<Map<String, Object>> employeeList = employeeServiceI.getEmployeeCountByJobRole();
             return ResponseEntity.ok(employeeList);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/employee/update-status/{empNumber}")
+    public ResponseEntity<EmployeeDto> updateEmpStatus(@PathVariable long empNumber){
+        try {
+            EmployeeDto employeeDtoResponse = employeeServiceI.updateEmpStatus(empNumber);
+            return ResponseEntity.ok(employeeDtoResponse);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

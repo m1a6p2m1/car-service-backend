@@ -23,13 +23,13 @@ public class UserDto {
     private String imageType;
     private String email;
     private String contactNumber;
+    private String jobTitle;
 
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String uniqueCusNo, String firstName, String lastName, String login, String token, String role, Long employeeId, Long customerId, byte[] image,
-                   String imageName, String imageType, String email , String contactNumber) {
+    public UserDto(Long id, String uniqueCusNo, String firstName, String lastName, String login, String token, String role, Long employeeId, Long customerId, byte[] image, String imageName, String imageType, String email, String contactNumber, String jobTitle) {
         this.id = id;
         this.uniqueCusNo = uniqueCusNo;
         this.firstName = firstName;
@@ -44,6 +44,7 @@ public class UserDto {
         this.imageType = imageType;
         this.email = email;
         this.contactNumber = contactNumber;
+        this.jobTitle = jobTitle;
     }
 
     public Long getId() {
@@ -156,5 +157,13 @@ public class UserDto {
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 }

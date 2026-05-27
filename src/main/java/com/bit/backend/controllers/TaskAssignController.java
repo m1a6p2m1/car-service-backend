@@ -140,6 +140,33 @@ public class TaskAssignController {
         }
     }
 
+    //get tasks that assign to the supervisor into the task tracker
+    @GetMapping("/task-assign/supervisor/tracker/{employeeId}/{taskNo}")
+    public ResponseEntity<List<TaskAssignDto>> getSupervisorTasks(@PathVariable String employeeId, @PathVariable String taskNo){
+        try {
+            System.out.println("Task tracker supervisor tasks");
+            List<TaskAssignDto> taskAssignDtoList = taskAssignServiceI.getSupervisorTasks(employeeId, taskNo);
+            return ResponseEntity.ok(taskAssignDtoList);
+        } catch (Exception e){
+            throw new AppException(
+                    "Request Failed with Error: " + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @GetMapping("/supervisor-task-by-employeeId")
+    public ResponseEntity<List<TaskAssignDto>> getSupervisorTasksByEmployeeId(@RequestParam String employeeId) {
+        // http://localhost:4200/task-by-uid
+        try {
+            System.out.println("Task tracker supervisor tasks by Supervisor");
+            List<TaskAssignDto> taskAssignDtoList = taskAssignServiceI.getSupervisorTasksByEmployeeId(employeeId);
+            return ResponseEntity.ok(taskAssignDtoList);
+        } catch (Exception e) {
+            throw new AppException("Request Failed with Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/task-assign/by-date-customerId")
     public ResponseEntity<List<TaskAssignDto>> getLicenseByDateAndCustomer(
             @RequestParam String date,
