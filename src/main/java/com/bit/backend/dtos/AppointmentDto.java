@@ -1,7 +1,5 @@
 package com.bit.backend.dtos;
 
-import jakarta.persistence.Column;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -13,6 +11,7 @@ public class AppointmentDto {
     private Integer bay;
     private String status;
     private Long bookedCount;
+    private Long taskId;
     private String taskName;
     private String vehicleType;
     private String licencePlate;
@@ -31,7 +30,7 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, Long bookedCount, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
+    public AppointmentDto(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, Long bookedCount, Long taskId, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, String login, Long assignee, String assigneeName) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
@@ -39,6 +38,7 @@ public class AppointmentDto {
         this.bay = bay;
         this.status = status;
         this.bookedCount = bookedCount;
+        this.taskId = taskId;
         this.taskName = taskName;
         this.vehicleType = vehicleType;
         this.licencePlate = licencePlate;
@@ -107,6 +107,14 @@ public class AppointmentDto {
 
     public void setBookedCount(Long bookedCount) {
         this.bookedCount = bookedCount;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 
     public String getTaskName() {

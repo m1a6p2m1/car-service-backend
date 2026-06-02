@@ -27,8 +27,11 @@ public class AppointmentEntity {
     private Integer bay;
     @Column(name = "status")
     private String status;
-    @Column(name = "task_name")
-    private String taskName;
+//    @Column(name = "task_name")
+//    private String taskName;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    private DefinedTasksEntity definedTasks;
     @Column(name = "vehicle_type")
     private String vehicleType;
     @Column(name = "licence_plate")
@@ -59,14 +62,14 @@ public class AppointmentEntity {
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, String taskName, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
+    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, DefinedTasksEntity definedTasks, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
         this.time = time;
         this.bay = bay;
         this.status = status;
-        this.taskName = taskName;
+        this.definedTasks = definedTasks;
         this.vehicleType = vehicleType;
         this.licencePlate = licencePlate;
         this.serviceType = serviceType;
@@ -129,12 +132,12 @@ public class AppointmentEntity {
         this.status = status;
     }
 
-    public String getTaskName() {
-        return taskName;
+    public DefinedTasksEntity getDefinedTasks() {
+        return definedTasks;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
+    public void setDefinedTasks(DefinedTasksEntity definedTasks) {
+        this.definedTasks = definedTasks;
     }
 
     public String getVehicleType() {

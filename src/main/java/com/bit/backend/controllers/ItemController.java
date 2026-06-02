@@ -1,5 +1,6 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.GRNDTO;
 import com.bit.backend.dtos.ItemDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.ItemServiceI;
@@ -42,6 +43,17 @@ public class ItemController {
             return ResponseEntity.ok(itemDtoList);
         }catch (Exception e){
             throw new AppException("Request fail with error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //get itemCode
+    @GetMapping("/item-code")
+    public ResponseEntity<List<ItemDto>> getItemCodes(){
+        try{
+            List<ItemDto> itemDtoList = itemServiceI.getData();
+            return ResponseEntity.ok().body(itemDtoList);
+        } catch (Exception e) {
+            throw new AppException(" Get mapping Failed " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

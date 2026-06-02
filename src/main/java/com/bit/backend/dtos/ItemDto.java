@@ -9,7 +9,8 @@ public class ItemDto {
     private String itemName;
     private String brandName;
     private String itemCategory;
-    private String supplierName;
+    private String unitOfMeasure;
+    private int reorderLevel;
     private String description;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private byte[] image;
@@ -21,14 +22,15 @@ public class ItemDto {
     public ItemDto() {
     }
 
-    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String supplierName, String description, byte[] image,
+    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String unitOfMeasure, int reorderLevel, String description, byte[] image,
                    String imageName, String imageType) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.brandName = brandName;
         this.itemCategory = itemCategory;
-        this.supplierName = supplierName;
+        this.unitOfMeasure = unitOfMeasure;
+        this.reorderLevel = reorderLevel;
         this.description = description;
         this.image = image;
         this.imageName = imageName;
@@ -76,12 +78,20 @@ public class ItemDto {
         this.itemCategory = itemCategory;
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public String getUnitOfMeasure() {
+        return unitOfMeasure;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+    public void setUnitOfMeasure(String unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+
+    public int getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(int reorderLevel) {
+        this.reorderLevel = reorderLevel;
     }
 
     public String getDescription() {

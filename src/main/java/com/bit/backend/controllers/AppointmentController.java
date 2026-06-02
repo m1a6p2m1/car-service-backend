@@ -30,7 +30,7 @@ public class AppointmentController {
 
     @PostMapping("/appointment-service")
     public ResponseEntity<AppointmentDto> book(@RequestBody AppointmentDto appointmentDto) {
-        System.out.println("************************appointment book********************");
+        System.out.println("************************controller hit********************");
         return ResponseEntity.ok(appointmentServiceI.book(appointmentDto));
     }
 

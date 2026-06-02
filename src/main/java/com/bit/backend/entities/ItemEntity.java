@@ -17,8 +17,10 @@ public class ItemEntity {
     private String itemCategory;
     @Column(name = "brand_name")
     private String brandName;
-    @Column(name = "supplier_name")
-    private String supplierName;
+    @Column(name = "unit_of_measure")
+    private String unitOfMeasure;
+    @Column(name = "reorder_level")
+    private int reorderLevel;
     @Column(name = "description")
     private String description;
     @Column(name = "image")
@@ -31,14 +33,15 @@ public class ItemEntity {
     public ItemEntity() {
     }
 
-    public ItemEntity(long itemId, String itemCode, String itemName, String itemCategory, String brandName, String supplierName, String description,
+    public ItemEntity(long itemId, String itemCode, String itemName, String itemCategory, String brandName, String unitOfMeasure,int reorderLevel, String description,
                         byte[] image, String imageType, String imageName) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.itemCategory = itemCategory;
         this.brandName = brandName;
-        this.supplierName = supplierName;
+        this.unitOfMeasure = unitOfMeasure;
+        this.reorderLevel = reorderLevel;
         this.description = description;
         this.image = image;
         this.imageName = imageName;
@@ -85,12 +88,20 @@ public class ItemEntity {
         this.brandName = brandName;
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public String getUnitOfMeasure() {
+        return unitOfMeasure;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+    public void setUnitOfMeasure(String unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+
+    public int getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(int reorderLevel) {
+        this.reorderLevel = reorderLevel;
     }
 
     public String getDescription() {

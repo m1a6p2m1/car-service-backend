@@ -5,15 +5,12 @@ import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AppointmentMapper;
 import com.bit.backend.repositories.AppointmentRepository;
+import com.bit.backend.repositories.DefinedTasksRepository;
+import com.bit.backend.repositories.TaskRepository;
 import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.AppointmentServiceI;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -28,6 +25,7 @@ public class AppointmentService implements AppointmentServiceI {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
     private final UserRepository userRepository;
+    private final DefinedTasksRepository definedTasksRepository;
 
     private static final LocalTime OPEN = LocalTime.of(9, 0);
     private static final LocalTime CLOSE_WEEKDAY = LocalTime.of(18, 0);
@@ -37,10 +35,11 @@ public class AppointmentService implements AppointmentServiceI {
     private static final int SLOT_MINUTES = 60;
     private static final int MAX_BAYS = 3;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, UserRepository userRepository) {
+    public AppointmentService(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, UserRepository userRepository, DefinedTasksRepository definedTasksRepository) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
         this.userRepository = userRepository;
+        this.definedTasksRepository = definedTasksRepository;
     }
 
     @Override
@@ -117,6 +116,15 @@ public class AppointmentService implements AppointmentServiceI {
 
         AppointmentEntity appointmentEntity = appointmentMapper.toAppointmentEntity(appointmentDto);
 
+        if (appointmentDto.getTaskId() == null) {
+            throw new RuntimeException("Task ID is required");
+        }
+
+        DefinedTasksEntity task = definedTasksRepository.findById(appointmentDto.getTaskId())
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        appointmentEntity.setDefinedTasks(task);
+
         // set role
         appointmentEntity.setRole(roleToSave);
         appointmentEntity.setBay(bay);
@@ -142,7 +150,8 @@ public class AppointmentService implements AppointmentServiceI {
                 saved.getBay(),
                 saved.getStatus(),
                 bookedCount,
-                saved.getTaskName(),
+                saved.getDefinedTasks() != null ? saved.getDefinedTasks().getId(): null,
+                saved.getDefinedTasks() != null ? saved.getDefinedTasks().getTaskName(): null,
                 saved.getVehicleType(),
                 saved.getLicencePlate(),
                 saved.getServiceType(),
