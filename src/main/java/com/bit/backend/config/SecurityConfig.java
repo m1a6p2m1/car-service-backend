@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // to handle csrf so you don't have to worry about session id
                 .authorizeHttpRequests((request) ->
                         request.requestMatchers(HttpMethod.POST, "/login", "/register","/forgot-password","/task-tracker","/customer-task-by-uid**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/customer-task-by-uid**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/customer-task-by-uid**", "/check-username").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

@@ -41,4 +41,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     //get customer details when enter phone number in appointment form
     Optional<User> findByContactNumber(String contactNumber);
+
+    boolean existsByLoginIgnoreCase(String username);
 }

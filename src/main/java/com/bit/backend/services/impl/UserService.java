@@ -299,4 +299,9 @@ public class UserService implements UserServiceI {
         return userMapper.toUserDto(customerDetails);
 
     }
+
+    @Override
+    public boolean isUsernameTaken(String username) {
+        return userRepository.existsByLoginIgnoreCase(username);
+    }
 }
