@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PrivilegeGroupController {
@@ -46,5 +47,12 @@ public class PrivilegeGroupController {
     @PutMapping("/privilege-groups/set-as-default/{id}")
     public ResponseEntity<PrivilegeGroupDto> setAsCustomerDefault(@PathVariable long id, @RequestBody PrivilegeGroupDto privilegeGroupDto) {
         return ResponseEntity.ok(privilegeGroupServiceI.setAsCustomerDefault(id, privilegeGroupDto));
+    }
+
+    @GetMapping("/privilege-groups/check-user-privil")
+    public ResponseEntity<Map<String, Boolean>> checkUserName(@RequestParam int grpId) {
+        boolean isAssigned = privilegeGroupServiceI.isUsersOrPrivilegesAssigned(grpId);
+        return ResponseEntity.ok(Map.of("isAssigned", isAssigned));
+
     }
 }

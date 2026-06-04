@@ -11,4 +11,5 @@ public interface PrivilegeGroupServiceI {
     PrivilegeGroupDto updatePrivilegeGroup(long id, PrivilegeGroupDto privilegeGroupDto);
     PrivilegeGroupDto deletePrivilegeGroup(long id, PrivilegeGroupDto privilegeGroupDto);
     PrivilegeGroupDto setAsCustomerDefault(long id, PrivilegeGroupDto privilegeGroupDto);
+    boolean isUsersOrPrivilegesAssigned(int grpId);
 }

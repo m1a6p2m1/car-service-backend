@@ -31,4 +31,8 @@ public interface PrivilegeGroupRepository extends JpaRepository<PrivilegeGroup, 
     void setAuthGroupToCustomer(int authGroupId, int userId);
     @Query(nativeQuery = true, value = "SELECT * FROM auth_groups WHERE is_default = :defVal")
     Optional<List<PrivilegeGroup>> findByDefaultValue( boolean defVal );
+    @Query(nativeQuery = true, value = "select count(user_id) from auth_group_users where auth_group_id = :grpId")
+    int isUsersAssigned(int grpId);
+    @Query(nativeQuery = true, value = "select count(auth_id) from auth_group_authentication where auth_group_id = :grpId")
+    int isPrivilegesAssigned(int grpId);
 }
