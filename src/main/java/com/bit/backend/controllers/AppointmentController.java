@@ -34,6 +34,12 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentServiceI.book(appointmentDto));
     }
 
+    @PutMapping("/edit-appointments/{id}")
+    public ResponseEntity<AppointmentDto> editAppointment(@PathVariable long id, @RequestBody AppointmentDto appointmentDto) {
+        System.out.println("************************ edit appointment controller hit********************");
+        return ResponseEntity.ok(appointmentServiceI.editAppointment(id, appointmentDto));
+    }
+
 //    @GetMapping("/appointment-service/by-date-time")
 //    public ResponseEntity<List<AppointmentDto>> getByDataAndTime(
 //            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,

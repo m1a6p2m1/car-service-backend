@@ -15,6 +15,8 @@ public interface AppointmentServiceI {
 
     AppointmentDto book(AppointmentDto dto);
 
+    AppointmentDto editAppointment(long id, AppointmentDto appointmentDto);
+
     List<AppointmentDto> getAllAppointments();
 
     AppointmentAssigneeChangeDto changeAssignee(AppointmentAssigneeChangeDto appointmentAssigneeChangeDto);

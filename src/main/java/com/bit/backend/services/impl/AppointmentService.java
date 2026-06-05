@@ -168,6 +168,34 @@ public class AppointmentService implements AppointmentServiceI {
     }
 
     @Override
+    public AppointmentDto editAppointment(long id, AppointmentDto appointmentDto){
+       AppointmentEntity appointment = appointmentRepository.findById(id)
+               .orElseThrow(() -> new RuntimeException("Appointment not Found"));
+       LocalDate oldDate = appointment.getDate();
+       LocalTime oldTime = appointment.getTime();
+
+       LocalDate newDate = appointmentDto.getDate();
+       LocalTime newTime = appointmentDto.getTime();
+
+       if (!oldDate.equals(newDate) || !oldTime.equals(newTime)) {
+           int newBay = IntStream.rangeClosed(1, MAX_BAYS)
+                   .filter(bay -> {
+                       Optional<AppointmentEntity> existing =
+                               appointmentRepository.findByDateAndTimeAndBay(newDate, newTime, bay);
+
+                       return existing.isEmpty();
+                   })
+                   .findFirst().orElseThrow(()-> new RuntimeException("All Bays are full for selected slot"));
+           appointment.setBay(newBay);
+       }
+       appointment.setDate(newDate);
+       appointment.setTime(newTime);
+
+       AppointmentEntity saved = appointmentRepository.save(appointment);
+       return appointmentMapper.toAppointmentDto(saved);
+    }
+
+    @Override
     public List<AppointmentDto> getAllAppointments() {
         return appointmentMapper.toAppointmentDtoList(appointmentRepository.findAll());
     }
