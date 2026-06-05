@@ -101,4 +101,11 @@ public class PrivilegeGroupService implements PrivilegeGroupServiceI {
 
         return privilegeGroupMapper.toPrivilegeGroupDto(savedPrivilegeGroup);
     }
+
+    @Override
+    public boolean isUsersOrPrivilegesAssigned(int grpId) {
+        int usersCount = privilegeGroupRepository.isUsersAssigned(grpId);
+        int privilegesCount = privilegeGroupRepository.isPrivilegesAssigned(grpId);
+        return usersCount + privilegesCount > 0;
+    }
 }

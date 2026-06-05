@@ -24,4 +24,6 @@ public interface UserServiceI {
 
     //get customer details when enter phone number in appointment form
     UserDto getCustomerByPhone(String contactNumber);
+
+    boolean isUsernameTaken(String username);
 }
