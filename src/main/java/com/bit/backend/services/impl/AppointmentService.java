@@ -190,6 +190,23 @@ public class AppointmentService implements AppointmentServiceI {
        }
        appointment.setDate(newDate);
        appointment.setTime(newTime);
+        appointment.setVehicleType(appointmentDto.getVehicleType());
+        appointment.setLicencePlate(appointmentDto.getLicencePlate());
+        appointment.setServiceType(appointmentDto.getServiceType());
+        appointment.setAdditionalServices(appointmentDto.getAdditionalServices());
+        appointment.setCustomerName(appointmentDto.getCustomerName());
+        appointment.setEmail(appointmentDto.getEmail());
+        appointment.setContactNumber(appointmentDto.getContactNumber());
+        appointment.setTotalServicePrice(appointmentDto.getTotalServicePrice());
+
+        if (appointmentDto.getTaskId() != null) {
+            DefinedTasksEntity task = definedTasksRepository
+                    .findById(appointmentDto.getTaskId())
+                    .orElseThrow(() -> new RuntimeException("Task not found"));
+
+            appointment.setDefinedTasks(task);
+        }
+
 
        AppointmentEntity saved = appointmentRepository.save(appointment);
        return appointmentMapper.toAppointmentDto(saved);

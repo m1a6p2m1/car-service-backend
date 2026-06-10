@@ -12,18 +12,17 @@ public class ItemDto {
     private String unitOfMeasure;
     private int reorderLevel;
     private String description;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private byte[] image;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String imageName;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String imageType;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    private byte[] image;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    private String imageName;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    private String imageType;
 
     public ItemDto() {
     }
 
-    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String unitOfMeasure, int reorderLevel, String description, byte[] image,
-                   String imageName, String imageType) {
+    public ItemDto(long itemId, String itemCode, String itemName, String brandName, String itemCategory, String unitOfMeasure, int reorderLevel, String description) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;
@@ -32,9 +31,9 @@ public class ItemDto {
         this.unitOfMeasure = unitOfMeasure;
         this.reorderLevel = reorderLevel;
         this.description = description;
-        this.image = image;
-        this.imageName = imageName;
-        this.imageType = imageType;
+//        this.image = image;
+//        this.imageName = imageName;
+//        this.imageType = imageType;
 
     }
 
@@ -102,27 +101,27 @@ public class ItemDto {
         this.description = description;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
+//    public byte[] getImage() {
+//        return image;
+//    }
+//
+//    public void setImage(byte[] image) {
+//        this.image = image;
+//    }
+//
+//    public String getImageName() {
+//        return imageName;
+//    }
+//
+//    public void setImageName(String imageName) {
+//        this.imageName = imageName;
+//    }
+//
+//    public String getImageType() {
+//        return imageType;
+//    }
+//
+//    public void setImageType(String imageType) {
+//        this.imageType = imageType;
+//    }
 }

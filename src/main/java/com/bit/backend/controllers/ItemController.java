@@ -25,9 +25,9 @@ public class ItemController {
     public ResponseEntity<ItemDto> addForm(@RequestPart("itemForm") ItemDto itemDto, @RequestPart("image") MultipartFile file
     ){
         try {
-            itemDto.setImage(file.getBytes());
-            itemDto.setImageName(file.getOriginalFilename());
-            itemDto.setImageType(file.getContentType());
+//            itemDto.setImage(file.getBytes());
+//            itemDto.setImageName(file.getOriginalFilename());
+//            itemDto.setImageType(file.getContentType());
 
             ItemDto itemDtoResponse = itemServiceI.addItemEntity(itemDto);
             return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemCode())).body(itemDtoResponse);
@@ -60,9 +60,9 @@ public class ItemController {
     @PutMapping("/item/{itemId}")
     public ResponseEntity<ItemDto> updateForm(@PathVariable long itemId, @RequestPart("itemForm") ItemDto itemDto, @RequestPart("image") MultipartFile file){
         try {
-            itemDto.setImage(file.getBytes());
-            itemDto.setImageName(file.getOriginalFilename());
-            itemDto.setImageType(file.getContentType());
+//            itemDto.setImage(file.getBytes());
+//            itemDto.setImageName(file.getOriginalFilename());
+//            itemDto.setImageType(file.getContentType());
 
             ItemDto itemDtoResponse = itemServiceI.updateForm(itemId, itemDto);
             return ResponseEntity.ok(itemDtoResponse);

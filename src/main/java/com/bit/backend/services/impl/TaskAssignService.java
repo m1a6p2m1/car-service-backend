@@ -92,18 +92,54 @@ public class TaskAssignService implements TaskAssignServiceI {
 
     @Override
     public SubTaskStatusChangeDto subTaskStatusChange(SubTaskStatusChangeDto subTaskStatusChangeDto) {
-        try {
-            SubTaskAssignDto savedSubTasks = null;
-            Optional<SubTaskAssignedEntity> oSubTaskAssignedEntity = subTasksAssignRepository.findById(subTaskStatusChangeDto.getId());
+//        try {
+//            SubTaskAssignDto savedSubTasks = null;
+//            Optional<SubTaskAssignedEntity> oSubTaskAssignedEntity = subTasksAssignRepository.findById(subTaskStatusChangeDto.getId());
+//
+//            if (oSubTaskAssignedEntity.isPresent()) {
+//                SubTaskAssignedEntity subTaskAssignedEntity = oSubTaskAssignedEntity.get();
+//                subTaskAssignedEntity.setStatus(subTaskStatusChangeDto.getStatus());
+//                savedSubTasks = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.save(subTaskAssignedEntity));
+//            }
+//
+//            return subTaskStatusChangeDto;
+//        } catch (Exception error) {
+//            throw new AppException("Request Failed with Error: " + error, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
 
-            if (oSubTaskAssignedEntity.isPresent()) {
-                SubTaskAssignedEntity subTaskAssignedEntity = oSubTaskAssignedEntity.get();
-                subTaskAssignedEntity.setStatus(subTaskStatusChangeDto.getStatus());
-                savedSubTasks = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.save(subTaskAssignedEntity));
+        try{
+            SubTaskAssignedEntity subTask = subTasksAssignRepository.findById(subTaskStatusChangeDto.getId())
+                    .orElseThrow(() ->
+                            new AppException("Sub Task Not Found",
+                                    HttpStatus.NOT_FOUND));
+
+            //Update current subtask
+            subTask.setStatus(subTaskStatusChangeDto.getStatus());
+            subTasksAssignRepository.save(subTask);
+
+            //Get MAin Task Number
+            String taskNo = subTask.getMainUniqueTaskNo();
+
+            //Get All subtasks of that main task
+            List<SubTaskAssignedEntity> subtasks = subTasksAssignRepository.findByMainUniqueTaskNo(taskNo);
+
+            boolean allDone = subtasks.stream()
+                    .allMatch(st -> "Done"
+                            .equalsIgnoreCase(st.getStatus()));
+
+            TaskAssignEntity mainTask = taskAssignRepository.findByUniqueTaskNo(taskNo)
+                    .orElseThrow(()->
+                            new AppException("Main Task Not Found",
+                                    HttpStatus.NOT_FOUND));
+
+            if (allDone){
+                mainTask.setStatus("Done");
+            }else {
+                mainTask.setStatus("Start");
             }
-
+            taskAssignRepository.save(mainTask);
             return subTaskStatusChangeDto;
-        } catch (Exception error) {
+        } catch (Exception error){
             throw new AppException("Request Failed with Error: " + error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -126,8 +162,14 @@ public class TaskAssignService implements TaskAssignServiceI {
 //        }
 
         if ((!taskNo.equals("-1")) && (taskNo != null || !taskNo.equals("") || !taskNo.equals(null))) {
-            List<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByUniqueTaskNo(taskNo);
-            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+//            Optional<TaskAssignEntity> taskAssignEntityList = this.taskAssignRepository.findByUniqueTaskNo(taskNo);
+            TaskAssignEntity entity = taskAssignRepository
+                    .findByUniqueTaskNo(taskNo)
+                    .orElseThrow(() ->
+                            new AppException("Task Not Found",
+                                    HttpStatus.NOT_FOUND));
+
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(List.of(entity));
             return taskAssignDtoList;
         } else if (taskNo.equals("-1")) {
             Long cusId = Long.parseLong(customerId);
@@ -141,8 +183,13 @@ public class TaskAssignService implements TaskAssignServiceI {
     @Override
     public List<TaskAssignDto> getMainTaskDetailsByUid(String uid) {
         try {
-            List<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(uid);
-            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+//            Optional<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(uid);
+            TaskAssignEntity entity = taskAssignRepository
+                    .findByUniqueTaskNo(uid)
+                    .orElseThrow(() ->
+                            new AppException("Task Not Found",
+                                    HttpStatus.NOT_FOUND));
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(List.of(entity));
             return taskAssignDtoList;
         } catch (Exception e) {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -174,8 +221,13 @@ public class TaskAssignService implements TaskAssignServiceI {
     @Override
     public List<TaskAssignDto> getSupervisorTasksByEmployeeId(String employeeId) {
         try {
-            List<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(employeeId);
-            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(taskAssignEntityList);
+//            Optional<TaskAssignEntity> taskAssignEntityList = taskAssignRepository.findByUniqueTaskNo(employeeId);
+            TaskAssignEntity entity = taskAssignRepository
+                    .findByUniqueTaskNo(employeeId)
+                    .orElseThrow(() ->
+                            new AppException("Task Not Found",
+                                    HttpStatus.NOT_FOUND));
+            List<TaskAssignDto> taskAssignDtoList = taskAssignMapper.toTaskAssignDtoList(List.of(entity));
             return taskAssignDtoList;
         } catch (Exception e) {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);

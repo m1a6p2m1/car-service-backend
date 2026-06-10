@@ -15,7 +15,8 @@ import java.util.Optional;
 public interface TaskAssignRepository extends JpaRepository<TaskAssignEntity, Long> {
     List<TaskAssignEntity> findByCustomerId(Long customerId); // customer commonly used tasks loaded into the dashboard
 
-    List<TaskAssignEntity> findByUniqueTaskNo(String parseLong);
+//    List<TaskAssignEntity> findByUniqueTaskNo(String parseLong);
+    Optional<TaskAssignEntity> findByUniqueTaskNo(String uniqueTaskNo);
 
     //get tasks that assign to the supervisor into the task tracker
     List<TaskAssignEntity> findBySupervisor(Long supervisor);

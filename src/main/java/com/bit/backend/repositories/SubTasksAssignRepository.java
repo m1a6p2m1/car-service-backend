@@ -8,4 +8,5 @@ import java.util.List;
 public interface SubTasksAssignRepository extends JpaRepository<SubTaskAssignedEntity, Long> {
     List<SubTaskAssignedEntity> findByAssignedUserId(Long empId);
     List<SubTaskAssignedEntity> findBySupervisor(Long empId);
+    List<SubTaskAssignedEntity> findByMainUniqueTaskNo(String mainUniqueTaskNo);
 }
