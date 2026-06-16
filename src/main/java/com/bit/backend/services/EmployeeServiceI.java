@@ -22,4 +22,9 @@ public interface EmployeeServiceI {
 
     //update Employee status "Inactive"
     EmployeeDto updateEmpStatus(long empNumber);
+
+    //check phoneNumber is already exist
+    boolean isPhoneNumberIsExists(String phoneNumber);
+
+    boolean isNicIsExists(String nic);
 }

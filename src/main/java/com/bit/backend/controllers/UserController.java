@@ -136,4 +136,11 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
+    //check phoneNumber is already exist
+    @GetMapping("/check-contact")
+    public ResponseEntity<Boolean> checkContactNumber(@RequestParam String contactNumber){
+        boolean exists = userServiceI.isContactNumberIsExists(contactNumber);
+        return ResponseEntity.ok(exists);
+    }
+
 }

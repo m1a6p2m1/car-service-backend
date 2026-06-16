@@ -15,4 +15,6 @@ public interface VehiclesServiceI {
     List<CustomerVehiclesDto> getVehicleByUserId(Long customerId);
 
     List<CustomerVehiclesDto> getVehiclesByCusId(String uniqueCusNo);
+
+    boolean isLicencePlateIsExists(String licencePlate);
 }

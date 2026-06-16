@@ -304,4 +304,10 @@ public class UserService implements UserServiceI {
     public boolean isUsernameTaken(String username) {
         return userRepository.existsByLoginIgnoreCase(username);
     }
+
+    //check phoneNumber is already exist
+    @Override
+    public boolean isContactNumberIsExists(String contactNumber){
+        return userRepository.existsByContactNumber(contactNumber);
+    }
 }

@@ -151,4 +151,10 @@ public class VehiclesService implements VehiclesServiceI {
         }
         return vehiclesMapper.toCustomerVehiclesDtoList(vehicles);
     }
+
+    //check phoneNumber is already exist
+    @Override
+    public boolean isLicencePlateIsExists(String licencePlate){
+        return vehiclesRepository.existsByLicencePlate(licencePlate);
+    }
 }

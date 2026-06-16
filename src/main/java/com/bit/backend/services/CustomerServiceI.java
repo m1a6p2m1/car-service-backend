@@ -12,4 +12,7 @@ public interface CustomerServiceI {
     CustomerDto deleteData(long cusId);
 //    List<Map<String, Object>> getTaskListCustomers();
     CustomerDto getCustomerById(Long id);
+
+    boolean isContactNumberIsExists(String contactNumber);
+    boolean isNicIsExists(String nic);
 }

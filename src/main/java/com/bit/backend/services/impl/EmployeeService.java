@@ -160,4 +160,15 @@ public class EmployeeService implements EmployeeServiceI {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //check phoneNumber is already exist
+    @Override
+    public boolean isPhoneNumberIsExists(String phoneNumber){
+        return employeeRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public boolean isNicIsExists(String nic){
+        return employeeRepository.existsByNic(nic);
+    }
 }

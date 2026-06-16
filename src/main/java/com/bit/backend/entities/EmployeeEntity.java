@@ -17,7 +17,7 @@ public class EmployeeEntity {
     private String fullName;
     @Column(name = "calling_name")
     private String callingName;
-    @Column(name = "nic")
+    @Column(name = "nic", unique = true)
     private String nic;
     @Column(name = "dob")
     private String dob;
@@ -27,7 +27,7 @@ public class EmployeeEntity {
     private String address;
     @Column(name = "email")
     private String email;
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
     @Column(name = "emergency_phone_number")
     private String emergencyPhoneNumber;

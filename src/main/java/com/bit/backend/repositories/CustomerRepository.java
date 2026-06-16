@@ -10,4 +10,7 @@ import java.util.Map;
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
     @Query("SELECT cusId as id, firstName as firstName, lastName as lastName FROM CustomerEntity")
     List<Map<String, Object>> getTaskCustomerList();
+
+    boolean existsByContactNumber(String contactNumber);
+    boolean existsByNic(String nic);
 }

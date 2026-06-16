@@ -21,5 +21,8 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> 
 
     Optional<EmployeeEntity> findByEmpNumber(long empNumber);
 
+    boolean existsByPhoneNumber(String phoneNumber);
+    boolean existsByNic(String nic);
+
 //    List<EmployeeEntity> findByEmployeeStatus(String employeeStatus);
 }

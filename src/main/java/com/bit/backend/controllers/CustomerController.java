@@ -88,4 +88,17 @@ public class CustomerController {
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
 
+    //check phoneNumber is already exist
+    @GetMapping("/customer/check-contact")
+    public ResponseEntity<Boolean> checkContactNumber(@RequestParam String contactNumber){
+        boolean exists = customerServiceI.isContactNumberIsExists(contactNumber);
+        return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/customer/check-nic")
+    public ResponseEntity<Boolean> checkNicNumber(@RequestParam String nic){
+        boolean exists = customerServiceI.isNicIsExists(nic);
+        return ResponseEntity.ok(exists);
+    }
+
 }

@@ -26,4 +26,6 @@ public interface UserServiceI {
     UserDto getCustomerByPhone(String contactNumber);
 
     boolean isUsernameTaken(String username);
+
+    boolean isContactNumberIsExists(String contactNumber);
 }

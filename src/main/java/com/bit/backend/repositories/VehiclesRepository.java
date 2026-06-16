@@ -16,6 +16,8 @@ public interface VehiclesRepository extends JpaRepository<VehiclesEntity, Long> 
     @Query(nativeQuery = true, value = "SELECT v.id as id, u.id as customerId, u.first_name as customerName, v.licence_plate as licencePlate, v.vehicle_model as vehicleModel, v.vehicle_type as vehicleType, u.unique_cus_no as uniqueCusNo FROM vehicles v JOIN app_user u ON v.customer_id = u.id;")
     List<Map<String, Object>> getVehiclesList();
 
+    boolean existsByLicencePlate(String licencePlate);
+
 //    @Query("SELECT v.licencePlate FROM VehiclesEntity v JOIN User u ON v.id = u.id")
 //    List<VehiclesEntity> findByCustomer_Id(Long customerId);
 }

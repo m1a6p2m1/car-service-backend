@@ -103,4 +103,10 @@ public class VehiclesController {
 
         return ResponseEntity.ok(appointmentDtoList);
     }
+
+    @GetMapping("/check-plate")
+    public ResponseEntity<Boolean> checkLicensePlate(@RequestParam String licencePlate){
+        boolean exists = vehiclesServiceI.isLicencePlateIsExists(licencePlate);
+        return ResponseEntity.ok(exists);
+    }
 }

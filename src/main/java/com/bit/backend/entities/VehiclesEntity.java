@@ -10,7 +10,7 @@ public class VehiclesEntity {
     private Long id;
 //    @Column(name = "customer_name")
 //    private String customerName;
-    @Column(name = "licence_plate")
+    @Column(name = "licence_plate", unique = true)
     private String licencePlate;
     @Column(name = "vehicle_type")
     private String vehicleType;

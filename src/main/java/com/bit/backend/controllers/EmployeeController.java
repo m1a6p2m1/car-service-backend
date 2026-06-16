@@ -137,4 +137,17 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //check phoneNumber is already exist
+    @GetMapping("/check-phone")
+    public ResponseEntity<Boolean> checkPhoneNumber(@RequestParam String phoneNumber){
+        boolean exists = employeeServiceI.isPhoneNumberIsExists(phoneNumber);
+        return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/check-nic")
+    public ResponseEntity<Boolean> checkNicNumber(@RequestParam String nic){
+        boolean exists = employeeServiceI.isNicIsExists(nic);
+        return ResponseEntity.ok(exists);
+    }
 }

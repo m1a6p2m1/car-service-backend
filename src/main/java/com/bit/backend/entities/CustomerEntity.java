@@ -19,13 +19,13 @@ public class CustomerEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "contact_number")
+    @Column(name = "contact_number", unique = true)
     private String contactNumber;
 
     @Column(name = "gender")
     private String gender;
 
-    @Column(name = "nic")
+    @Column(name = "nic", unique = true)
     private String nic;
 
     @Column(name = "address")

@@ -105,4 +105,15 @@ public class CustomerService implements CustomerServiceI {
         }
         return new CustomerDto();
     }
+
+    //check phoneNumber is already exist
+    @Override
+    public boolean isContactNumberIsExists(String contactNumber){
+        return customerRepository.existsByContactNumber(contactNumber);
+    }
+
+    @Override
+    public boolean isNicIsExists(String nic){
+        return customerRepository.existsByNic(nic);
+    }
 }

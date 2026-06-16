@@ -45,7 +45,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "contact_number")
+    @Column(name = "contact_number", unique = true)
     private String contactNumber;
 
     @Column(name = "address")
