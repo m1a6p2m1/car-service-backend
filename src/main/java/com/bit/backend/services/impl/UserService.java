@@ -9,7 +9,6 @@ import com.bit.backend.mappers.UserMapper;
 import com.bit.backend.repositories.*;
 import com.bit.backend.services.NotificationServiceI;
 import com.bit.backend.services.UserServiceI;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -309,5 +308,54 @@ public class UserService implements UserServiceI {
     @Override
     public boolean isContactNumberIsExists(String contactNumber){
         return userRepository.existsByContactNumber(contactNumber);
+    }
+
+    //get employee login credentials for update
+    @Override
+    public EmployeeCredentialDto getEmployeeLogin(Long employeeId) {
+
+        User user = userRepository
+                .findByEmployee_EmpNumber(employeeId)
+                .orElseThrow(() ->
+                        new AppException(
+                                "Login not found",
+                                HttpStatus.NOT_FOUND));
+
+        EmployeeCredentialDto dto = new EmployeeCredentialDto();
+
+        dto.setEmployeeId(employeeId);
+        dto.setLogin(user.getLogin());
+
+        // NEVER set password
+
+        return dto;
+    }
+
+    @Override
+    public EmployeeCredentialDto updateEmployeeLogin(Long employeeId, EmployeeCredentialDto dto){
+        User user = userRepository.findByEmployee_EmpNumber(employeeId)
+                .orElseThrow(() ->
+                        new AppException("User Not Found", HttpStatus.NOT_FOUND));
+
+        // Check if the username already belongs to another user
+        Optional<User> existing = userRepository.findByLogin(dto.getLogin());
+
+        if (existing.isPresent()
+                && !existing.get().getId().equals(user.getId())) {
+
+            throw new AppException(
+                    "Username already exists",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Update username
+        user.setLogin(dto.getLogin());
+
+        if(dto.getPassword() != null && !dto.getPassword().trim().isEmpty()){
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        userRepository.save(user);
+        dto.setPassword(null);
+        return dto;
     }
 }

@@ -155,6 +155,20 @@ public class TaskAssignController {
         }
     }
 
+    @GetMapping("/all-assign-tasks/manager/tracker")
+    public ResponseEntity<List<TaskAssignDto>> getAllTasks(){
+        try {
+            System.out.println("Task tracker supervisor tasks");
+            List<TaskAssignDto> taskAssignDtoList = taskAssignServiceI.getAllTasks();
+            return ResponseEntity.ok(taskAssignDtoList);
+        } catch (Exception e){
+            throw new AppException(
+                    "Request Failed with Error: " + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
     @GetMapping("/supervisor-task-by-employeeId")
     public ResponseEntity<List<TaskAssignDto>> getSupervisorTasksByEmployeeId(@RequestParam String employeeId) {
         // http://localhost:4200/task-by-uid
@@ -192,5 +206,11 @@ public class TaskAssignController {
         } catch (Exception e) {
             throw new AppException("Failed to get appointment details " + licencePlate + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //get done assigned tasks to the bill generate form table
+    @GetMapping("/task-assign/done-status")
+    public ResponseEntity<List<TaskAssignDto>> getAllDoneTasks(){
+        return ResponseEntity.ok(taskAssignServiceI.getAllDoneTasks());
     }
 }

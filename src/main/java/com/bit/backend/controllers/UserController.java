@@ -143,4 +143,18 @@ public class UserController {
         return ResponseEntity.ok(exists);
     }
 
+    //edit employee user credentials
+    @GetMapping("/employee-login/get-credentials/{employeeId}")
+    public ResponseEntity<EmployeeCredentialDto> getEmployeeLogin(
+            @PathVariable Long employeeId) {
+
+        return ResponseEntity.ok(
+                userServiceI.getEmployeeLogin(employeeId));
+    }
+
+    @PutMapping("/employee-login/edit-credentials/{employeeId}")
+    public ResponseEntity<EmployeeCredentialDto> updateEmployeeLogin(@PathVariable Long employeeId, @RequestBody EmployeeCredentialDto dto){
+        return ResponseEntity.ok(userServiceI.updateEmployeeLogin(employeeId, dto));
+    }
+
 }

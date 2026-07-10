@@ -28,4 +28,8 @@ public interface UserServiceI {
     boolean isUsernameTaken(String username);
 
     boolean isContactNumberIsExists(String contactNumber);
+
+    EmployeeCredentialDto getEmployeeLogin(Long employeeId);
+
+    EmployeeCredentialDto updateEmployeeLogin(Long employeeId, EmployeeCredentialDto dto);
 }

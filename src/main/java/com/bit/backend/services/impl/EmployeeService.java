@@ -63,6 +63,13 @@ public class EmployeeService implements EmployeeServiceI {
         try {
             List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
             List<EmployeeDto> employeeDtoList = employeeMapper.toEmployeeDtoList(employeeEntityList);
+            for (EmployeeDto dto : employeeDtoList) {
+
+                boolean loginCreated =
+                        userRepository.existsByEmployee_EmpNumber(dto.getEmpNumber());
+
+                dto.setLoginCreated(loginCreated);
+            }
             return employeeDtoList;
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);

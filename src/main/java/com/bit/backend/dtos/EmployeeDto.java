@@ -19,6 +19,7 @@ public class EmployeeDto {
     private String employmentType;
     private String employeeStatus;
     private String jobTitle;
+    private boolean loginCreated;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private byte[] image;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -169,6 +170,15 @@ public class EmployeeDto {
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
     }
+
+    public boolean isLoginCreated() {
+        return loginCreated;
+    }
+
+    public void setLoginCreated(boolean loginCreated) {
+        this.loginCreated = loginCreated;
+    }
+
     public byte[] getImage() {
         return image;
     }

@@ -138,6 +138,16 @@ public class EmployeeController {
         }
     }
 
+    @PutMapping("/employee/update-login-status/{empNumber}")
+    public ResponseEntity<EmployeeDto> updateEmpLoginStatus(@PathVariable long empNumber){
+        try {
+            EmployeeDto employeeDtoResponse = employeeServiceI.updateEmpStatus(empNumber);
+            return ResponseEntity.ok(employeeDtoResponse);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //check phoneNumber is already exist
     @GetMapping("/check-phone")
     public ResponseEntity<Boolean> checkPhoneNumber(@RequestParam String phoneNumber){

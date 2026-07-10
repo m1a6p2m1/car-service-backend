@@ -23,8 +23,13 @@ public interface TaskAssignServiceI {
     List<TaskAssignDto> getSupervisorTasks(String employeeId, String taskNo);
     List<TaskAssignDto> getSupervisorTasksByEmployeeId(String employeeId);
 
+    //show all assign tasks for Manager
+    List<TaskAssignDto> getAllTasks();
+
     List<TaskAssignDto> getLicenseByDateAndCustomer(LocalDate date, Long customerId);
 
     //get Appointments details when select the license plate no for customer feedback
     TaskAssignDto getDetailsByLicensePlate(LocalDate date, String licencePlate);
+
+    List<TaskAssignDto> getAllDoneTasks();
 }

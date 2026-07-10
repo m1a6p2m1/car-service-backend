@@ -46,4 +46,7 @@ public interface TaskAssignRepository extends JpaRepository<TaskAssignEntity, Lo
     Optional<TaskAssignEntity> findByLicensePlate(
             @Param("date") LocalDate date,
             @Param("licencePlate") String licencePlate);
+
+
+    List<TaskAssignEntity> findByStatus(String status);
 }
