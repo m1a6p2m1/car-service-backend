@@ -167,4 +167,15 @@ public class TaskIntroduceService implements TaskIntroduceServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public TaskIntroduceDto getByTaskName(String taskName) {
+        Optional<DefinedTasksEntity> optionalDefinedTasksEntity = definedTasksRepository.findByTaskName(taskName);
+
+        if(!optionalDefinedTasksEntity.isPresent()){
+            throw new AppException("Task not found. Please contact system administrator", HttpStatus.BAD_REQUEST);
+        }
+        DefinedTasksEntity definedTasksEntity = optionalDefinedTasksEntity.get();
+        return definedTasksMapper.toTaskIntroduceDto(definedTasksEntity);
+    }
 }

@@ -68,4 +68,16 @@ public class TaskIntroduceController {
         }
 
     }
+
+    @GetMapping("/task-introduce/get-task-details-by-name/{taskName}")
+    public ResponseEntity<TaskIntroduceDto> getTotalBillValueByTaskName(@PathVariable String taskName){
+        try {
+            TaskIntroduceDto taskIntroduceDto = taskIntroduceServiceI.getByTaskName(taskName);
+            return ResponseEntity.ok(taskIntroduceDto);
+        } catch (Exception e){
+            throw new AppException("Failed to get task with id " + taskName + ". Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }

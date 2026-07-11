@@ -16,4 +16,6 @@ public interface TaskIntroduceServiceI {
     TaskIntroduceDto updateData(long id, TaskIntroduceDto taskIntroduceDto);
 
     TaskIntroduceDto deleteData(long id);
+
+    TaskIntroduceDto getByTaskName(String taskName);
 }
