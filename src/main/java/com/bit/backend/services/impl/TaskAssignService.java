@@ -251,35 +251,37 @@ public class TaskAssignService implements TaskAssignServiceI {
     @Override
     public TaskAssignDto addTaskAssignEntity(TaskAssignDto taskAssignDto){
         try {
-//            System.out.println("*******************In get Data**************");
+            //Convert DTO to ENTITY
             TaskAssignEntity taskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
 
+            //Get customer email if not provided
             if ((taskAssignDto.getEmail() == null || taskAssignDto.getEmail().equals("")) && taskAssignDto.getCustomerId() != null) {
                 CustomerDto customerDto = customerServiceI.getCustomerById(taskAssignDto.getCustomerId());
                 if (customerDto.getEmail() != null) {
                     taskAssignEntity.setEmail(customerDto.getEmail());
                 }
             }
-
+            //Save main task first
             TaskAssignEntity savedTask = taskAssignRepository.save(taskAssignEntity);
-            TaskAssignDto savedDto = null;
-            TaskAssignEntity updatedTask = null;
-            int count = 1;
-
+//            TaskAssignDto savedDto = null;
+//            TaskAssignEntity updatedTask = null;
+//
+            //update appointment status
             updateAppointmentStatus(taskAssignDto.getAppointmentUniqueNo());
-
+            //Generate Task number
             String taskNo = generateTaskNumber(savedTask);
             Long superVisorId = taskAssignDto.getSupervisor();
             String customer = taskAssignDto.getCustomerName();
 
             if (taskNo != null) {
-                taskAssignEntity.setUniqueTaskNo(taskNo);
-                updatedTask = taskAssignRepository.save(taskAssignEntity);
-                savedDto = taskAssignMapper.toTaskAssignDto(updatedTask);
-            }
+                savedTask.setUniqueTaskNo(taskNo);
+                // Save task with task number
+                savedTask = taskAssignRepository.save(savedTask);
+//                savedDto = taskAssignMapper.toTaskAssignDto(updatedTask);
+                // Get subtasks
+                List<SubTaskAssignedEntity> subTaskAssignedEntityList = savedTask.getSubTasks();
 
-            if (savedDto != null) {
-                List<SubTaskAssignedEntity> subTaskAssignedEntityList = updatedTask.getSubTasks();
+                int count = 1;
 
                 for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
                     String subTaskNo = generateSubTaskNumber(taskNo, subTaskAssignedEntity, count);
@@ -289,27 +291,49 @@ public class TaskAssignService implements TaskAssignServiceI {
                     subTaskAssignedEntity.setCustomer(customer);
                     subTaskAssignedEntity.setStatus("pending");
 
+                    // Set technician name
                     if(subTaskAssignedEntity.getAssignedUserId() != null) {
                         EmployeeEntity employee = employeeRepository
                                 .findById(subTaskAssignedEntity.getAssignedUserId())
                                 .orElse(null);
                         if (employee != null) {
-                            subTaskAssignedEntity.setAssigneUserName(employee.getFullName());
+                            subTaskAssignedEntity.setAssignUserName(employee.getFullName());
                         }
                     }
 //                    System.out.println("Saving Name: " + subTaskAssignedEntity.getAssigneUserName());
                     count = count + 1;
                 }
+                // Save subtasks after updating values
+                List<SubTaskAssignedEntity> savedSubTasks =
+                        subTasksAssignRepository.saveAll(subTaskAssignedEntityList);
+//                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
+                // Convert final entity to DTO
+                TaskAssignDto savedDto =
+                        taskAssignMapper.toTaskAssignDto(savedTask);
 
-                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
+                // Convert subtasks to DTO and attach
+                List<SubTaskAssignDto> subTaskDtoList =
+                        taskAssignMapper.toSubTaskAssignDto(savedSubTasks);
+
+                savedDto.setSubTasks(subTaskDtoList);
+
+                savedDto.setEmail(savedTask.getEmail());
+                savedDto.setUniqueTaskNo(savedTask.getUniqueTaskNo());
+
+                // Send notification
+                this.notificationServiceI
+                        .sendTaskTrackerNotification(savedDto);
+
+
+                return savedDto;
             }
-            taskAssignDto.setEmail(taskAssignEntity.getEmail());
-            taskAssignDto.setUniqueTaskNo(taskAssignEntity.getUniqueTaskNo());
-            // send mail to customer [Todo]
-            this.notificationServiceI.sendTaskTrackerNotification(taskAssignDto);
-            // send notification to employee [todo]
+//            taskAssignDto.setEmail(taskAssignEntity.getEmail());
+//            taskAssignDto.setUniqueTaskNo(taskAssignEntity.getUniqueTaskNo());
+//            // send mail to customer [Todo]
+//            this.notificationServiceI.sendTaskTrackerNotification(taskAssignDto);
+//            // send notification to employee [todo]
 
-            return savedDto;
+            return null;
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

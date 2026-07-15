@@ -25,7 +25,7 @@ public class SubTaskAssignedEntity {
     private Long supervisor;
 
     @Column(name="assigne_user_name")
-    private String assigneUserName;
+    private String assignUserName;
 
     @Column(name = "main_unique_task_no")
     private String mainUniqueTaskNo;
@@ -90,12 +90,12 @@ public class SubTaskAssignedEntity {
         this.supervisor = supervisor;
     }
 
-    public String getAssigneUserName() {
-        return assigneUserName;
+    public String getAssignUserName() {
+        return assignUserName;
     }
 
-    public void setAssigneUserName(String assigneUserName) {
-        this.assigneUserName = assigneUserName;
+    public void setAssignUserName(String assignUserName) {
+        this.assignUserName = assignUserName;
     }
 
     public String getMainUniqueTaskNo() {

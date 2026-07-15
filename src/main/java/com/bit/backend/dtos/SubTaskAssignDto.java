@@ -7,19 +7,19 @@ public class SubTaskAssignDto {
     private String uniqueSubTaskNo;
     private String status;
     private Long supervisor;
-    private String assigneUserName;
+    private String assignUserName;
     private String mainUniqueTaskNo;
     private String customer;
 
     public SubTaskAssignDto(Long id, String description, Long assignedUserId, String uniqueSubTaskNo, String status,
-                            Long supervisor, String assigneUserName, String mainUniqueTaskNo, String customer) {
+                            Long supervisor, String assignUserName, String mainUniqueTaskNo, String customer) {
         this.id = id;
         this.description = description;
         this.assignedUserId = assignedUserId;
         this.uniqueSubTaskNo = uniqueSubTaskNo;
         this.status = status;
         this.supervisor = supervisor;
-        this.assigneUserName = assigneUserName;
+        this.assignUserName = assignUserName;
         this.mainUniqueTaskNo = mainUniqueTaskNo;
         this.customer = customer;
     }
@@ -72,12 +72,12 @@ public class SubTaskAssignDto {
         this.supervisor = supervisor;
     }
 
-    public String getAssigneUserName() {
-        return assigneUserName;
+    public String getAssignUserName() {
+        return assignUserName;
     }
 
-    public void setAssigneUserName(String assigneUserName) {
-        this.assigneUserName = assigneUserName;
+    public void setAssignUserName(String assignUserName) {
+        this.assignUserName = assignUserName;
     }
 
     public String getMainUniqueTaskNo() {

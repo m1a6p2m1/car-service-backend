@@ -23,19 +23,22 @@ import java.util.Random;
 
 @Service
 public class EmployeeService implements EmployeeServiceI {
-
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final UserRepository userRepository;
     private final AttendanceMarkRepository attendanceMarkRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserRepository userRepository, AttendanceMarkRepository attendanceMarkRepository) {
+    public EmployeeService(
+            EmployeeRepository employeeRepository,
+            EmployeeMapper employeeMapper,
+            UserRepository userRepository,
+            AttendanceMarkRepository attendanceMarkRepository
+    ) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.userRepository = userRepository;
         this.attendanceMarkRepository = attendanceMarkRepository;
     }
-
     @Override
     public EmployeeDto addEmployeeEntity(EmployeeDto employeeDto) {
         try {
@@ -56,18 +59,14 @@ public class EmployeeService implements EmployeeServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @Override
     public List<EmployeeDto> getData() {
-//        System.out.println("employeeService");
         try {
             List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
             List<EmployeeDto> employeeDtoList = employeeMapper.toEmployeeDtoList(employeeEntityList);
             for (EmployeeDto dto : employeeDtoList) {
-
                 boolean loginCreated =
                         userRepository.existsByEmployee_EmpNumber(dto.getEmpNumber());
-
                 dto.setLoginCreated(loginCreated);
             }
             return employeeDtoList;
@@ -75,24 +74,19 @@ public class EmployeeService implements EmployeeServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @Override
     public EmployeeDto getEmployeeById(Long empNumber) {
         Optional<EmployeeEntity> optional = employeeRepository.findById(empNumber);
         if (!optional.isPresent()) {
             throw new AppException("Employee not found with ID: " + empNumber, HttpStatus.NOT_FOUND);
         }
-
         EmployeeEntity employeeEntity = optional.get();
         return employeeMapper.toEmployeeDto(employeeEntity);
     }
-
-
     @Override
     public EmployeeDto updateEmployeeData(long empNumber, EmployeeDto employeeDto) {
         try {
             Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(empNumber);
-
             if (!optionalEmployeeEntity.isPresent()){
                 throw new AppException("Employee Does Not Exist", HttpStatus.BAD_REQUEST);
             }
@@ -130,12 +124,10 @@ public class EmployeeService implements EmployeeServiceI {
     public List<Map<String, Object>> getEmployees() {
         return employeeRepository.getEmployeeList();
     }
-
     @Override
     public List<Map<String, Object>> getEmployeeCountByJobRole() {
         return employeeRepository.getEmployeeCountByJobRole();
     }
-
     public String generateEmpNumber(EmployeeEntity employeeEntity) {
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String empNumberPart = String.valueOf(employeeEntity.getEmpNumber());

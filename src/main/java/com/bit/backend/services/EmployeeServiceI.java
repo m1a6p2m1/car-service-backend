@@ -1,11 +1,9 @@
 package com.bit.backend.services;
-
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.FormDemoDto;
 
 import java.util.List;
 import java.util.Map;
-
 public interface EmployeeServiceI {
     EmployeeDto addEmployeeEntity(EmployeeDto employeeDto);
 
@@ -17,7 +15,8 @@ public interface EmployeeServiceI {
 
     EmployeeDto deleteData(long empNumber);
 
-    List<Map<String, Object>> getEmployees(); //get employee list to set supervisors list task_assign form supervisor field
+    //get employee list to set supervisors list task_assign form supervisor field
+    List<Map<String, Object>> getEmployees();
     List<Map<String, Object>>getEmployeeCountByJobRole();
 
     //update Employee status "Inactive"
@@ -25,6 +24,5 @@ public interface EmployeeServiceI {
 
     //check phoneNumber is already exist
     boolean isPhoneNumberIsExists(String phoneNumber);
-
     boolean isNicIsExists(String nic);
 }

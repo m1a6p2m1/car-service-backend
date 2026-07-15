@@ -1,5 +1,4 @@
 package com.bit.backend.controllers;
-
 import com.bit.backend.config.UserAuthProvider;
 import com.bit.backend.dtos.CustomerFeedbackDto;
 import com.bit.backend.dtos.EmployeeDto;
@@ -17,10 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-
 @RestController
 public class EmployeeController {
-
     private final EmployeeServiceI employeeServiceI;
     private final UserServiceI userServiceI;
     private final UserAuthProvider userAuthProvider;
@@ -30,7 +27,6 @@ public class EmployeeController {
         this.userServiceI = userServiceI;
         this.userAuthProvider = userAuthProvider;
     }
-
     @PostMapping(value = {"/employee"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<EmployeeDto> addForm(@RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file
     ){
@@ -44,9 +40,7 @@ public class EmployeeController {
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-
     @GetMapping("/employee")
     public ResponseEntity<List<EmployeeDto>> getData(){
         try {
@@ -56,7 +50,6 @@ public class EmployeeController {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @GetMapping("/employee/{empNumber}")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable long empNumber) {
         try {
@@ -66,10 +59,9 @@ public class EmployeeController {
             throw new AppException("Failed to get employee with ID " + empNumber + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
     @PutMapping("/employee/{empNumber}")
-    public ResponseEntity<EmployeeDto> updateEmployeeData(@PathVariable long empNumber, @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file
+    public ResponseEntity<EmployeeDto> updateEmployeeData(
+            @PathVariable long empNumber, @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file
     ){
         try {
             employeeDto.setImage(file.getBytes());
@@ -82,7 +74,6 @@ public class EmployeeController {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @DeleteMapping("/employee/{empNumber}")
     public ResponseEntity<EmployeeDto> deleteData(@PathVariable long empNumber){
         try {
@@ -92,21 +83,17 @@ public class EmployeeController {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     // employee logins
-
     @PostMapping("/employee/register")
     public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
         UserDto user = userServiceI.register(signUpDto);
         return ResponseEntity.created(URI.create("/employee/register/" + user.getId())).body(user);
     }
-
     @PutMapping ("/employee/register/{empNumber}")
     public ResponseEntity<UserDto> editRegistrationDetails(@PathVariable long empNumber, @RequestBody SignUpDto signUpDto) {
         UserDto user = userServiceI.register(signUpDto);
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
     }
-
     //get employee list to set supervisors list task_assign form supervisor field
     @GetMapping("/employee/get-employee-list")
     public ResponseEntity<List<Map<String, Object>>> getEmployees(){
@@ -117,7 +104,6 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @GetMapping("/employee/get-employee-count-by-role")
     public ResponseEntity<List<Map<String, Object>>> getEmployeeCountByJobRole(){
         try {
@@ -127,7 +113,6 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @PutMapping("/employee/update-status/{empNumber}")
     public ResponseEntity<EmployeeDto> updateEmpStatus(@PathVariable long empNumber){
         try {
@@ -137,7 +122,6 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @PutMapping("/employee/update-login-status/{empNumber}")
     public ResponseEntity<EmployeeDto> updateEmpLoginStatus(@PathVariable long empNumber){
         try {
@@ -147,14 +131,12 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     //check phoneNumber is already exist
     @GetMapping("/check-phone")
     public ResponseEntity<Boolean> checkPhoneNumber(@RequestParam String phoneNumber){
         boolean exists = employeeServiceI.isPhoneNumberIsExists(phoneNumber);
         return ResponseEntity.ok(exists);
     }
-
     @GetMapping("/check-nic")
     public ResponseEntity<Boolean> checkNicNumber(@RequestParam String nic){
         boolean exists = employeeServiceI.isNicIsExists(nic);
