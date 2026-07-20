@@ -213,4 +213,30 @@ public class TaskAssignController {
     public ResponseEntity<List<TaskAssignDto>> getAllDoneTasks(){
         return ResponseEntity.ok(taskAssignServiceI.getAllDoneTasks());
     }
+
+    //update subtask prices when generate bill button click
+    @PutMapping("/task-assign/{id}/sub-task-prices")
+    public ResponseEntity<?> updateSubTasksPrices(@PathVariable Long id, @RequestBody TaskAssignDto dto) {
+        try {
+
+            taskAssignServiceI.updateSubTaskPrices(id, dto);
+
+            return ResponseEntity.ok("Sub task prices updated successfully");
+
+
+        }catch(Exception e){
+
+            throw new AppException(
+                    "Request Failed with Error: " + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+
+        }
+    }
+    //Generate bill and save it in appointment table
+    @PostMapping("/task-assign/{id}/generate-bill")
+    public ResponseEntity<?> generateBill(@PathVariable Long id) throws Exception {
+        taskAssignServiceI.generateBill(id);
+        return ResponseEntity.ok("Bill Generated Successfully");
+    }
 }

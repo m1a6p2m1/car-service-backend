@@ -33,6 +33,9 @@ public class SubTaskAssignedEntity {
     @Column(name = "customer")
     private String customer;
 
+    @Column(name = "sub_task_price")
+    private Double subTaskPrice;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskAssignEntity taskAssignEntity;
@@ -112,5 +115,13 @@ public class SubTaskAssignedEntity {
 
     public void setCustomer(String customer) {
         this.customer = customer;
+    }
+
+    public Double getSubTaskPrice() {
+        return subTaskPrice;
+    }
+
+    public void setSubTaskPrice(Double subTaskPrice) {
+        this.subTaskPrice = subTaskPrice;
     }
 }

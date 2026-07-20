@@ -28,4 +28,6 @@ public interface AppointmentServiceI {
     List<AppointmentDto> getAppointmentsByDateAndTime(LocalDate date, LocalTime time, String currentNo);
 
     AppointmentDto getAppointmentsByAppointmentNo(String appointmentUniqueNo);
+
+    byte[] getBillPdf(Long id);
 }

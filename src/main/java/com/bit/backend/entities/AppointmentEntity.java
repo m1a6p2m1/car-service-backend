@@ -59,10 +59,14 @@ public class AppointmentEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Lob
+    @Column(name = "bill_pdf", columnDefinition = "LONGBLOB")
+    private byte[] billPdf;
+
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, DefinedTasksEntity definedTasks, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user) {
+    public AppointmentEntity(Long id, String appointmentUniqueNo, LocalDate date, LocalTime time, Integer bay, String status, DefinedTasksEntity definedTasks, String vehicleType, String licencePlate, String serviceType, String additionalServices, String customerName, String email, String contactNumber, Double totalServicePrice, String role, Long assignee, String assigneeName, User user, byte[] billPdf) {
         this.id = id;
         this.appointmentUniqueNo = appointmentUniqueNo;
         this.date = date;
@@ -82,6 +86,7 @@ public class AppointmentEntity {
         this.assignee = assignee;
         this.assigneeName = assigneeName;
         this.user = user;
+        this.billPdf = billPdf;
     }
 
     public Long getId() {
@@ -232,5 +237,13 @@ public class AppointmentEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public byte[] getBillPdf() {
+        return billPdf;
+    }
+
+    public void setBillPdf(byte[] billPdf) {
+        this.billPdf = billPdf;
     }
 }

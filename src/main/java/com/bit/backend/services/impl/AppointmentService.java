@@ -287,6 +287,27 @@ public class AppointmentService implements AppointmentServiceI {
         return "APP" + datePart + idPart;
     }
 
+    public byte[] getBillPdf(Long id) {
+
+        AppointmentEntity appointment = appointmentRepository.findById(id)
+                .orElseThrow(() ->
+                        new AppException(
+                                "Appointment not found",
+                                HttpStatus.NOT_FOUND
+                        ));
+
+        byte[] pdf = appointment.getBillPdf();
+
+        if(pdf == null){
+            throw new AppException(
+                    "Bill not generated yet",
+                    HttpStatus.NOT_FOUND
+            );
+        }
+
+        return pdf;
+    }
+
 //    @Override
 //    public List<AppointmentDto> getAppointmentsByCusId(Long id) {
 //        Optional<AppointmentEntity> optional = appointmentRepository.findById(id);

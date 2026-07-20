@@ -4,7 +4,9 @@ import com.bit.backend.dtos.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AppointmentServiceI;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,5 +113,17 @@ public class AppointmentController {
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/appointment/{id}/bill")
+    public ResponseEntity<byte[]> viewBill(@PathVariable Long id) {
+
+        byte[] pdf = appointmentServiceI.getBillPdf(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=bill.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 }

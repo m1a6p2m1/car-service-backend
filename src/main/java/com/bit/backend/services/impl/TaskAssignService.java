@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -30,13 +31,13 @@ public class TaskAssignService implements TaskAssignServiceI {
     private final CustomerServiceI customerServiceI;
     private final NotificationServiceI notificationServiceI;
     private final EmployeeRepository employeeRepository;
-
     private final AppointmentRepository appointmentRepository;
+    private final PdfGenerateService pdfGenerateService;
 
     public TaskAssignService(TaskAssignRepository taskAssignRepository, TaskAssignMapper taskAssignMapper,
                              DefinedTasksRepository definedTasksRepository, DefinedTasksMapper definedTasksMapper,
                              SubTasksAssignRepository subTasksAssignRepository, UserRepository userRepository,
-                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI, EmployeeRepository employeeRepository, AppointmentRepository appointmentRepository) {
+                             CustomerServiceI customerServiceI, NotificationServiceI notificationServiceI, EmployeeRepository employeeRepository, AppointmentRepository appointmentRepository, PdfGenerateService pdfGenerateService) {
         this.taskAssignRepository = taskAssignRepository;
         this.taskAssignMapper = taskAssignMapper;
         this.definedTasksRepository = definedTasksRepository;
@@ -47,6 +48,7 @@ public class TaskAssignService implements TaskAssignServiceI {
         this.notificationServiceI = notificationServiceI;
         this.employeeRepository = employeeRepository;
         this.appointmentRepository = appointmentRepository;
+        this.pdfGenerateService = pdfGenerateService;
     }
 
     @Override
@@ -473,5 +475,66 @@ public class TaskAssignService implements TaskAssignServiceI {
     public List<TaskAssignDto> getAllDoneTasks(){
         List<TaskAssignEntity> entityList = taskAssignRepository.findByStatus("Done");
         return taskAssignMapper.toTaskAssignDtoList(entityList);
+    }
+
+    //bill Generate - update the subtask prices in subtaskAssign table
+    @Override
+    public void updateSubTaskPrices(Long id, TaskAssignDto dto) {
+        if (dto.getSubTasks() == null) {return;}
+        for(SubTaskAssignDto subTaskDto : dto.getSubTasks() ) {
+            SubTaskAssignedEntity subTaskAssignedEntity = subTasksAssignRepository.findById(subTaskDto.getId())
+                    .orElseThrow(() ->
+                            new AppException("Sub Task not found: " + subTaskDto.getId(),HttpStatus.NOT_FOUND));
+
+            subTaskAssignedEntity.setSubTaskPrice(
+                    subTaskDto.getSubTaskPrice()
+            );
+
+
+            subTasksAssignRepository.save(subTaskAssignedEntity);
+        }
+    }
+
+    //Bill generate and save it in appointment table
+    public void generateBill(Long id) throws Exception{
+        //Get task details
+        TaskAssignEntity task = taskAssignRepository.findById(id)
+                .orElseThrow(()->
+                        new AppException("Task not Found", HttpStatus.NOT_FOUND));
+
+        //find the related appointment
+        AppointmentEntity appointment = appointmentRepository.findByAppointment_UniqueNo(task.getAppointmentUniqueNo())
+                .orElseThrow(()->
+                        new AppException("Appointment Not Found", HttpStatus.NOT_FOUND));
+
+        //Create BillDto
+        BillDto bill = new BillDto();
+
+        bill.setCustomerName(task.getCustomerName());
+        bill.setLicencePlate(task.getLicencePlate());
+        bill.setDate(task.getDate());
+        bill.setTaskName(task.getTaskName());
+        bill.setServiceType(task.getServiceType());
+
+        List<SubTaskAssignDto> billSubTasks = new ArrayList<>();
+        double totalCost = 0;
+        for (SubTaskAssignedEntity sub: task.getSubTasks()) {
+            SubTaskAssignDto dto = new SubTaskAssignDto();
+            dto.setId((sub.getId()));
+            dto.setDescription(sub.getDescription());
+            dto.setSubTaskPrice(sub.getSubTaskPrice());
+
+            billSubTasks.add(dto);
+            totalCost += sub.getSubTaskPrice();
+        }
+        bill.setSubTasks(billSubTasks);
+        bill.setTotalCost(totalCost);
+
+        //Generate pdf
+        byte[] pdf = pdfGenerateService.generateBillPdf(bill);
+
+        //Save pdf
+        appointment.setBillPdf(pdf);
+        appointmentRepository.save(appointment);
     }
 }

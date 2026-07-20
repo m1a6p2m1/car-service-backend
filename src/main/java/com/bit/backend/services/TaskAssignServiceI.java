@@ -32,4 +32,7 @@ public interface TaskAssignServiceI {
     TaskAssignDto getDetailsByLicensePlate(LocalDate date, String licencePlate);
 
     List<TaskAssignDto> getAllDoneTasks();
+
+    void updateSubTaskPrices(Long id, TaskAssignDto dto);
+    void generateBill(Long id) throws Exception;
 }
