@@ -388,56 +388,214 @@ public class TaskAssignService implements TaskAssignServiceI {
     }
 
 
+//    @Override
+//    public TaskAssignDto updateData(long taskId, TaskAssignDto taskAssignDto) {
+//        int count = 0;
+//        try {
+//            Optional<TaskAssignEntity> optionalTaskAssignEntity = taskAssignRepository.findById(taskId);
+//
+//            if(!optionalTaskAssignEntity.isPresent()){
+//                throw new AppException("Task Assign Does Not Exist", HttpStatus.BAD_REQUEST);
+//            }
+//
+//            count = optionalTaskAssignEntity.get().getSubTasks().size() + 1;
+//            taskAssignDto.setUniqueTaskNo(optionalTaskAssignEntity.get().getUniqueTaskNo());
+//            TaskAssignEntity newTaskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
+//
+//            newTaskAssignEntity.setId(taskId);
+//            String customer = newTaskAssignEntity.getCustomerName();
+//            newTaskAssignEntity.setUniqueTaskNo(taskAssignDto.getUniqueTaskNo());
+//
+//            String uniqueTaskNo = optionalTaskAssignEntity.get().getUniqueTaskNo();
+//            if (uniqueTaskNo == null || uniqueTaskNo.equals("") || uniqueTaskNo.equals(null)) {
+//                uniqueTaskNo = generateTaskNumber(optionalTaskAssignEntity.get());
+//                newTaskAssignEntity.setUniqueTaskNo(uniqueTaskNo);
+//                count = 0;
+//            }
+//
+//            TaskAssignEntity taskAssignEntity = taskAssignRepository.save(newTaskAssignEntity);
+//            TaskAssignDto responseTaskAssignDto = taskAssignMapper.toTaskAssignDto(taskAssignEntity);
+//            Long superVisorId = taskAssignEntity.getSupervisor();
+//
+//            if (responseTaskAssignDto != null) {
+//                List<SubTaskAssignedEntity> subTaskAssignedEntityList = taskAssignEntity.getSubTasks();
+//
+//                for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
+//                    String subTaskNo = "";
+//                    if (subTaskAssignedEntity.getUniqueSubTaskNo() == null || subTaskAssignedEntity.getUniqueSubTaskNo().equals("") || subTaskAssignedEntity.getUniqueSubTaskNo().equals(null)) {
+//                        subTaskNo  = generateSubTaskNumber(uniqueTaskNo, subTaskAssignedEntity, count);
+//                    }
+//                    subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
+//                    subTaskAssignedEntity.setSupervisor(superVisorId);
+//                    subTaskAssignedEntity.setMainUniqueTaskNo(uniqueTaskNo);
+//                    subTaskAssignedEntity.setCustomer(customer);
+//                    count = count + 1;
+//                }
+//
+//                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
+//            }
+//
+//            return responseTaskAssignDto;
+//        } catch (Exception e){
+//            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @Override
+    @Transactional
     public TaskAssignDto updateData(long taskId, TaskAssignDto taskAssignDto) {
-        int count = 0;
+
         try {
-            Optional<TaskAssignEntity> optionalTaskAssignEntity = taskAssignRepository.findById(taskId);
 
-            if(!optionalTaskAssignEntity.isPresent()){
-                throw new AppException("Task Assign Does Not Exist", HttpStatus.BAD_REQUEST);
+            TaskAssignEntity existingTask =
+                    taskAssignRepository.findById(taskId)
+                            .orElseThrow(() ->
+                                    new AppException(
+                                            "Task Assign Does Not Exist",
+                                            HttpStatus.BAD_REQUEST
+                                    ));
+
+
+            // keep existing task number
+            String uniqueTaskNo = existingTask.getUniqueTaskNo();
+
+            if(uniqueTaskNo == null || uniqueTaskNo.isEmpty()){
+                uniqueTaskNo = generateTaskNumber(existingTask);
+                existingTask.setUniqueTaskNo(uniqueTaskNo);
             }
 
-            count = optionalTaskAssignEntity.get().getSubTasks().size() + 1;
-            taskAssignDto.setUniqueTaskNo(optionalTaskAssignEntity.get().getUniqueTaskNo());
-            TaskAssignEntity newTaskAssignEntity = taskAssignMapper.toTaskAssignEntity(taskAssignDto);
 
-            newTaskAssignEntity.setId(taskId);
-            String customer = newTaskAssignEntity.getCustomerName();
-            newTaskAssignEntity.setUniqueTaskNo(taskAssignDto.getUniqueTaskNo());
+            /*
+             * Update main task fields only
+             * Do NOT replace entity
+             */
+            existingTask.setAppointmentUniqueNo(
+                    taskAssignDto.getAppointmentUniqueNo()
+            );
 
-            String uniqueTaskNo = optionalTaskAssignEntity.get().getUniqueTaskNo();
-            if (uniqueTaskNo == null || uniqueTaskNo.equals("") || uniqueTaskNo.equals(null)) {
-                uniqueTaskNo = generateTaskNumber(optionalTaskAssignEntity.get());
-                newTaskAssignEntity.setUniqueTaskNo(uniqueTaskNo);
-                count = 0;
-            }
+            existingTask.setDate(taskAssignDto.getDate());
+            existingTask.setTime(taskAssignDto.getTime());
+            existingTask.setTaskName(taskAssignDto.getTaskName());
+            existingTask.setServiceType(taskAssignDto.getServiceType());
+            existingTask.setTaskCreatedBy(taskAssignDto.getTaskCreatedBy());
+            existingTask.setCustomerName(taskAssignDto.getCustomerName());
+            existingTask.setLicencePlate(taskAssignDto.getLicencePlate());
+            existingTask.setVehicleType(taskAssignDto.getVehicleType());
+            existingTask.setEmail(taskAssignDto.getEmail());
+            existingTask.setDescription(taskAssignDto.getDescription());
+            existingTask.setStatus(taskAssignDto.getStatus());
+            existingTask.setCustomerId(taskAssignDto.getCustomerId());
+            existingTask.setSupervisor(taskAssignDto.getSupervisor());
 
-            TaskAssignEntity taskAssignEntity = taskAssignRepository.save(newTaskAssignEntity);
-            TaskAssignDto responseTaskAssignDto = taskAssignMapper.toTaskAssignDto(taskAssignEntity);
-            Long superVisorId = taskAssignEntity.getSupervisor();
 
-            if (responseTaskAssignDto != null) {
-                List<SubTaskAssignedEntity> subTaskAssignedEntityList = taskAssignEntity.getSubTasks();
+            String customer = existingTask.getCustomerName();
+            Long supervisorId = existingTask.getSupervisor();
 
-                for (SubTaskAssignedEntity subTaskAssignedEntity: subTaskAssignedEntityList) {
-                    String subTaskNo = "";
-                    if (subTaskAssignedEntity.getUniqueSubTaskNo() == null || subTaskAssignedEntity.getUniqueSubTaskNo().equals("") || subTaskAssignedEntity.getUniqueSubTaskNo().equals(null)) {
-                        subTaskNo  = generateSubTaskNumber(uniqueTaskNo, subTaskAssignedEntity, count);
+
+            /*
+             * Update subtasks
+             */
+            if(taskAssignDto.getSubTasks()!=null){
+
+                int count = existingTask.getSubTasks().size()+1;
+
+                for(SubTaskAssignDto subDto : taskAssignDto.getSubTasks()){
+
+                    SubTaskAssignedEntity subTask;
+
+                    // existing subtask
+                    if(subDto.getId()!=null){
+
+                        subTask = existingTask.getSubTasks()
+                                .stream()
+                                .filter(s -> s.getId()
+                                        .equals(subDto.getId()))
+                                .findFirst()
+                                .orElse(null);
+
+                        if(subTask == null){
+                            continue;
+                        }
+
                     }
-                    subTaskAssignedEntity.setUniqueSubTaskNo(subTaskNo);
-                    subTaskAssignedEntity.setSupervisor(superVisorId);
-                    subTaskAssignedEntity.setMainUniqueTaskNo(uniqueTaskNo);
-                    subTaskAssignedEntity.setCustomer(customer);
-                    count = count + 1;
+                    // new subtask
+                    else {
+
+                        subTask = new SubTaskAssignedEntity();
+                        existingTask.addSubTask(subTask);
+
+                    }
+                    /*
+                     * Update only editable fields
+                     */
+                    subTask.setDescription(
+                            subDto.getDescription()
+                    );
+
+                    subTask.setAssignedUserId(
+                            subDto.getAssignedUserId()
+                    );
+                    /*
+                     * KEEP old status
+                     */
+                    if(subTask.getStatus()==null){
+                        subTask.setStatus("pending");
+                    }
+                    /*
+                     * Generate sub task number only once
+                     */
+                    if(subTask.getUniqueSubTaskNo()==null ||
+                            subTask.getUniqueSubTaskNo().isEmpty()){
+
+                        subTask.setUniqueSubTaskNo(
+                                generateSubTaskNumber(
+                                        uniqueTaskNo,
+                                        subTask,
+                                        count
+                                )
+                        );
+
+                    }
+                    subTask.setSupervisor(supervisorId);
+                    subTask.setMainUniqueTaskNo(uniqueTaskNo);
+                    subTask.setCustomer(customer);
+
+                    /*
+                     * Update technician name
+                     */
+                    if(subTask.getAssignedUserId()!=null){
+
+                        EmployeeEntity employee =
+                                employeeRepository
+                                        .findById(
+                                                subTask.getAssignedUserId()
+                                        )
+                                        .orElse(null);
+
+
+                        if(employee!=null){
+                            subTask.setAssignUserName(
+                                    employee.getFullName()
+                            );
+                        }
+
+                    }
+                    count++;
                 }
-
-                List<SubTaskAssignDto> subTaskAssignDtoList = taskAssignMapper.toSubTaskAssignDto(subTasksAssignRepository.saveAll(subTaskAssignedEntityList));
             }
+            TaskAssignEntity saved =
+                    taskAssignRepository.save(existingTask);
 
-            return responseTaskAssignDto;
-        } catch (Exception e){
-            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return taskAssignMapper.toTaskAssignDto(saved);
+
+
+        }catch(Exception e){
+
+            throw new AppException(
+                    "Request Failed with Error: "+e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+
         }
     }
 
