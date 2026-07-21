@@ -21,16 +21,15 @@ public class ItemController {
         this.itemServiceI = itemServiceI;
     }
 
-    @PostMapping(value = {"/item"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ItemDto> addForm(@RequestPart("itemForm") ItemDto itemDto, @RequestPart("image") MultipartFile file
-    ){
+    @PostMapping("/item")
+    public ResponseEntity<ItemDto> addForm(@RequestBody ItemDto itemDto){
         try {
 //            itemDto.setImage(file.getBytes());
 //            itemDto.setImageName(file.getOriginalFilename());
 //            itemDto.setImageType(file.getContentType());
 
             ItemDto itemDtoResponse = itemServiceI.addItemEntity(itemDto);
-            return ResponseEntity.created(URI.create("/item"+ itemDtoResponse.getItemCode())).body(itemDtoResponse);
+            return ResponseEntity.ok(itemDtoResponse);
         }catch (Exception e){
             throw new AppException("Request fail with error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -58,7 +57,7 @@ public class ItemController {
     }
 
     @PutMapping("/item/{itemId}")
-    public ResponseEntity<ItemDto> updateForm(@PathVariable long itemId, @RequestPart("itemForm") ItemDto itemDto, @RequestPart("image") MultipartFile file){
+    public ResponseEntity<ItemDto> updateForm(@PathVariable long itemId, @RequestBody ItemDto itemDto){
         try {
 //            itemDto.setImage(file.getBytes());
 //            itemDto.setImageName(file.getOriginalFilename());

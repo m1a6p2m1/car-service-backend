@@ -20,7 +20,7 @@ public class SupplierController {
     public ResponseEntity<SupplierDto> addForm(@RequestBody SupplierDto supplierDto){
         try {
             SupplierDto supplierDtoResponse = supplierServiceI.addSupplierEntity(supplierDto);
-            return ResponseEntity.created(URI.create("/supplier"+supplierDtoResponse.getSupplierName())).body(supplierDtoResponse);
+            return ResponseEntity.ok(supplierDtoResponse);
         }catch (Exception e){
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
