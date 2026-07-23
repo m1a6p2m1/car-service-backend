@@ -113,6 +113,7 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //Enable and Disable the Employee Login (EmployeeStatus update to the Active and Inactive)
     @PutMapping("/employee/update-status/{empNumber}")
     public ResponseEntity<EmployeeDto> updateEmpStatus(@PathVariable long empNumber){
         try {
@@ -122,15 +123,15 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("/employee/update-login-status/{empNumber}")
-    public ResponseEntity<EmployeeDto> updateEmpLoginStatus(@PathVariable long empNumber){
-        try {
-            EmployeeDto employeeDtoResponse = employeeServiceI.updateEmpStatus(empNumber);
-            return ResponseEntity.ok(employeeDtoResponse);
-        }catch (Exception e){
-            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @PutMapping("/employee/update-login-status/{empNumber}")
+//    public ResponseEntity<EmployeeDto> updateEmpLoginStatus(@PathVariable long empNumber){
+//        try {
+//            EmployeeDto employeeDtoResponse = employeeServiceI.updateEmpStatus(empNumber);
+//            return ResponseEntity.ok(employeeDtoResponse);
+//        }catch (Exception e){
+//            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
     //check phoneNumber is already exist
     @GetMapping("/check-phone")
     public ResponseEntity<Boolean> checkPhoneNumber(@RequestParam String phoneNumber){

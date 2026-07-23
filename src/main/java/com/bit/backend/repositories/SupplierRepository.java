@@ -4,4 +4,8 @@ import com.bit.backend.entities.SupplierEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> {
+
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByNic(String nic);
 }

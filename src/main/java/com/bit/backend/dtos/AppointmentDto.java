@@ -25,7 +25,7 @@ public class AppointmentDto {
     private String login;
     private Long assignee;
     private String assigneeName;
-
+    private boolean billCreated;
 
     public AppointmentDto() {
     }
@@ -227,4 +227,12 @@ public class AppointmentDto {
 //    public LocalTime timeSlot() {
 //        return timeSlot;
 //    }
+
+    public boolean isBillCreated() {
+        return billCreated;
+    }
+
+    public void setBillCreated(boolean billCreated) {
+        this.billCreated = billCreated;
+    }
 }

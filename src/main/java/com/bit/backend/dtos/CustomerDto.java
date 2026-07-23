@@ -12,11 +12,12 @@ public class CustomerDto {
     private String licencePlate;
     private String vehicleType;
     private String vehicleModel;
+    private boolean loginCreated;
 
     public CustomerDto() {
     }
 
-    public CustomerDto(long cusId, String firstName, String lastName, String email, String contactNumber, String gender, String address, String nic, String licencePlate, String vehicleType, String vehicleModel) {
+    public CustomerDto(long cusId, String firstName, String lastName, String email, String contactNumber, String gender, String address, String nic, String licencePlate, String vehicleType, String vehicleModel, boolean loginCreated) {
         this.cusId = cusId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +29,7 @@ public class CustomerDto {
         this.licencePlate = licencePlate;
         this.vehicleType = vehicleType;
         this.vehicleModel = vehicleModel;
+        this.loginCreated = loginCreated;
     }
 
     public long getCusId() {
@@ -116,5 +118,13 @@ public class CustomerDto {
 
     public void setVehicleModel(String vehicleModel) {
         this.vehicleModel = vehicleModel;
+    }
+
+    public boolean isLoginCreated() {
+        return loginCreated;
+    }
+
+    public void setLoginCreated(boolean loginCreated) {
+        this.loginCreated = loginCreated;
     }
 }

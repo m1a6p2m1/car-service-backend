@@ -632,7 +632,26 @@ public class TaskAssignService implements TaskAssignServiceI {
     @Override
     public List<TaskAssignDto> getAllDoneTasks(){
         List<TaskAssignEntity> entityList = taskAssignRepository.findByStatus("Done");
-        return taskAssignMapper.toTaskAssignDtoList(entityList);
+        List<TaskAssignDto> dtoList = taskAssignMapper.toTaskAssignDtoList(entityList);
+
+        for (int i = 0; i < entityList.size(); i++) {
+            TaskAssignEntity task = entityList.get(i);
+            AppointmentEntity appointment =
+                    appointmentRepository
+                            .findByAppointmentUniqueNo(
+                                    task.getAppointmentUniqueNo()
+                            )
+                            .orElse(null);
+            if (appointment != null) {
+                dtoList.get(i).setAppointmentId(appointment.getId());
+                dtoList.get(i).setAppointmentUniqueNo(appointment.getAppointmentUniqueNo());
+                dtoList.get(i).setCustomerName(appointment.getCustomerName());
+                dtoList.get(i).setBillCreated(appointment.getBillPdf() != null);
+            }else{
+                dtoList.get(i).setBillCreated(false);
+            }
+        }
+        return dtoList;
     }
 
     //bill Generate - update the subtask prices in subtaskAssign table

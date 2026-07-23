@@ -9,4 +9,6 @@ public interface SupplierServiceI {
     List<SupplierDto> getData();
     SupplierDto updateForm(long supplierId, SupplierDto supplierDto);
     SupplierDto deleteData(long supplierId);
+    boolean isPhoneNumberIsExists(String phoneNumber);
+    boolean isNicIsExists(String nic);
 }
