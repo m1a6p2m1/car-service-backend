@@ -56,5 +56,17 @@ public class SupplierController {
         }
     }
 
+    //check phoneNumber is already exist
+    @GetMapping("/supplier/check-phone")
+    public ResponseEntity<Boolean> checkPhoneNumber(@RequestParam String phoneNumber){
+        boolean exists = supplierServiceI.isPhoneNumberIsExists(phoneNumber);
+        return ResponseEntity.ok(exists);
+    }
+    @GetMapping("/supplier/check-nic")
+    public ResponseEntity<Boolean> checkNicNumber(@RequestParam String nic){
+        boolean exists = supplierServiceI.isNicIsExists(nic);
+        return ResponseEntity.ok(exists);
+    }
+
 }
 

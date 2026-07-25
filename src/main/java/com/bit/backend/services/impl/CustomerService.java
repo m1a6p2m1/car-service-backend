@@ -1,6 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.CustomerDto;
+import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.entities.CustomerEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.CustomerMapper;
@@ -47,6 +48,11 @@ public class CustomerService implements CustomerServiceI {
         try {
             List<CustomerEntity> customerEntityList = customerRepository.findAll();
             List<CustomerDto> customerDtoList = customerMapper.toCustomerDtoList(customerEntityList);
+            for (CustomerDto dto : customerDtoList) {
+                boolean loginCreated =
+                        userRepository.existsByCustomer_CusId(dto.getCusId());
+                dto.setLoginCreated(loginCreated);
+            }
             return customerDtoList;
         }catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -214,7 +214,21 @@ public class AppointmentService implements AppointmentServiceI {
 
     @Override
     public List<AppointmentDto> getAllAppointments() {
-        return appointmentMapper.toAppointmentDtoList(appointmentRepository.findAll());
+        try{
+           List<AppointmentEntity> entities = appointmentRepository.findAll();
+            return entities.stream()
+                    .map(entity -> {
+                        AppointmentDto dto = appointmentMapper.toAppointmentDto(entity);
+                        dto.setBillCreated(entity.getBillPdf() != null);
+                        return dto;
+                    })
+                    .toList();
+//           List<AppointmentDto> appointmentDtoList = appointmentMapper.toAppointmentDtoList(appointmentEntityList);
+//           return appointmentDtoList;
+        }catch (Exception e){
+            throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        //return appointmentMapper.toAppointmentDtoList(appointmentRepository.findAll());
     }
 
     @Override
@@ -258,7 +272,14 @@ public class AppointmentService implements AppointmentServiceI {
         if (appointments.isEmpty()) {
             throw new AppException("No appointments found for customer ID: " + uniqueCusNo, HttpStatus.NOT_FOUND);
         }
-        return appointmentMapper.toAppointmentDtoList(appointments);
+        return appointments.stream()
+                .map(entity -> {
+                    AppointmentDto dto = appointmentMapper.toAppointmentDto(entity);
+                    dto.setBillCreated(entity.getBillPdf() != null);
+                    return dto;
+                })
+                .toList();
+//        return appointmentMapper.toAppointmentDtoList(appointments);
     }
 
     // get Appointment numbers related to the date and time(taskAssign)

@@ -153,8 +153,22 @@ public class UserController {
     }
 
     @PutMapping("/employee-login/edit-credentials/{employeeId}")
-    public ResponseEntity<EmployeeCredentialDto> updateEmployeeLogin(@PathVariable Long employeeId, @RequestBody EmployeeCredentialDto dto){
+    public ResponseEntity<EmployeeCredentialDto> updateEmployeeLogin(@PathVariable long employeeId, @RequestBody EmployeeCredentialDto dto){
         return ResponseEntity.ok(userServiceI.updateEmployeeLogin(employeeId, dto));
+    }
+
+    //customer form get user credentials
+    @GetMapping("/customer-login/get-credentials/{customerId}")
+    public ResponseEntity<CustomerCredentialDto> getCustomerLogin(
+            @PathVariable Long customerId) {
+
+        return ResponseEntity.ok(
+                userServiceI.getCustomerLogin(customerId));
+    }
+
+    @PutMapping("/customer-login/edit-credentials/{customerId}")
+    public ResponseEntity<CustomerCredentialDto> updateEmployeeLogin(@PathVariable long customerId, @RequestBody CustomerCredentialDto dto){
+        return ResponseEntity.ok(userServiceI.updateCustomerLogin(customerId, dto));
     }
 
 }

@@ -44,4 +44,6 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     //get Appointments details when select the appointment no(taskAssign)
     @Query("SELECT a FROM AppointmentEntity a WHERE a.appointmentUniqueNo = :no")
     Optional<AppointmentEntity> findByAppointment_UniqueNo(@Param("no") String no);
+
+    Optional<AppointmentEntity> findByAppointmentUniqueNo(String appointmentUniqueNo);
 }

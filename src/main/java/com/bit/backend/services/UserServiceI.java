@@ -32,4 +32,7 @@ public interface UserServiceI {
     EmployeeCredentialDto getEmployeeLogin(Long employeeId);
 
     EmployeeCredentialDto updateEmployeeLogin(Long employeeId, EmployeeCredentialDto dto);
+
+    CustomerCredentialDto getCustomerLogin(Long customerId);
+    CustomerCredentialDto updateCustomerLogin(Long customerId, CustomerCredentialDto dto);
 }

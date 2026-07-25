@@ -358,4 +358,52 @@ public class UserService implements UserServiceI {
         dto.setPassword(null);
         return dto;
     }
+
+    @Override
+    public CustomerCredentialDto getCustomerLogin(Long customerId) {
+
+        User user = userRepository
+                .findByCustomer_CusId(customerId)
+                .orElseThrow(() ->
+                        new AppException(
+                                "Login not found",
+                                HttpStatus.NOT_FOUND));
+
+        CustomerCredentialDto dto = new CustomerCredentialDto();
+
+        dto.setCustomerId(customerId);
+        dto.setLogin(user.getLogin());
+
+        // NEVER set password
+
+        return dto;
+    }
+
+    @Override
+    public CustomerCredentialDto updateCustomerLogin(Long customerId, CustomerCredentialDto dto){
+        User user = userRepository.findByCustomer_CusId(customerId)
+                .orElseThrow(() ->
+                        new AppException("User Not Found", HttpStatus.NOT_FOUND));
+
+        // Check if the username already belongs to another user
+        Optional<User> existing = userRepository.findByLogin(dto.getLogin());
+
+        if (existing.isPresent()
+                && !existing.get().getId().equals(user.getId())) {
+
+            throw new AppException(
+                    "Username already exists",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Update username
+        user.setLogin(dto.getLogin());
+
+        if(dto.getPassword() != null && !dto.getPassword().trim().isEmpty()){
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        userRepository.save(user);
+        dto.setPassword(null);
+        return dto;
+    }
 }

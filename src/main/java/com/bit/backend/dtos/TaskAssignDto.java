@@ -22,6 +22,8 @@ public class TaskAssignDto {
     private List<SubTaskAssignDto> subTasks;
     private Long customerId;
     private Long supervisor;
+    private Long appointmentId;
+    private boolean billCreated;
 
     public TaskAssignDto() {
     }
@@ -180,5 +182,21 @@ public class TaskAssignDto {
 
     public void setSupervisor(Long supervisor) {
         this.supervisor = supervisor;
+    }
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public boolean isBillCreated() {
+        return billCreated;
+    }
+
+    public void setBillCreated(boolean billCreated) {
+        this.billCreated = billCreated;
     }
 }

@@ -81,4 +81,15 @@ public class SupplierService implements SupplierServiceI {
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //check phoneNumber is already exist
+    @Override
+    public boolean isPhoneNumberIsExists(String phoneNumber){
+        return supplierRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public boolean isNicIsExists(String nic){
+        return supplierRepository.existsByNic(nic);
+    }
 }
