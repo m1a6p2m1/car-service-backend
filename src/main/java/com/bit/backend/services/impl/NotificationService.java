@@ -39,16 +39,16 @@ public class NotificationService implements NotificationServiceI {
         NotificationEntity savedNotification = notificationRepository.save(notificationEntity);
         NotificationDto savedDto = notificationMapper.toNotificationDto(savedNotification);
 
-        String htmlBody = """
-    <div style="font-family: Arial, sans-serif;">
-        <h2 style="color: #4CAF50;">📢 Carservice Notification </h2>
-        <p>Hello Student,</p>
-        <p>Your task has been <strong>successfully started</strong>.</p>
-        <p>Thank you for using the car service portal.</p>
-        <hr>
-        <small>This is an automated message. Do not reply.</small>
-    </div>
-""";
+//        String htmlBody = """
+//    <div style="font-family: Arial, sans-serif;">
+//        <h2 style="color: #4CAF50;">📢 Carservice Notification </h2>
+//        <p>Hello Student,</p>
+//        <p>Your task has been <strong>successfully started</strong>.</p>
+//        <p>Thank you for using the car service portal.</p>
+//        <hr>
+//        <small>This is an automated message. Do not reply.</small>
+//    </div>
+//""";
 
 //        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 //        simpleMailMessage.setFrom("chamith109mendes@gmail.com"); // CAR SERVICE EMAIL
@@ -56,19 +56,19 @@ public class NotificationService implements NotificationServiceI {
 //        simpleMailMessage.setSubject(notificationDto.getMessage());
 //        simpleMailMessage.setText("Your assignment has been uploaded successfully!");
 
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+//        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         // true = multipart message
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+//        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        helper.setFrom("carservice@gmail.com"); // add the correct mail
-        helper.setTo(notificationDto.getEmail());
-        helper.setSubject("Demo Email"); // Add correct subject
-        helper.setText(htmlBody, true); // Set true for HTML
-
-        if (!notificationDto.getEmail().isEmpty()) {
-            javaMailSender.send(mimeMessage);
-        }
+//        helper.setFrom("carservice@gmail.com"); // add the correct mail
+//        helper.setTo(notificationDto.getEmail());
+//        helper.setSubject("Demo Email"); // Add correct subject
+//        helper.setText(htmlBody, true); // Set true for HTML
+//
+//        if (!notificationDto.getEmail().isEmpty()) {
+//            javaMailSender.send(mimeMessage);
+//        }
 
         return savedDto;
     }

@@ -63,6 +63,16 @@ public class TaskAssignController {
         }
     }
 
+    @GetMapping("/task-assign/get-by-no/{uniqueNo}")
+    public ResponseEntity<TaskAssignDto> getTaskByNo(@PathVariable String uniqueNo) {
+        try {
+            TaskAssignDto taskAssignDto = taskAssignServiceI.getTaskByNo(uniqueNo);
+            return ResponseEntity.ok(taskAssignDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to get task with no " + uniqueNo + ". Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PutMapping("/task-assign/{taskId}")
     public ResponseEntity<TaskAssignDto> updateData(@PathVariable long taskId, @RequestBody TaskAssignDto taskAssignDto){

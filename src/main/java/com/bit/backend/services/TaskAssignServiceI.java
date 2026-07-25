@@ -35,4 +35,6 @@ public interface TaskAssignServiceI {
 
     void updateSubTaskPrices(Long id, TaskAssignDto dto);
     void generateBill(Long id) throws Exception;
+
+    TaskAssignDto getTaskByNo(String taskNo);
 }

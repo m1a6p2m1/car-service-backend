@@ -695,4 +695,14 @@ public class TaskAssignService implements TaskAssignServiceI {
         appointment.setBillPdf(pdf);
         appointmentRepository.save(appointment);
     }
+
+    @Override
+    public TaskAssignDto getTaskByNo(String taskNo) {
+        TaskAssignEntity entity = taskAssignRepository
+                .findByUniqueTaskNo(taskNo)
+                .orElseThrow(() ->
+                        new AppException("Task Not Found",
+                                HttpStatus.NOT_FOUND));
+        return taskAssignMapper.toTaskAssignDto(entity);
+    }
 }

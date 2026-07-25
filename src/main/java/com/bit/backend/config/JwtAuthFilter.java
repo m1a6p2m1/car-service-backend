@@ -25,35 +25,46 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (header != null) {
-            String[] authElements = header.split(" ");
+        String token = resolveToken(request);
 
-            if (authElements.length == 2
-                    && "Bearer".equals(authElements[0])) {
-                try {
-
-                    // extract login
-//                    if (userDto.getLogin() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//                        return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
-//                    }
-
-                    if ("GET".equals(request.getMethod())) {
-                        SecurityContextHolder.getContext().setAuthentication(
-                                userAuthProvider.validateToken(authElements[1]));
-                    } else {
-                        SecurityContextHolder.getContext().setAuthentication(
-                                userAuthProvider.validateTokenStrongly(authElements[1]));
-                    }
-                } catch (RuntimeException e) {
-                    SecurityContextHolder.clearContext();
-                    throw e;
+        if (token != null) {
+            try {
+                if ("GET".equals(request.getMethod())) {
+                    SecurityContextHolder.getContext().setAuthentication(
+                            userAuthProvider.validateToken(token));
+                } else {
+                    SecurityContextHolder.getContext().setAuthentication(
+                            userAuthProvider.validateTokenStrongly(token));
                 }
+            } catch (RuntimeException e) {
+                SecurityContextHolder.clearContext();
+                throw e;
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Normal requests carry the token in the Authorization header.
+     * SSE is the exception: EventSource cannot set headers, so for the
+     * notification stream endpoint only, we accept it as a ?token= query param.
+     */
+    private String resolveToken(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null) {
+            String[] authElements = header.split(" ");
+            if (authElements.length == 2 && "Bearer".equals(authElements[0])) {
+                return authElements[1];
+            }
+        }
+
+        if (request.getRequestURI().startsWith("/notification/stream")) {
+            return request.getParameter("token");
+        }
+
+        return null;
     }
 
     @Override
