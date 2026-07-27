@@ -30,4 +30,6 @@ public interface AppointmentServiceI {
     AppointmentDto getAppointmentsByAppointmentNo(String appointmentUniqueNo);
 
     byte[] getBillPdf(Long id);
+
+    void updatePaymentStatus(Long id);
 }

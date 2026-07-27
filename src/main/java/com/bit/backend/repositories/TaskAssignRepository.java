@@ -49,4 +49,6 @@ public interface TaskAssignRepository extends JpaRepository<TaskAssignEntity, Lo
 
 
     List<TaskAssignEntity> findByStatus(String status);
+
+    Optional<TaskAssignEntity> findByAppointmentUniqueNo(String appointmentUniqueNo);
 }

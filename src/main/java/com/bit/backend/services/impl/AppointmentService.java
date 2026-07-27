@@ -4,10 +4,7 @@ import com.bit.backend.dtos.*;
 import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AppointmentMapper;
-import com.bit.backend.repositories.AppointmentRepository;
-import com.bit.backend.repositories.DefinedTasksRepository;
-import com.bit.backend.repositories.TaskRepository;
-import com.bit.backend.repositories.UserRepository;
+import com.bit.backend.repositories.*;
 import com.bit.backend.services.AppointmentServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,7 @@ public class AppointmentService implements AppointmentServiceI {
     private final AppointmentMapper appointmentMapper;
     private final UserRepository userRepository;
     private final DefinedTasksRepository definedTasksRepository;
+    private final TaskAssignRepository taskAssignRepository;
 
     private static final LocalTime OPEN = LocalTime.of(9, 0);
     private static final LocalTime CLOSE_WEEKDAY = LocalTime.of(18, 0);
@@ -35,11 +33,12 @@ public class AppointmentService implements AppointmentServiceI {
     private static final int SLOT_MINUTES = 60;
     private static final int MAX_BAYS = 3;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, UserRepository userRepository, DefinedTasksRepository definedTasksRepository) {
+    public AppointmentService(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, UserRepository userRepository, DefinedTasksRepository definedTasksRepository, TaskAssignRepository taskAssignRepository) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
         this.userRepository = userRepository;
         this.definedTasksRepository = definedTasksRepository;
+        this.taskAssignRepository = taskAssignRepository;
     }
 
     @Override
@@ -220,6 +219,11 @@ public class AppointmentService implements AppointmentServiceI {
                     .map(entity -> {
                         AppointmentDto dto = appointmentMapper.toAppointmentDto(entity);
                         dto.setBillCreated(entity.getBillPdf() != null);
+                        dto.setBillStatus(entity.getBillStatus());
+                        taskAssignRepository.findByAppointmentUniqueNo(entity.getAppointmentUniqueNo())
+                                .ifPresent(task ->
+                                        dto.setTaskStatus(task.getStatus()));
+
                         return dto;
                     })
                     .toList();
@@ -327,6 +331,17 @@ public class AppointmentService implements AppointmentServiceI {
         }
 
         return pdf;
+    }
+
+    @Override
+    public void updatePaymentStatus(Long id) {
+        AppointmentEntity appointment = appointmentRepository.findById(id)
+                .orElseThrow(()->
+                        new AppException("Appointment Not Found",
+                                HttpStatus.NOT_FOUND)
+                );
+        appointment.setBillStatus("Payment Done");
+        appointmentRepository.save(appointment);
     }
 
 //    @Override

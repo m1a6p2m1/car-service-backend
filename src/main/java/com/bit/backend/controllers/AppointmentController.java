@@ -126,4 +126,11 @@ public class AppointmentController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
+
+    //update the appointment form status field when customer made the payment
+    @PutMapping("/all-appointments/payment-done/{id}")
+    public ResponseEntity<String> updatePaymentStatus(@PathVariable Long id) {
+        appointmentServiceI.updatePaymentStatus(id);
+        return ResponseEntity.ok("Payment Status update Successfully");
+    }
 }

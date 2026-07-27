@@ -629,6 +629,8 @@ public class TaskAssignService implements TaskAssignServiceI {
         return taskAssignMapper.toTaskAssignDto(details);
     }
 
+
+    //get all done tasks from task assign form for bill Generate form table
     @Override
     public List<TaskAssignDto> getAllDoneTasks(){
         List<TaskAssignEntity> entityList = taskAssignRepository.findByStatus("Done");

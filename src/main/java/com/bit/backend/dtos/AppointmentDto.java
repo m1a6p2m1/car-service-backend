@@ -26,6 +26,8 @@ public class AppointmentDto {
     private Long assignee;
     private String assigneeName;
     private boolean billCreated;
+    private String taskStatus;
+    private String billStatus;
 
     public AppointmentDto() {
     }
@@ -234,5 +236,21 @@ public class AppointmentDto {
 
     public void setBillCreated(boolean billCreated) {
         this.billCreated = billCreated;
+    }
+
+    public String getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
+    public String getBillStatus() {
+        return billStatus;
+    }
+
+    public void setBillStatus(String billStatus) {
+        this.billStatus = billStatus;
     }
 }
