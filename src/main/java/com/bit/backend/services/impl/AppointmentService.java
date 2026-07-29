@@ -280,6 +280,10 @@ public class AppointmentService implements AppointmentServiceI {
                 .map(entity -> {
                     AppointmentDto dto = appointmentMapper.toAppointmentDto(entity);
                     dto.setBillCreated(entity.getBillPdf() != null);
+                    dto.setBillStatus(entity.getBillStatus());
+                    taskAssignRepository.findByAppointmentUniqueNo(entity.getAppointmentUniqueNo())
+                            .ifPresent(task ->
+                                    dto.setTaskStatus(task.getStatus()));
                     return dto;
                 })
                 .toList();

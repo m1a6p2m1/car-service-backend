@@ -86,16 +86,30 @@ public class EmployeeService implements EmployeeServiceI {
     @Override
     public EmployeeDto updateEmployeeData(long empNumber, EmployeeDto employeeDto) {
         try {
-            Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(empNumber);
-            if (!optionalEmployeeEntity.isPresent()){
-                throw new AppException("Employee Does Not Exist", HttpStatus.BAD_REQUEST);
-            }
-            EmployeeEntity newEmployeeEntity = employeeMapper.toEmployeeEntity(employeeDto);
-            newEmployeeEntity.setEmpNumber(empNumber);
+            EmployeeEntity employeeEntity = employeeRepository.findById(empNumber)
+                    .orElseThrow(()->
+                            new AppException("Employee Does Not Exist", HttpStatus.BAD_REQUEST));
+//            if (!optionalEmployeeEntity.isPresent()){
+//                throw new AppException("Employee Does Not Exist", HttpStatus.BAD_REQUEST);
+//            }
+            employeeEntity.setFullName(employeeDto.getFullName());
+            employeeEntity.setCallingName(employeeDto.getCallingName());
+            employeeEntity.setNic(employeeDto.getNic());
+            employeeEntity.setDob(employeeDto.getDob());
+            employeeEntity.setGender(employeeDto.getGender());
+            employeeEntity.setAddress(employeeDto.getAddress());
+            employeeEntity.setEmail(employeeDto.getEmail());
+            employeeEntity.setPhoneNumber(employeeDto.getPhoneNumber());
+            employeeEntity.setEmergencyPhoneNumber(employeeDto.getEmergencyPhoneNumber());
+            employeeEntity.setBloodGroup(employeeDto.getBloodGroup());
+            employeeEntity.setEmploymentType(employeeDto.getEmploymentType());
+            employeeEntity.setJobTitle(employeeDto.getJobTitle());
 
-            EmployeeEntity employeeEntity = employeeRepository.save(newEmployeeEntity);
-            EmployeeDto responseEmployeeDto = employeeMapper.toEmployeeDto(employeeEntity);
-            return responseEmployeeDto;
+//            EmployeeEntity newEmployeeEntity = employeeMapper.toEmployeeEntity(employeeDto);
+//            newEmployeeEntity.setEmpNumber(empNumber);
+
+            EmployeeEntity saved = employeeRepository.save(employeeEntity);
+            return employeeMapper.toEmployeeDto(saved);
         } catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

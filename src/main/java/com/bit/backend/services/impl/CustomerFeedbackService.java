@@ -86,15 +86,33 @@ public class CustomerFeedbackService implements CustomerFeedbackServiceI {
     public CustomerFeedbackDto updateForm(long id, CustomerFeedbackDto customerFeedbackDto) {
 //        System.out.println("******In DataBase**********");
         try {
-            Optional<CustomerFeedbackEntity> optionalCustomerFeedbackEntity = customerFeedbackRepository.findById(id);
-            if (!optionalCustomerFeedbackEntity.isPresent()){
-                throw new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST);
+            CustomerFeedbackEntity customerFeedbackEntity = customerFeedbackRepository.findById(id)
+                    .orElseThrow(()->
+             new AppException("Customer Form Does Not Exist", HttpStatus.BAD_REQUEST));
+
+
+            customerFeedbackEntity.setUserName(customerFeedbackDto.getUserName());
+            customerFeedbackEntity.setLicencePlate(customerFeedbackDto.getLicencePlate());
+            customerFeedbackEntity.setUniqueTaskNo(customerFeedbackDto.getUniqueTaskNo());
+            customerFeedbackEntity.setServiceType(customerFeedbackDto.getServiceType());
+            customerFeedbackEntity.setServiceDate(customerFeedbackDto.getServiceDate());
+            customerFeedbackEntity.setServiceQuality(customerFeedbackDto.getServiceQuality());
+            customerFeedbackEntity.setComplaint(customerFeedbackDto.getComplaint());
+            customerFeedbackEntity.setRecommendation(customerFeedbackDto.getRecommendation());
+
+            if (customerFeedbackDto.getUserId() != null) {
+                User user = userRepository.findById(customerFeedbackDto.getUserId())
+                        .orElseThrow(() -> new RuntimeException("User not Found"));
+                customerFeedbackEntity.setUser(user);
             }
-            CustomerFeedbackEntity newCustomerEntity = customerFeedbackMapper.toCustomerFeedbackEntity(customerFeedbackDto);
-            newCustomerEntity.setId(id);
-            CustomerFeedbackEntity customerFeedbackEntity = customerFeedbackRepository.save(newCustomerEntity);
-            CustomerFeedbackDto customerFeedbackDtoResponse = customerFeedbackMapper.toCustomerFeedbackDto(customerFeedbackEntity);
-            return customerFeedbackDtoResponse;
+
+            // Reset status after edit
+            customerFeedbackEntity.setStatus("UNREVIEWED");
+
+            CustomerFeedbackEntity saved = customerFeedbackRepository.save(customerFeedbackEntity);
+
+            return customerFeedbackMapper.toCustomerFeedbackDto(saved);
+
         }catch (Exception e){
             throw new AppException("Request Failed with Error:" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
