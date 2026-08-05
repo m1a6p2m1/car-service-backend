@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AppointmentController {
@@ -132,5 +133,16 @@ public class AppointmentController {
     public ResponseEntity<String> updatePaymentStatus(@PathVariable Long id) {
         appointmentServiceI.updatePaymentStatus(id);
         return ResponseEntity.ok("Payment Status update Successfully");
+    }
+
+    //Service type Count Report
+    @GetMapping("/appointment/get-service-type-count")
+    public ResponseEntity<List<Map<String, Object>>> getServiceTypesCount(){
+        try {
+            List<Map<String, Object>> serviceTypeList = appointmentServiceI.getServiceTypesCount();
+            return ResponseEntity.ok(serviceTypeList);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CustomerFeedbackController {
@@ -89,6 +90,17 @@ public class CustomerFeedbackController {
             CustomerFeedbackDto customerFeedbackDtoResponse = customerFeedbackServiceI.updateReview(id);
             return ResponseEntity.ok(customerFeedbackDtoResponse);
         }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //feedback report
+    @GetMapping("/customer-feedback/customer-feedbacks-rates")
+    public ResponseEntity<List<Map<String, Object>>> getCustomerFeedbackRateServices() {
+        try {
+            List<Map<String, Object>> customerFeedbackRates = customerFeedbackServiceI.getCustomerFeedbackRateServices();
+            return ResponseEntity.ok(customerFeedbackRates);
+        } catch (Exception e) {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

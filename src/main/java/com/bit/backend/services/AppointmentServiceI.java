@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public interface AppointmentServiceI {
 
@@ -32,4 +33,7 @@ public interface AppointmentServiceI {
     byte[] getBillPdf(Long id);
 
     void updatePaymentStatus(Long id);
+
+    //service type report
+    List<Map<String, Object>> getServiceTypesCount();
 }

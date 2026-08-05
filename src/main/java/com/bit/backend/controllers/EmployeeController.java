@@ -104,6 +104,7 @@ public class EmployeeController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //Report employee count by job role
     @GetMapping("/employee/get-employee-count-by-role")
     public ResponseEntity<List<Map<String, Object>>> getEmployeeCountByJobRole(){
         try {

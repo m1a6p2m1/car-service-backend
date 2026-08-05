@@ -3,6 +3,7 @@ package com.bit.backend.services;
 import com.bit.backend.dtos.CustomerFeedbackDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomerFeedbackServiceI {
     CustomerFeedbackDto addCustomerFeedbackEntity(CustomerFeedbackDto customerFeedbackDto);
@@ -13,4 +14,7 @@ public interface CustomerFeedbackServiceI {
     CustomerFeedbackDto deleteData(long id);
     //update reviewed feedbacks
     CustomerFeedbackDto updateReview(long id);
+
+    //feedback report
+    List<Map<String, Object>> getCustomerFeedbackRateServices();
 }

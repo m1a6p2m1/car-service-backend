@@ -348,6 +348,11 @@ public class AppointmentService implements AppointmentServiceI {
         appointmentRepository.save(appointment);
     }
 
+    @Override
+    public List<Map<String, Object>> getServiceTypesCount() {
+        return appointmentRepository.getServiceTypesCount();
+    }
+
 //    @Override
 //    public List<AppointmentDto> getAppointmentsByCusId(Long id) {
 //        Optional<AppointmentEntity> optional = appointmentRepository.findById(id);

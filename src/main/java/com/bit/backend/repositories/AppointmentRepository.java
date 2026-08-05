@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long> {
@@ -46,4 +47,8 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     Optional<AppointmentEntity> findByAppointment_UniqueNo(@Param("no") String no);
 
     Optional<AppointmentEntity> findByAppointmentUniqueNo(String appointmentUniqueNo);
+
+    //Service Type Report
+    @Query("SELECT serviceType as service, count(serviceType) as cnt FROM AppointmentEntity group by serviceType")
+    List<Map<String, Object>> getServiceTypesCount();
 }
