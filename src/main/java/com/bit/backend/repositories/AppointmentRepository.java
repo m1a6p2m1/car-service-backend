@@ -51,4 +51,8 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     //Service Type Report
     @Query("SELECT serviceType as service, count(serviceType) as cnt FROM AppointmentEntity group by serviceType")
     List<Map<String, Object>> getServiceTypesCount();
+
+    @Query("SELECT serviceType as appointmentType, COUNT(*) AS count FROM AppointmentEntity where date between :from and :to group by serviceType")
+    List<Map<String, Object>> countByTypeBetween(@Param("from") LocalDate from,
+                                              @Param("to") LocalDate to);
 }

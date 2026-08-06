@@ -36,4 +36,6 @@ public interface AppointmentServiceI {
 
     //service type report
     List<Map<String, Object>> getServiceTypesCount();
+
+    List<Map<String, Object>> getCountsByType(LocalDate from, LocalDate to);
 }

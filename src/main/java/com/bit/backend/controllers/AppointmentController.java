@@ -145,4 +145,17 @@ public class AppointmentController {
             throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/appointment-service/get-counts-by-type")
+    public ResponseEntity<List<Map<String, Object>>> getCountsByType(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ){
+        try {
+            List<Map<String, Object>> serviceTypeList = appointmentServiceI.getCountsByType(from, to);
+            return ResponseEntity.ok(serviceTypeList);
+        }catch (Exception e){
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
