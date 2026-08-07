@@ -199,6 +199,8 @@ public class UserService implements UserServiceI {
         dto.setContactNumber(user.getContactNumber());
 
         if (user.getEmployee() != null) {
+            dto.setEmail(user.getEmployee().getEmail());
+            dto.setContactNumber(user.getEmployee().getPhoneNumber());
             dto.setImage(user.getEmployee().getImage());
             dto.setImageType(user.getEmployee().getImageType());
             dto.setImageName(user.getEmployee().getImageName());
@@ -215,6 +217,8 @@ public class UserService implements UserServiceI {
         // Update User fields
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setContactNumber(userDto.getContactNumber());
 
         // Update related Employee fields
         if (user.getEmployee() != null) {
@@ -226,6 +230,18 @@ public class UserService implements UserServiceI {
             employee.setImageType(userDto.getImageType());
 
             employeeRepository.save(employee);
+        }
+
+        //Update Related Customer Fields
+        if(user.getCustomer() != null) {
+            CustomerEntity customer = user.getCustomer();
+
+            customer.setFirstName(userDto.getFirstName());
+            customer.setLastName(userDto.getLastName());
+            customer.setEmail(userDto.getEmail());
+            customer.setContactNumber(userDto.getContactNumber());
+
+            customerRepository.save(customer);
         }
 
         User savedUser = userRepository.save(user);
@@ -405,5 +421,28 @@ public class UserService implements UserServiceI {
         userRepository.save(user);
         dto.setPassword(null);
         return dto;
+    }
+
+    @Override
+    public List<UserDto> getCustomersByRole() {
+        try{
+            List<User> customerEntityList = userRepository.findByRole("CUSTOMER");
+            List<UserDto> customerDtoList = new ArrayList<>();
+
+            for(User user : customerEntityList) {
+                UserDto dto = new UserDto();
+                dto.setId(user.getId());
+                dto.setFirstName(user.getFirstName());
+                dto.setLastName(user.getLastName());
+                dto.setEmail(user.getEmail());
+                dto.setContactNumber(user.getContactNumber());
+                dto.setRole(user.getRole());
+
+                customerDtoList.add(dto);
+            }
+            return customerDtoList;
+        } catch (Exception e){
+            throw new RuntimeException("Failed to fetch customer data", e);
+        }
     }
 }

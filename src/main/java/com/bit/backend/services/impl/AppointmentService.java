@@ -358,6 +358,11 @@ public class AppointmentService implements AppointmentServiceI {
         return appointmentRepository.countByTypeBetween(from, to);
     }
 
+    @Override
+    public List<Map<String, Object>> getCountsByVehicleType(LocalDate from, LocalDate to) {
+        return appointmentRepository.countByVehicleType(from, to);
+    }
+
 //    @Override
 //    public List<AppointmentDto> getAppointmentsByCusId(Long id) {
 //        Optional<AppointmentEntity> optional = appointmentRepository.findById(id);

@@ -171,4 +171,10 @@ public class UserController {
         return ResponseEntity.ok(userServiceI.updateCustomerLogin(customerId, dto));
     }
 
+    @GetMapping("/users/all-customers")
+    public ResponseEntity<List<UserDto>> getCustomersByRole() {
+        List<UserDto> userDto = userServiceI.getCustomersByRole();
+        return ResponseEntity.ok(userDto);
+    }
+
 }

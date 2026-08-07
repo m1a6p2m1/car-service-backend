@@ -38,4 +38,5 @@ public interface AppointmentServiceI {
     List<Map<String, Object>> getServiceTypesCount();
 
     List<Map<String, Object>> getCountsByType(LocalDate from, LocalDate to);
+    List<Map<String, Object>> getCountsByVehicleType(LocalDate from, LocalDate to);
 }

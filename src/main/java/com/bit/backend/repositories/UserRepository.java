@@ -53,4 +53,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByCustomer_CusId(Long cusId);
 
     boolean existsByCustomer_CusId(Long cusId);
+
+    List<User> findByRole(String role);
 }

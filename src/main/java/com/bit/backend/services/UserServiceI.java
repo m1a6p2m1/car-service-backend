@@ -35,4 +35,6 @@ public interface UserServiceI {
 
     CustomerCredentialDto getCustomerLogin(Long customerId);
     CustomerCredentialDto updateCustomerLogin(Long customerId, CustomerCredentialDto dto);
+
+    List<UserDto> getCustomersByRole();
 }
